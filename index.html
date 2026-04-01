@@ -181,6 +181,93 @@ body {
 }
 .card-link:hover { text-decoration: underline; }
 
+/* ─── PHOTO CAROUSEL ─── */
+.carousel {
+  position: relative;
+  width: 100%;
+  height: 180px;
+  overflow: hidden;
+  border-radius: 12px 12px 0 0;
+  background: var(--blush-light);
+}
+.carousel img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: none;
+}
+.carousel img.active { display: block; }
+.carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255,255,255,0.85);
+  border: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+  transition: all 0.2s;
+  z-index: 2;
+}
+.carousel-btn:hover { background: white; transform: translateY(-50%) scale(1.1); }
+.carousel-btn.prev { left: 6px; }
+.carousel-btn.next { right: 6px; }
+.carousel-dots {
+  position: absolute;
+  bottom: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 4px;
+  z-index: 2;
+}
+.carousel-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.5);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.carousel-dot.active { background: white; }
+.carousel-counter {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(0,0,0,0.5);
+  color: white;
+  font-size: 0.65rem;
+  padding: 2px 7px;
+  border-radius: 10px;
+  z-index: 2;
+}
+
+/* Popup carousel */
+.popup-carousel {
+  position: relative;
+  width: 220px;
+  height: 140px;
+  overflow: hidden;
+  border-radius: 8px;
+  margin-bottom: 8px;
+}
+.popup-carousel img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: none;
+}
+.popup-carousel img.active { display: block; }
+.popup-carousel .carousel-btn { width: 22px; height: 22px; font-size: 11px; }
+
 /* Score bars */
 .score-bars { margin: 8px 0; }
 .score-bar-row { display: flex; align-items: center; gap: 6px; margin-bottom: 3px; font-size: 0.7rem; }
@@ -382,167 +469,177 @@ body {
 </div>
 
 <script>
-// ─── LISTING DATA ───
+// ─── LISTING DATA (scraped & scored) ───
 const LISTINGS = [
   {
-    rank: 1,
-    name: "The Madison Compound",
-    id: "48013607",
-    score: 7.95,
-    loc: 9, val: 6, bach: 9,
-    bedrooms: 6, beds: 8, baths: 6.5,
-    guests: 16,
-    price: 7387, pricePerNight: 2462,
-    rating: 4.94, reviews: 89,
-    neighborhood: "Cannonborough-Elliotborough",
-    highlight: "Rooftop deck \u2022 every BR has en-suite bath \u2022 blocks from Upper King \u2022 Guest Favorite",
-    url: "https://www.airbnb.com/rooms/48013607",
-    lat: 32.7842, lng: -79.9398,
-    fav: false
+    rank: 1, name: "Suite Retreat on Coming Street ~ Walk Everywhere!", id: "46752205",
+    score: 7.75, loc: 9, val: 7, bach: 6.8,
+    bedrooms: 3, baths: 2.0, guests: 10,
+    price: 2844, pricePerNight: 948, rating: 4.86, reviews: 340,
+    highlight: "Shared patio \u2022 Outdoor furniture \u2022 BBQ grill \u2022 Wifi \u2022 340 reviews",
+    url: "https://www.airbnb.com/rooms/46752205",
+    lat: 32.79065, lng: -79.94288,
+    photos: [
+      "https://a0.muscache.com/im/pictures/prohost-api/Hosting-46752205/original/6c908c8b-e1ac-44ea-b577-6c2ac458750e.jpeg",
+      "https://a0.muscache.com/im/pictures/prohost-api/Hosting-46752205/original/2b94fc5b-41cc-4c81-8ed1-6bd5169ce053.jpeg",
+      "https://a0.muscache.com/im/pictures/prohost-api/Hosting-46752205/original/a6c06c79-4a0d-4e75-944d-d16dbc246f4e.jpeg",
+      "https://a0.muscache.com/im/pictures/prohost-api/Hosting-46752205/original/054fdfb0-7585-4343-9168-91fc644be3b8.jpeg",
+      "https://a0.muscache.com/im/pictures/prohost-api/Hosting-46752205/original/5e76631b-4e7b-4541-9396-b1a0f4361ffb.jpeg",
+      "https://a0.muscache.com/im/pictures/prohost-api/Hosting-46752205/original/b900d799-f887-403c-8b30-0e315bc6b94c.jpeg"
+    ], fav: false
   },
   {
-    rank: 2,
-    name: "Emerald House",
-    id: "1053709450155846173",
-    score: 8.15,
-    loc: 9, val: 8, bach: 7,
-    bedrooms: 4, beds: 6, baths: 3.5,
-    guests: 12,
-    price: 4373, pricePerNight: 1458,
-    rating: 4.93, reviews: 76,
-    neighborhood: "Cannonborough-Elliotborough",
-    highlight: "Guest Favorite \u2022 bachelorette reviews \u2022 near King St \u2022 charming 4BR",
-    url: "https://www.airbnb.com/rooms/1053709450155846173",
-    lat: 32.7838, lng: -79.9402,
-    fav: false
-  },
-  {
-    rank: 3,
-    name: "Tuckertown | Resort Pool",
-    id: "43361901",
-    score: 8.0,
-    loc: 8, val: 8, bach: 8,
-    bedrooms: 4, beds: 5, baths: 4.5,
-    guests: 10,
-    price: 4789, pricePerNight: 1596,
-    rating: 4.84, reviews: 190,
-    neighborhood: "Cannonborough-Elliotborough",
-    highlight: "HEATED RESORT POOL \u2022 every BR has en-suite \u2022 Guest Favorite \u2022 sweeping porches",
-    url: "https://www.airbnb.com/rooms/43361901",
-    lat: 32.7830, lng: -79.9410,
-    fav: false
-  },
-  {
-    rank: 4,
-    name: "Cannonborough Court",
-    id: "22626614",
-    score: 7.65,
-    loc: 8, val: 7, bach: 8,
-    bedrooms: 7, beds: 13, baths: 6,
-    guests: 16,
-    price: 6665, pricePerNight: 2222,
-    rating: 4.97, reviews: 93,
-    neighborhood: "Cannonborough-Elliotborough",
-    highlight: "7BR pair of duplexes \u2022 courtyard \u2022 BBQ \u2022 tons of bachelorette reviews!",
-    url: "https://www.airbnb.com/rooms/22626614",
-    lat: 32.7835, lng: -79.9405,
-    fav: false
-  },
-  {
-    rank: 5,
-    name: "Casa Zo\u00eb | Royal House",
-    id: "1124619401718428882",
-    score: 7.6,
-    loc: 9, val: 5, bach: 9,
-    bedrooms: 8, beds: 13, baths: 10,
-    guests: 16,
-    price: 8571, pricePerNight: 2857,
-    rating: 5.0, reviews: 21,
-    neighborhood: "Cannonborough-Elliotborough",
-    highlight: "Dual-unit mansion \u2022 steps from King St \u2022 10 bathrooms \u2022 bachelorette reviews",
-    url: "https://www.airbnb.com/rooms/1124619401718428882",
-    lat: 32.7840, lng: -79.9395,
-    fav: false
-  },
-  {
-    rank: 6,
-    name: "1850s Building | 5BR Downtown",
-    id: "17841718",
-    score: 7.95,
-    loc: 8, val: 10, bach: 5,
-    bedrooms: 5, beds: 5, baths: 3,
-    guests: 10,
-    price: 2334, pricePerNight: 778,
-    rating: 4.89, reviews: 261,
-    neighborhood: "Elliotborough",
-    highlight: "CHEAPEST option \u2022 $78/person/night \u2022 261 reviews \u2022 12-ft ceilings \u2022 walkable",
+    rank: 2, name: "DOWNTOWN-1850s BUILDING, 12' CEILINGS, 5BR, 3BA", id: "17841718",
+    score: 7.62, loc: 8, val: 8, bach: 6.5,
+    bedrooms: 5, baths: 3.0, guests: 10,
+    price: 2334, pricePerNight: 778, rating: 4.89, reviews: 261,
+    highlight: "Patio \u2022 Washer/Dryer \u2022 $78/person/night \u2022 261 reviews",
     url: "https://www.airbnb.com/rooms/17841718",
-    lat: 32.7832, lng: -79.9408,
-    fav: false
+    lat: 32.79242, lng: -79.94676,
+    photos: [
+      "https://a0.muscache.com/im/pictures/39f6ae5d-12a0-412d-af0e-c6aab85afbd4.jpg",
+      "https://a0.muscache.com/im/pictures/fb5e4ee1-06a9-4609-970a-6dc704bc2c84.jpg",
+      "https://a0.muscache.com/im/pictures/bab86bb5-7056-4406-a075-b1de908ec1b4.jpg",
+      "https://a0.muscache.com/im/pictures/9397c89a-12c4-451d-98c4-e743ff0e3d46.jpg",
+      "https://a0.muscache.com/im/pictures/13d76537-31ba-4a0b-bca9-de4649f7a239.jpg",
+      "https://a0.muscache.com/im/pictures/0143df69-ca5c-41a0-a745-53979181224b.jpg"
+    ], fav: false
   },
   {
-    rank: 7,
-    name: "The Islander House | King St",
-    id: "915112824071484579",
-    score: 7.95,
-    loc: 10, val: 7, bach: 6,
-    bedrooms: 3, beds: 6, baths: 3.5,
-    guests: 12,
-    price: 4755, pricePerNight: 1585,
-    rating: 4.85, reviews: 110,
-    neighborhood: "King Street",
-    highlight: "ON King Street \u2022 bachelorette reviews \u2022 parking included \u2022 3.5 baths",
-    url: "https://www.airbnb.com/rooms/915112824071484579",
-    lat: 32.7875, lng: -79.9376,
-    fav: false
+    rank: 3, name: "Suite Retreat on Coming Street ^ Walk Everywhere!", id: "46891953",
+    score: 7.60, loc: 10, val: 6, bach: 6.0,
+    bedrooms: 3, baths: 2.0, guests: 10,
+    price: 3204, pricePerNight: 1068, rating: 4.89, reviews: 354,
+    highlight: "Patio \u2022 Outdoor furniture \u2022 Wifi \u2022 354 reviews",
+    url: "https://www.airbnb.com/rooms/46891953",
+    lat: 32.79019, lng: -79.94062,
+    photos: [
+      "https://a0.muscache.com/im/pictures/hosting/Hosting-46891953/original/708890d9-56e9-4638-ab06-c090f19d5c30.jpeg",
+      "https://a0.muscache.com/im/pictures/hosting/Hosting-46891953/original/d4e5db01-a701-49f3-a5ca-eb3b132d6788.jpeg",
+      "https://a0.muscache.com/im/pictures/hosting/Hosting-46891953/original/ea9df582-61d6-41c5-9b05-4553607a9895.jpeg",
+      "https://a0.muscache.com/im/pictures/hosting/Hosting-46891953/original/08bed9fc-02c9-4c9b-9eed-0d34a3f88f63.jpeg",
+      "https://a0.muscache.com/im/pictures/hosting/Hosting-46891953/original/73bd8249-2ee9-447e-8dc2-00784e193c85.jpeg",
+      "https://a0.muscache.com/im/pictures/hosting/Hosting-46891953/original/440771a1-3e68-4dad-84f0-be91ffc47f04.jpeg"
+    ], fav: false
   },
   {
-    rank: 8,
-    name: "BEST Location | 4 King BRs",
-    id: "25949267",
-    score: 7.9,
-    loc: 9, val: 8, bach: 6,
-    bedrooms: 4, beds: 4, baths: 2,
-    guests: 10,
-    price: 3046, pricePerNight: 1015,
-    rating: 4.79, reviews: 190,
-    neighborhood: "Cannonborough-Elliotborough",
-    highlight: "4 king beds \u2022 bachelorette reviews \u2022 $102/person/night \u2022 190 reviews",
-    url: "https://www.airbnb.com/rooms/25949267",
-    lat: 32.7845, lng: -79.9400,
-    fav: false
+    rank: 4, name: "In the Heart of King Street | Hampton Suite", id: "1077545683054037596",
+    score: 7.57, loc: 10, val: 7, bach: 4.5,
+    bedrooms: 2, baths: 2.0, guests: 10,
+    price: 2729, pricePerNight: 910, rating: 4.91, reviews: 53,
+    highlight: "ON King Street \u2022 Washer/Dryer \u2022 $91/person/night \u2022 53 reviews",
+    url: "https://www.airbnb.com/rooms/1077545683054037596",
+    lat: 32.7898, lng: -79.9393,
+    photos: [
+      "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1077545683054037596/original/a5880707-9a98-4391-864c-38019fdfdb6b.jpeg",
+      "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1077545683054037596/original/02b98812-e3d8-46e3-9e8b-250c20992c51.jpeg",
+      "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1077545683054037596/original/4c12eaab-fe51-4d38-a9d0-9f37c85db460.jpeg",
+      "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1077545683054037596/original/3029b07a-393a-44e8-9358-eddd35b6efe9.jpeg",
+      "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1077545683054037596/original/0cb4ef52-8d7a-46db-9db9-dff1a1270a9b.jpeg",
+      "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1077545683054037596/original/533a2bb9-a45e-4928-a6c6-9587890f633d.jpeg"
+    ], fav: false
   },
   {
-    rank: 9,
-    name: "Revitalized Historical Residence",
-    id: "6968000",
-    score: 7.6,
-    loc: 8, val: 9, bach: 5,
-    bedrooms: 4, beds: 5, baths: 3.5,
-    guests: 10,
-    price: 3198, pricePerNight: 1066,
-    rating: 4.84, reviews: 366,
-    neighborhood: "Cannonborough-Elliotborough",
-    highlight: "366 reviews (most reviewed!) \u2022 $107/person/night \u2022 historic Southern charm",
+    rank: 5, name: "Revitalized Historical Southern Residence", id: "6968000",
+    score: 7.45, loc: 9, val: 6, bach: 7.0,
+    bedrooms: 4, baths: 3.5, guests: 10,
+    price: 3667, pricePerNight: 1222, rating: 4.84, reviews: 366,
+    highlight: "Patio \u2022 Outdoor furniture \u2022 Washer \u2022 366 reviews (most reviewed!)",
     url: "https://www.airbnb.com/rooms/6968000",
-    lat: 32.7836, lng: -79.9403,
-    fav: false
+    lat: 32.791, lng: -79.942,
+    photos: [
+      "https://a0.muscache.com/im/pictures/prohost-api/Hosting-6968000/original/8e0dfc29-87dd-4d45-b091-b2536afb3687.jpeg",
+      "https://a0.muscache.com/im/pictures/prohost-api/Hosting-6968000/original/294422d6-80a7-4f06-b2ae-334c1ea7e575.jpeg",
+      "https://a0.muscache.com/im/pictures/prohost-api/Hosting-6968000/original/b457932e-25f6-4c14-85a7-5d7c9d40309f.jpeg",
+      "https://a0.muscache.com/im/pictures/prohost-api/Hosting-6968000/original/6ad8dff1-09ec-4698-a740-011bb25a0d1e.jpeg",
+      "https://a0.muscache.com/im/pictures/prohost-api/Hosting-6968000/original/89c15c17-96af-4d7c-a510-1534637c1869.jpeg",
+      "https://a0.muscache.com/im/pictures/prohost-api/Hosting-6968000/original/30431f2f-b7e8-468c-8f50-17e03ac98e85.jpeg"
+    ], fav: false
   },
   {
-    rank: 10,
-    name: "The Inns | 6BR/6BA",
-    id: "40237144",
-    score: 6.95,
-    loc: 8, val: 5, bach: 8,
-    bedrooms: 6, beds: 6, baths: 6,
-    guests: 12,
-    price: 7920, pricePerNight: 2640,
-    rating: 4.97, reviews: 64,
-    neighborhood: "Cannonborough-Elliotborough",
-    highlight: "6 en-suite bedrooms \u2022 bachelorette reviews \u2022 walk to King \u2022 4.97 rating",
-    url: "https://www.airbnb.com/rooms/40237144",
-    lat: 32.7838, lng: -79.9400,
-    fav: false
+    rank: 6, name: "Downtown Historic Home Steps to King St", id: "1062477349179807047",
+    score: 7.38, loc: 10, val: 5, bach: 6.5,
+    bedrooms: 4, baths: 2.0, guests: 12,
+    price: 5046, pricePerNight: 1682, rating: 4.72, reviews: 81,
+    highlight: "Steps to King St \u2022 Patio \u2022 Washer \u2022 81 reviews",
+    url: "https://www.airbnb.com/rooms/1062477349179807047",
+    lat: 32.7908, lng: -79.9412,
+    photos: [
+      "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1062477349179807047/original/9df18607-cc6a-4736-affd-524e20086d49.jpeg",
+      "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1062477349179807047/original/56e94a16-f091-4b8d-b22c-e6c0f194f1b4.jpeg",
+      "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1062477349179807047/original/86bc59be-7ad5-49f1-af9e-3bdd4543d181.jpeg",
+      "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1062477349179807047/original/b1465b89-bbb1-4ca9-82e2-98dc4d9a5506.jpeg",
+      "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1062477349179807047/original/ea1c5ac9-bdbf-4273-9d9f-74237d732206.jpeg",
+      "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1062477349179807047/original/c46fe02d-fa48-4a90-b9f1-ce672b733940.jpeg"
+    ], fav: false
+  },
+  {
+    rank: 7, name: "Classic Charleston Home, Steps to King, 5BR/6BA", id: "963100235579806175",
+    score: 7.35, loc: 9, val: 5, bach: 8.0,
+    bedrooms: 5, baths: 6.0, guests: 12,
+    price: 4371, pricePerNight: 1457, rating: 4.75, reviews: 8,
+    highlight: "5BR/6BA \u2022 Private patio \u2022 Outdoor furniture \u2022 Wifi",
+    url: "https://www.airbnb.com/rooms/963100235579806175",
+    lat: 32.7913, lng: -79.9427,
+    photos: [
+      "https://a0.muscache.com/im/pictures/miso/Hosting-963100235579806175/original/1627e06a-9025-4662-8eda-0ef5d6cece9c.jpeg",
+      "https://a0.muscache.com/im/pictures/miso/Hosting-963100235579806175/original/81697757-5e91-40ba-94f8-0d545cb7f386.jpeg",
+      "https://a0.muscache.com/im/pictures/miso/Hosting-963100235579806175/original/a07c4506-f546-4907-bb93-4de4b8d2f26e.jpeg",
+      "https://a0.muscache.com/im/pictures/miso/Hosting-963100235579806175/original/52dbd280-dcb5-4295-a6b9-e0f58b650ce3.jpeg",
+      "https://a0.muscache.com/im/pictures/miso/Hosting-963100235579806175/original/188b942f-6adc-47ce-b787-8a1e83a3e7e6.jpeg",
+      "https://a0.muscache.com/im/pictures/miso/Hosting-963100235579806175/original/c8fc3783-8474-4a41-8a24-0e217bd830ca.jpeg"
+    ], fav: false
+  },
+  {
+    rank: 8, name: "Colorful House w. Outdoor Space + Parking", id: "1613984834110877334",
+    score: 7.32, loc: 9, val: 6, bach: 6.5,
+    bedrooms: 4, baths: 2.0, guests: 10,
+    price: 3766, pricePerNight: 1256, rating: 5.0, reviews: 5,
+    highlight: "Patio \u2022 Outdoor furniture \u2022 Washer \u2022 5.0 rating",
+    url: "https://www.airbnb.com/rooms/1613984834110877334",
+    lat: 32.7922, lng: -79.9433,
+    photos: [
+      "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1613984834110877334/original/ec10caea-64ff-4ab7-9d76-a59f08328a76.jpeg",
+      "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1613984834110877334/original/0362cbe2-5881-4559-ac85-96c1db4f9396.jpeg",
+      "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1613984834110877334/original/703de1bc-04bc-462d-a65d-ec6b8480766b.jpeg",
+      "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1613984834110877334/original/bf9ffced-5553-422b-88a7-eeed29685bee.jpeg",
+      "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1613984834110877334/original/58e8f9d2-ed5e-4418-a577-5f61e46078aa.jpeg",
+      "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1613984834110877334/original/3deabae3-1432-479e-ab06-37c383d22ea2.jpeg"
+    ], fav: false
+  },
+  {
+    rank: 9, name: "Premier Stay Near King Street | Three 1BR Suites", id: "1642921990581279657",
+    score: 7.30, loc: 9, val: 6, bach: 6.4,
+    bedrooms: 3, baths: 3.0, guests: 12,
+    price: 3586, pricePerNight: 1195, rating: 0, reviews: 0,
+    highlight: "3 private suites \u2022 Washer \u2022 Near King St",
+    url: "https://www.airbnb.com/rooms/1642921990581279657",
+    lat: 32.7892, lng: -79.9302,
+    photos: [
+      "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1642921990581279657/original/579f6893-65b9-475a-b25b-262c719730a0.jpeg",
+      "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1642921990581279657/original/c897d73b-a373-4bc5-9bbf-83d06371bccf.jpeg",
+      "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1642921990581279657/original/a84541aa-cae7-4d00-adb9-1fba59712202.jpeg",
+      "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1642921990581279657/original/ddbeeb17-423c-4856-9766-2c4ff724f3e6.jpeg",
+      "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1642921990581279657/original/2fd979b4-ed77-4596-a42d-050cf18b1814.jpeg",
+      "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1642921990581279657/original/54afbbc3-5c77-4b10-b280-a0f0b93b2666.jpeg"
+    ], fav: false
+  },
+  {
+    rank: 10, name: "3 Spacious 1BR Suites Near City Center", id: "1642921995758585575",
+    score: 7.30, loc: 9, val: 6, bach: 6.4,
+    bedrooms: 3, baths: 3.0, guests: 12,
+    price: 3586, pricePerNight: 1195, rating: 0, reviews: 0,
+    highlight: "3 private suites \u2022 Washer \u2022 Near City Center",
+    url: "https://www.airbnb.com/rooms/1642921995758585575",
+    lat: 32.7892, lng: -79.9302,
+    photos: [
+      "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1642921995758585575/original/66ef2585-3e55-499e-be1b-ad9bbe4bba91.jpeg",
+      "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1642921995758585575/original/8e1f86a4-9d67-4835-97fe-b5275101d034.jpeg",
+      "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1642921995758585575/original/f8f9b205-4645-482b-aac0-3a7b8ac673bc.jpeg",
+      "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1642921995758585575/original/0c13ed95-a7de-4fb6-a527-510080a6eff1.jpeg",
+      "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1642921995758585575/original/d40c04c2-fdf5-4887-8b98-09cde6e45f86.jpeg",
+      "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1642921995758585575/original/cf5bf28f-dcca-4276-83f0-bebca44b18b3.jpeg"
+    ], fav: false
   }
 ];
 
@@ -687,10 +784,24 @@ function renderCards() {
     const listingVotes = votes[l.id] || {};
     const myVote = voterName ? listingVotes[voterName] : null;
     const voteCount = Object.keys(listingVotes).length;
+    const photos = l.photos || [];
+    const ratingStr = l.rating ? `\u2605 ${l.rating} (${l.reviews} reviews)` : 'New listing';
 
     return `
-    <div class="card" id="card-${l.id}" onclick="flyTo(${l.lat}, ${l.lng}, '${l.id}')">
-      <div class="card-body">
+    <div class="card" id="card-${l.id}">
+      ${photos.length > 0 ? `
+      <div class="carousel" id="carousel-${l.id}" onclick="event.stopPropagation()">
+        ${photos.map((p, idx) => `<img src="${p}" alt="${l.name}" class="${idx === 0 ? 'active' : ''}" loading="lazy">`).join('')}
+        ${photos.length > 1 ? `
+          <button class="carousel-btn prev" onclick="slideCarousel('${l.id}', -1)">\u2039</button>
+          <button class="carousel-btn next" onclick="slideCarousel('${l.id}', 1)">\u203A</button>
+          <div class="carousel-counter"><span id="counter-${l.id}">1</span>/${photos.length}</div>
+          <div class="carousel-dots">
+            ${photos.map((_, idx) => `<button class="carousel-dot ${idx === 0 ? 'active' : ''}" onclick="goToSlide('${l.id}', ${idx})"></button>`).join('')}
+          </div>
+        ` : ''}
+      </div>` : ''}
+      <div class="card-body" onclick="flyTo(${l.lat}, ${l.lng}, '${l.id}')">
         <div class="card-rank">${l.rank}</div>
         <div class="card-name">${l.name}</div>
         <div class="card-score-badge">Score: ${l.score.toFixed(1)} / 10</div>
@@ -709,10 +820,10 @@ function renderCards() {
           </div>
         </div>
         <div class="card-details">
-          <div><span class="label">Beds</span><br>${l.bedrooms}BR \u2022 ${l.beds} beds \u2022 ${l.baths} ba</div>
-          <div><span class="label">Rating</span><br>\u2605 ${l.rating} (${l.reviews} reviews)</div>
-          <div><span class="label">Total (3 nights)</span><br><span class="card-price">$${l.price.toLocaleString()} <small>($${ppn}/person/night)</small></span></div>
-          <div><span class="label">Area</span><br>${l.neighborhood}</div>
+          <div><span class="label">Layout</span><br>${l.bedrooms}BR \u2022 ${l.baths} ba \u2022 ${l.guests} guests</div>
+          <div><span class="label">Rating</span><br>${ratingStr}</div>
+          <div><span class="label">Total (3 nights)</span><br><span class="card-price">$${l.price.toLocaleString()} <small>($${ppn}/pp/night)</small></span></div>
+          <div><span class="label">Per Night</span><br>$${Math.round(l.pricePerNight).toLocaleString()}</div>
         </div>
         <div class="card-highlight">${l.highlight}</div>
         <a class="card-link" href="${l.url}" target="_blank" onclick="event.stopPropagation()">View on Airbnb \u2192</a>
@@ -729,6 +840,35 @@ function renderCards() {
       </div>
     </div>`;
   }).join('');
+}
+
+// ─── CAROUSEL ───
+function slideCarousel(listingId, direction, isPopup) {
+  const carousel = document.getElementById(isPopup ? listingId : 'carousel-' + listingId);
+  const imgs = carousel.querySelectorAll('img');
+  const dots = carousel.querySelectorAll('.carousel-dot');
+  let current = [...imgs].findIndex(img => img.classList.contains('active'));
+  imgs[current].classList.remove('active');
+  if (dots[current]) dots[current].classList.remove('active');
+  current = (current + direction + imgs.length) % imgs.length;
+  imgs[current].classList.add('active');
+  if (dots[current]) dots[current].classList.add('active');
+  const counter = document.getElementById('counter-' + listingId);
+  if (counter) counter.textContent = current + 1;
+}
+
+function goToSlide(listingId, index) {
+  const carousel = document.getElementById('carousel-' + listingId);
+  const imgs = carousel.querySelectorAll('img');
+  const dots = carousel.querySelectorAll('.carousel-dot');
+  imgs.forEach((img, i) => {
+    img.classList.toggle('active', i === index);
+  });
+  dots.forEach((dot, i) => {
+    dot.classList.toggle('active', i === index);
+  });
+  const counter = document.getElementById('counter-' + listingId);
+  if (counter) counter.textContent = index + 1;
 }
 
 // ─── MAP ───
@@ -778,18 +918,29 @@ function initMap() {
     });
 
     const ppn = Math.round(l.price / 10 / 3);
+    const photos = l.photos || [];
+    const popupId = 'popup-' + l.id;
+    const ratingStr = l.rating ? `\u2605${l.rating}` : 'New';
     const marker = L.marker([l.lat, l.lng], { icon })
       .addTo(map)
       .bindPopup(`
         <div style="font-family:Montserrat,sans-serif; max-width:220px;">
+          ${photos.length > 0 ? `
+          <div class="popup-carousel" id="${popupId}">
+            ${photos.map((p, idx) => `<img src="${p}" class="${idx === 0 ? 'active' : ''}">`).join('')}
+            ${photos.length > 1 ? `
+              <button class="carousel-btn prev" onclick="slideCarousel('${popupId}', -1, true)">\u2039</button>
+              <button class="carousel-btn next" onclick="slideCarousel('${popupId}', 1, true)">\u203A</button>
+            ` : ''}
+          </div>` : ''}
           <b style="font-family:Playfair Display,serif; font-size:14px;">#${l.rank} ${l.name}</b><br>
           <span style="color:#D4A843; font-weight:600;">Score: ${l.score.toFixed(1)}</span><br>
-          ${l.bedrooms}BR \u2022 ${l.beds} beds \u2022 \u2605${l.rating}<br>
+          ${l.bedrooms}BR \u2022 ${l.baths}ba \u2022 ${ratingStr}<br>
           <b>$${l.price.toLocaleString()}</b> <span style="color:#999;">($${ppn}/pp/night)</span><br>
           <em style="color:#D4A843; font-size:12px;">${l.highlight}</em><br>
           <a href="${l.url}" target="_blank" style="color:#D4A843;">View on Airbnb</a>
         </div>
-      `);
+      `, { maxWidth: 240 });
     markers[l.id] = marker;
   });
 
