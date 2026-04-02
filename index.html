@@ -504,6 +504,9 @@ body {
       <button class="sort-btn" onclick="sortListings('val')" id="sort-val">Value</button>
       <button class="sort-btn" onclick="sortListings('bach')" id="sort-bach">Bach Fit</button>
       <button class="sort-btn" onclick="sortListings('price')" id="sort-price">Price</button>
+      <span class="sort-label" style="margin-left:8px;">Filter:</span>
+      <button class="sort-btn" onclick="toggleFilter('pool')" id="filter-pool">Pool / Hot Tub</button>
+      <button class="sort-btn" onclick="toggleFilter('parking')" id="filter-parking">Free Parking</button>
     </div>
     <div id="cardList"></div>
   </div>
@@ -1286,6 +1289,7 @@ const UPPER_KING = { lat: 32.7876, lng: -79.9378 };
 let voterName = '';
 let votes = {}; // { listingId: { voterName: emoji } }
 let currentSort = 'score';
+let activeFilters = new Set();
 let sortedListings = [...LISTINGS];
 let isSaving = false;
 
@@ -1408,20 +1412,48 @@ function copyShareLink() {
 }
 
 // ─── RENDER CARDS ───
+function toggleFilter(filter) {
+  const btn = document.getElementById('filter-' + filter);
+  if (activeFilters.has(filter)) {
+    activeFilters.delete(filter);
+    btn.classList.remove('active');
+  } else {
+    activeFilters.add(filter);
+    btn.classList.add('active');
+  }
+  applyFiltersAndSort();
+}
+
 function sortListings(key) {
   currentSort = key;
-  document.querySelectorAll('.sort-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.sort-bar .sort-btn').forEach(b => {
+    if (b.id.startsWith('sort-')) b.classList.remove('active');
+  });
   document.getElementById('sort-' + key).classList.add('active');
+  applyFiltersAndSort();
+}
 
-  sortedListings = [...LISTINGS].sort((a, b) => {
-    if (key === 'price') return a.price - b.price; // cheapest first
-    if (key === 'loc') return b.loc - a.loc || b.score - a.score;
-    if (key === 'val') return b.val - a.val || b.score - a.score;
-    if (key === 'bach') return b.bach - a.bach || b.score - a.score;
-    return b.score - a.score; // default: total score
+function applyFiltersAndSort() {
+  let filtered = [...LISTINGS];
+
+  // Apply filters
+  if (activeFilters.has('pool')) {
+    filtered = filtered.filter(l => l.hasPool || l.hasHotTub);
+  }
+  if (activeFilters.has('parking')) {
+    filtered = filtered.filter(l => l.hasParking);
+  }
+
+  // Apply sort
+  filtered.sort((a, b) => {
+    if (currentSort === 'price') return a.price - b.price;
+    if (currentSort === 'loc') return b.loc - a.loc || b.score - a.score;
+    if (currentSort === 'val') return b.val - a.val || b.score - a.score;
+    if (currentSort === 'bach') return b.bach - a.bach || b.score - a.score;
+    return b.score - a.score;
   });
 
-  // Re-assign display ranks based on sort order
+  sortedListings = filtered;
   sortedListings.forEach((l, i) => l._displayRank = i + 1);
   renderCards();
 }
