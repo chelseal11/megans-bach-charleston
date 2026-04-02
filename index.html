@@ -1103,40 +1103,28 @@ let voterName = '';
 let votes = {}; // { listingId: { voterName: emoji } }
 let currentSort = 'score';
 let sortedListings = [...LISTINGS];
-let fileSha = null; // GitHub file SHA for updates
 let isSaving = false;
 
-// ─── GITHUB VOTES STORAGE ───
-const GH_TOKEN = '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';
-const GH_API = 'https://api.github.com/repos/chelseal11/megans-bach-charleston/contents/votes.json';
-const GH_HEADERS = {
-  'Authorization': 'Bearer ' + GH_TOKEN,
-  'Content-Type': 'application/json',
-  'Accept': 'application/vnd.github.v3+json'
-};
+// ─── VOTES API (Vercel serverless function) ───
+const VOTES_API = 'https://bach-votes.vercel.app/api/votes';
 
 async function loadVotes() {
   const dot = document.getElementById('syncStatus');
   try {
-    const res = await fetch(GH_API, { headers: GH_HEADERS });
+    const res = await fetch(VOTES_API);
     if (res.ok) {
-      const data = await res.json();
-      fileSha = data.sha;
-      const content = JSON.parse(atob(data.content));
-      votes = content || {};
+      votes = await res.json();
       dot.innerHTML = '&#x1f7e2; Synced';
     }
   } catch(e) {
-    console.warn('Failed to load votes from GitHub', e);
+    console.warn('Failed to load votes', e);
     dot.innerHTML = '&#x1f534; Offline';
-    // Fall back to localStorage
     const saved = localStorage.getItem('bach_votes');
     if (saved) try { votes = JSON.parse(saved); } catch(e) {}
   }
 }
 
 async function saveVotes() {
-  // Always save locally as backup
   localStorage.setItem('bach_votes', JSON.stringify(votes));
 
   if (isSaving) return;
@@ -1145,41 +1133,18 @@ async function saveVotes() {
   dot.innerHTML = '&#x1f7e1; Saving...';
 
   try {
-    // Fetch latest SHA first to avoid conflicts
-    const getRes = await fetch(GH_API, { headers: GH_HEADERS });
-    if (getRes.ok) {
-      const getData = await getRes.json();
-      fileSha = getData.sha;
-      // Merge remote votes with local to avoid overwrites
-      const remote = JSON.parse(atob(getData.content)) || {};
-      for (const [listingId, voterMap] of Object.entries(remote)) {
-        if (!votes[listingId]) votes[listingId] = {};
-        for (const [name, emoji] of Object.entries(voterMap)) {
-          if (votes[listingId][name] === undefined) {
-            votes[listingId][name] = emoji;
-          }
-        }
-      }
-    }
-
-    const res = await fetch(GH_API, {
-      method: 'PUT',
-      headers: GH_HEADERS,
-      body: JSON.stringify({
-        message: 'Update votes',
-        content: btoa(JSON.stringify(votes, null, 2)),
-        sha: fileSha
-      })
+    const res = await fetch(VOTES_API, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(votes)
     });
     if (res.ok) {
-      const result = await res.json();
-      fileSha = result.content.sha;
       dot.innerHTML = '&#x1f7e2; Synced';
     } else {
       dot.innerHTML = '&#x1f534; Save failed';
     }
   } catch(e) {
-    console.warn('Failed to save votes to GitHub', e);
+    console.warn('Failed to save votes', e);
     dot.innerHTML = '&#x1f534; Offline';
   }
   isSaving = false;
