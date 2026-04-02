@@ -214,7 +214,7 @@ def main():
             loc = score_location(lat, lng)
             val = score_value(price_per_night)
             bach = score_bach_fit(max_guests, bedrooms, bathrooms, amenities_lower)
-            total_score = round(loc * 0.4 + val * 0.35 + bach * 0.25, 2)
+            total_score = round(loc * 0.34 + val * 0.33 + bach * 0.33, 2)
 
             entry = {
                 "room_id": room_id,
