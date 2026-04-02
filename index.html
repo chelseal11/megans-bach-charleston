@@ -135,6 +135,29 @@ body {
   border-color: var(--gold);
 }
 
+/* ─── POOL/HOT TUB BADGE ─── */
+.amenity-badges { display: flex; gap: 6px; margin: 6px 0 4px 40px; flex-wrap: wrap; }
+.amenity-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  background: linear-gradient(135deg, #E0F2FE, #BAE6FD);
+  color: #0369A1;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 12px;
+  border: 1px solid #7DD3FC;
+}
+.amenity-badge.hot-tub {
+  background: linear-gradient(135deg, #FEF3C7, #FDE68A);
+  color: #92400E;
+  border-color: #FCD34D;
+}
+.card.has-water-feature {
+  border-left: 3px solid #38BDF8;
+}
+
 /* ─── LISTING CARD ─── */
 .card {
   background: var(--white);
@@ -511,7 +534,7 @@ body {
 </div>
 
 <script>
-// ─── LISTING DATA (scraped & scored — loc 34%, val 33%, bach 33%) ───
+// ─── LISTING DATA (pool/hot tub boosted — loc 34%, val 33%, bach 33%) ───
 const LISTINGS = [
   {
     "rank": 1,
@@ -528,7 +551,7 @@ const LISTINGS = [
     "pricePerNight": 948,
     "rating": 4.86,
     "reviews": 340,
-    "highlight": "Shared patio or balcony \u2022 Outdoor furniture \u2022 BBQ grill \u2022 Hair dryer \u2022 Wifi",
+    "highlight": "Shared patio or balcony \u2022 Outdoor furniture \u2022 Hair dryer \u2022 340 reviews",
     "url": "https://www.airbnb.com/rooms/46752205",
     "lat": 32.79065,
     "lng": -79.94288,
@@ -540,6 +563,8 @@ const LISTINGS = [
       "https://a0.muscache.com/im/pictures/prohost-api/Hosting-46752205/original/5e76631b-4e7b-4541-9396-b1a0f4361ffb.jpeg",
       "https://a0.muscache.com/im/pictures/prohost-api/Hosting-46752205/original/b900d799-f887-403c-8b30-0e315bc6b94c.jpeg"
     ],
+    "hasPool": false,
+    "hasHotTub": false,
     "fav": false
   },
   {
@@ -557,7 +582,7 @@ const LISTINGS = [
     "pricePerNight": 778,
     "rating": 4.89,
     "reviews": 261,
-    "highlight": "Patio or balcony \u2022 Hair dryer \u2022 Washer \u2022 261 reviews",
+    "highlight": "Patio or balcony \u2022 Hair dryer \u2022 261 reviews",
     "url": "https://www.airbnb.com/rooms/17841718",
     "lat": 32.79242,
     "lng": -79.94676,
@@ -569,6 +594,8 @@ const LISTINGS = [
       "https://a0.muscache.com/im/pictures/13d76537-31ba-4a0b-bca9-de4649f7a239.jpg",
       "https://a0.muscache.com/im/pictures/0143df69-ca5c-41a0-a745-53979181224b.jpg"
     ],
+    "hasPool": false,
+    "hasHotTub": false,
     "fav": false
   },
   {
@@ -586,7 +613,7 @@ const LISTINGS = [
     "pricePerNight": 1222,
     "rating": 4.84,
     "reviews": 366,
-    "highlight": "Patio or balcony \u2022 Outdoor furniture \u2022 Hair dryer \u2022 Free washer \u2013 In unit \u2022 366 reviews",
+    "highlight": "Patio or balcony \u2022 Outdoor furniture \u2022 Hair dryer \u2022 366 reviews",
     "url": "https://www.airbnb.com/rooms/6968000",
     "lat": 32.791,
     "lng": -79.942,
@@ -598,6 +625,8 @@ const LISTINGS = [
       "https://a0.muscache.com/im/pictures/prohost-api/Hosting-6968000/original/89c15c17-96af-4d7c-a510-1534637c1869.jpeg",
       "https://a0.muscache.com/im/pictures/prohost-api/Hosting-6968000/original/30431f2f-b7e8-468c-8f50-17e03ac98e85.jpeg"
     ],
+    "hasPool": false,
+    "hasHotTub": false,
     "fav": false
   },
   {
@@ -615,7 +644,7 @@ const LISTINGS = [
     "pricePerNight": 1457,
     "rating": 4.75,
     "reviews": 8,
-    "highlight": "Private patio or balcony \u2022 Outdoor furniture \u2022 Hair dryer \u2022 Wifi \u2022 8 reviews",
+    "highlight": "Private patio or balcony \u2022 Outdoor furniture \u2022 Hair dryer \u2022 8 reviews",
     "url": "https://www.airbnb.com/rooms/963100235579806175",
     "lat": 32.7913,
     "lng": -79.9427,
@@ -627,10 +656,43 @@ const LISTINGS = [
       "https://a0.muscache.com/im/pictures/miso/Hosting-963100235579806175/original/188b942f-6adc-47ce-b787-8a1e83a3e7e6.jpeg",
       "https://a0.muscache.com/im/pictures/miso/Hosting-963100235579806175/original/c8fc3783-8474-4a41-8a24-0e217bd830ca.jpeg"
     ],
+    "hasPool": false,
+    "hasHotTub": false,
     "fav": false
   },
   {
     "rank": 5,
+    "name": "6-Bedroom Home with Pool, Walk to Dining & Sights!",
+    "id": "1067027116202514008",
+    "score": 7.25,
+    "loc": 9,
+    "val": 3,
+    "bach": 9.7,
+    "bedrooms": 6,
+    "baths": 5.5,
+    "guests": 12,
+    "price": 8234.0,
+    "pricePerNight": 2745,
+    "rating": 4.85,
+    "reviews": 26,
+    "highlight": "\ud83c\udfca Pool \u2022 Outdoor furniture \u2022 BBQ grill \u2022 Hair dryer \u2022 26 reviews",
+    "url": "https://www.airbnb.com/rooms/1067027116202514008",
+    "lat": 32.79301,
+    "lng": -79.94291,
+    "photos": [
+      "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1067027116202514008/original/6ab26e5d-cbe0-4665-af5b-bb4b769a3b5d.jpeg",
+      "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1067027116202514008/original/96ab5e0a-970e-475a-8d02-f813b97d3ca8.jpeg",
+      "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1067027116202514008/original/bf59e2c9-cd36-4bff-b80f-359bd29cc0a7.jpeg",
+      "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1067027116202514008/original/6b01f0f3-f6ed-4941-8ecc-4376b54e30cc.jpeg",
+      "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1067027116202514008/original/b36b8431-c8ad-42b8-9341-39ed377a7986.jpeg",
+      "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1067027116202514008/original/59ffb81f-bef2-49a0-bd5a-bcaa0e53798c.jpeg"
+    ],
+    "hasPool": true,
+    "hasHotTub": false,
+    "fav": false
+  },
+  {
+    "rank": 6,
     "name": "In the Heart of King Street | Hampton Suite",
     "id": "1077545683054037596",
     "score": 7.2,
@@ -644,7 +706,7 @@ const LISTINGS = [
     "pricePerNight": 910,
     "rating": 4.91,
     "reviews": 53,
-    "highlight": "Hair dryer \u2022 Washer \u2022 53 reviews",
+    "highlight": "Hair dryer \u2022 53 reviews",
     "url": "https://www.airbnb.com/rooms/1077545683054037596",
     "lat": 32.7898,
     "lng": -79.9393,
@@ -656,10 +718,12 @@ const LISTINGS = [
       "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1077545683054037596/original/0cb4ef52-8d7a-46db-9db9-dff1a1270a9b.jpeg",
       "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1077545683054037596/original/533a2bb9-a45e-4928-a6c6-9587890f633d.jpeg"
     ],
+    "hasPool": false,
+    "hasHotTub": false,
     "fav": false
   },
   {
-    "rank": 6,
+    "rank": 7,
     "name": "Downtown Historic Home Steps to King St",
     "id": "1062477349179807047",
     "score": 7.2,
@@ -673,7 +737,7 @@ const LISTINGS = [
     "pricePerNight": 1682,
     "rating": 4.72,
     "reviews": 81,
-    "highlight": "Patio or balcony \u2022 Hair dryer \u2022 Washer \u2022 81 reviews",
+    "highlight": "Patio or balcony \u2022 Hair dryer \u2022 81 reviews",
     "url": "https://www.airbnb.com/rooms/1062477349179807047",
     "lat": 32.7908,
     "lng": -79.9412,
@@ -685,10 +749,12 @@ const LISTINGS = [
       "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1062477349179807047/original/ea1c5ac9-bdbf-4273-9d9f-74237d732206.jpeg",
       "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1062477349179807047/original/c46fe02d-fa48-4a90-b9f1-ce672b733940.jpeg"
     ],
+    "hasPool": false,
+    "hasHotTub": false,
     "fav": false
   },
   {
-    "rank": 7,
+    "rank": 8,
     "name": "Spacious, Historic Home with Porches",
     "id": "29095989",
     "score": 7.2,
@@ -702,7 +768,7 @@ const LISTINGS = [
     "pricePerNight": 1740,
     "rating": 4.73,
     "reviews": 263,
-    "highlight": "Patio or balcony \u2022 Outdoor furniture \u2022 Hair dryer \u2022 Washer \u2022 263 reviews",
+    "highlight": "Patio or balcony \u2022 Outdoor furniture \u2022 Hair dryer \u2022 263 reviews",
     "url": "https://www.airbnb.com/rooms/29095989",
     "lat": 32.7887,
     "lng": -79.94,
@@ -714,10 +780,12 @@ const LISTINGS = [
       "https://a0.muscache.com/im/pictures/prohost-api/Hosting-29095989/original/92862239-a360-489f-a053-95afc9bb2c3c.jpeg",
       "https://a0.muscache.com/im/pictures/prohost-api/Hosting-29095989/original/ebe68bfc-d816-4bd1-8c80-9e7293c18664.jpeg"
     ],
+    "hasPool": false,
+    "hasHotTub": false,
     "fav": false
   },
   {
-    "rank": 8,
+    "rank": 9,
     "name": "Colorful House w. Outdoor Space + Parking",
     "id": "1613984834110877334",
     "score": 7.19,
@@ -731,7 +799,7 @@ const LISTINGS = [
     "pricePerNight": 1255,
     "rating": 5.0,
     "reviews": 5,
-    "highlight": "Patio or balcony \u2022 Outdoor furniture \u2022 Hair dryer \u2022 Washer \u2022 5 reviews",
+    "highlight": "Patio or balcony \u2022 Outdoor furniture \u2022 Hair dryer \u2022 5 reviews",
     "url": "https://www.airbnb.com/rooms/1613984834110877334",
     "lat": 32.792204448888455,
     "lng": -79.94331793021003,
@@ -743,10 +811,12 @@ const LISTINGS = [
       "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1613984834110877334/original/58e8f9d2-ed5e-4418-a577-5f61e46078aa.jpeg",
       "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1613984834110877334/original/3deabae3-1432-479e-ab06-37c383d22ea2.jpeg"
     ],
+    "hasPool": false,
+    "hasHotTub": false,
     "fav": false
   },
   {
-    "rank": 9,
+    "rank": 10,
     "name": "Premier Stay Near King Street l Three 1BR Suites",
     "id": "1642921990581279657",
     "score": 7.15,
@@ -760,7 +830,7 @@ const LISTINGS = [
     "pricePerNight": 1195,
     "rating": 0,
     "reviews": 0,
-    "highlight": "Hair dryer \u2022 Washer",
+    "highlight": "Hair dryer",
     "url": "https://www.airbnb.com/rooms/1642921990581279657",
     "lat": 32.789194,
     "lng": -79.930179,
@@ -772,10 +842,12 @@ const LISTINGS = [
       "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1642921990581279657/original/2fd979b4-ed77-4596-a42d-050cf18b1814.jpeg",
       "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1642921990581279657/original/54afbbc3-5c77-4b10-b280-a0f0b93b2666.jpeg"
     ],
+    "hasPool": false,
+    "hasHotTub": false,
     "fav": false
   },
   {
-    "rank": 10,
+    "rank": 11,
     "name": "3 Spacious 1BR Suite Near City Center - 0.6 miles",
     "id": "1642921995758585575",
     "score": 7.15,
@@ -789,7 +861,7 @@ const LISTINGS = [
     "pricePerNight": 1195,
     "rating": 0,
     "reviews": 0,
-    "highlight": "Hair dryer \u2022 Washer",
+    "highlight": "Hair dryer",
     "url": "https://www.airbnb.com/rooms/1642921995758585575",
     "lat": 32.789194,
     "lng": -79.930179,
@@ -801,10 +873,12 @@ const LISTINGS = [
       "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1642921995758585575/original/d40c04c2-fdf5-4887-8b98-09cde6e45f86.jpeg",
       "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1642921995758585575/original/cf5bf28f-dcca-4276-83f0-bebca44b18b3.jpeg"
     ],
+    "hasPool": false,
+    "hasHotTub": false,
     "fav": false
   },
   {
-    "rank": 11,
+    "rank": 12,
     "name": "Guesthouse Charleston East 42 A & B",
     "id": "49090156",
     "score": 7.09,
@@ -818,7 +892,7 @@ const LISTINGS = [
     "pricePerNight": 1593,
     "rating": 4.91,
     "reviews": 23,
-    "highlight": "Outdoor furniture \u2022 Hair dryer \u2022 Washer \u2013 In unit \u2022 23 reviews",
+    "highlight": "Outdoor furniture \u2022 Hair dryer \u2022 23 reviews",
     "url": "https://www.airbnb.com/rooms/49090156",
     "lat": 32.7928,
     "lng": -79.9423,
@@ -830,10 +904,12 @@ const LISTINGS = [
       "https://a0.muscache.com/im/pictures/prohost-api/Hosting-49090156/original/55304bc4-6acb-42de-90b8-f0ec6088df9e.jpeg",
       "https://a0.muscache.com/im/pictures/prohost-api/Hosting-49090156/original/e34465d7-d561-4f5a-94dd-99f4548c3b35.jpeg"
     ],
+    "hasPool": false,
+    "hasHotTub": false,
     "fav": false
   },
   {
-    "rank": 12,
+    "rank": 13,
     "name": "Where Tranquility Blooms | Blossoms on Cannon",
     "id": "52920171",
     "score": 7.09,
@@ -847,7 +923,7 @@ const LISTINGS = [
     "pricePerNight": 1579,
     "rating": 4.6,
     "reviews": 70,
-    "highlight": "Private patio or balcony \u2022 Outdoor furniture \u2022 Hair dryer \u2022 Free washer \u2013 In unit \u2022 70 reviews",
+    "highlight": "Private patio or balcony \u2022 Outdoor furniture \u2022 Hair dryer \u2022 70 reviews",
     "url": "https://www.airbnb.com/rooms/52920171",
     "lat": 32.7895,
     "lng": -79.9458,
@@ -859,10 +935,12 @@ const LISTINGS = [
       "https://a0.muscache.com/im/pictures/prohost-api/Hosting-52920171/original/fb14995a-964a-424a-8dba-992131fca543.jpeg",
       "https://a0.muscache.com/im/pictures/prohost-api/Hosting-52920171/original/3bbbed01-a54e-40b0-855a-b951d2526515.jpeg"
     ],
+    "hasPool": false,
+    "hasHotTub": false,
     "fav": false
   },
   {
-    "rank": 13,
+    "rank": 14,
     "name": "The Chapel | Manor 4BR Charming Charleston, Near K",
     "id": "1026217780981097434",
     "score": 7.09,
@@ -876,7 +954,7 @@ const LISTINGS = [
     "pricePerNight": 1392,
     "rating": 4.9,
     "reviews": 52,
-    "highlight": "Shared patio or balcony \u2022 Outdoor furniture \u2022 Hair dryer \u2022 Washer \u2022 52 reviews",
+    "highlight": "Shared patio or balcony \u2022 Outdoor furniture \u2022 Hair dryer \u2022 52 reviews",
     "url": "https://www.airbnb.com/rooms/1026217780981097434",
     "lat": 32.7903,
     "lng": -79.9455,
@@ -888,10 +966,12 @@ const LISTINGS = [
       "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1026217780981097434/original/c99c1776-eb1f-4a75-a1b3-4516a8c97968.jpeg",
       "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1026217780981097434/original/71ca56b6-5866-48c5-bf7b-2834c0a135a2.jpeg"
     ],
+    "hasPool": false,
+    "hasHotTub": false,
     "fav": false
   },
   {
-    "rank": 14,
+    "rank": 15,
     "name": "Downtown Charleston Gem | Walk Everywhere | Sleeps",
     "id": "1371130742322595578",
     "score": 7.09,
@@ -905,7 +985,7 @@ const LISTINGS = [
     "pricePerNight": 2167,
     "rating": 4.33,
     "reviews": 6,
-    "highlight": "Private patio or balcony \u2022 Outdoor furniture \u2022 Hair dryer \u2022 Wifi \u2022 6 reviews",
+    "highlight": "Private patio or balcony \u2022 Outdoor furniture \u2022 Hair dryer \u2022 6 reviews",
     "url": "https://www.airbnb.com/rooms/1371130742322595578",
     "lat": 32.7928,
     "lng": -79.9422,
@@ -917,10 +997,12 @@ const LISTINGS = [
       "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1371130742322595578/original/6efcbb69-de2a-4366-a47d-ec2059ee9a4d.jpeg",
       "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1371130742322595578/original/5fcf805a-0485-4ddc-bdaf-b6058efc69eb.jpeg"
     ],
+    "hasPool": false,
+    "hasHotTub": false,
     "fav": false
   },
   {
-    "rank": 15,
+    "rank": 16,
     "name": "Stylish NEW 4 Bedroom Downtown Home",
     "id": "1278377186833537504",
     "score": 7.02,
@@ -934,7 +1016,7 @@ const LISTINGS = [
     "pricePerNight": 1654,
     "rating": 4.9,
     "reviews": 30,
-    "highlight": "Patio or balcony \u2022 Outdoor furniture \u2022 Hair dryer \u2022 Washer \u2022 30 reviews",
+    "highlight": "Patio or balcony \u2022 Outdoor furniture \u2022 Hair dryer \u2022 30 reviews",
     "url": "https://www.airbnb.com/rooms/1278377186833537504",
     "lat": 32.78995166472671,
     "lng": -79.94576800897728,
@@ -946,10 +1028,12 @@ const LISTINGS = [
       "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1278377186833537504/original/587fa1fc-0b49-4a20-91ce-ac09cf022b98.jpeg",
       "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1278377186833537504/original/8a94a1ea-804b-4469-ada0-04a59790f8a8.jpeg"
     ],
+    "hasPool": false,
+    "hasHotTub": false,
     "fav": false
   },
   {
-    "rank": 16,
+    "rank": 17,
     "name": "Sophisticated Home in Historic Charleston",
     "id": "1392142331501407010",
     "score": 7.02,
@@ -963,7 +1047,7 @@ const LISTINGS = [
     "pricePerNight": 2025,
     "rating": 4.94,
     "reviews": 17,
-    "highlight": "Patio or balcony \u2022 Outdoor furniture \u2022 BBQ grill \u2022 Hair dryer \u2022 Washer",
+    "highlight": "Patio or balcony \u2022 Outdoor furniture \u2022 Hair dryer \u2022 17 reviews",
     "url": "https://www.airbnb.com/rooms/1392142331501407010",
     "lat": 32.7896,
     "lng": -79.946,
@@ -975,10 +1059,12 @@ const LISTINGS = [
       "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1392142331501407010/original/4b0b452a-d036-4a6d-9bbb-a6821a98b7c6.jpeg",
       "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1392142331501407010/original/6f676f6b-96a7-487b-8c15-8577f8414620.jpeg"
     ],
+    "hasPool": false,
+    "hasHotTub": false,
     "fav": false
   },
   {
-    "rank": 17,
+    "rank": 18,
     "name": "Cannonborough Court",
     "id": "22626614",
     "score": 7.02,
@@ -992,7 +1078,7 @@ const LISTINGS = [
     "pricePerNight": 2422,
     "rating": 4.97,
     "reviews": 93,
-    "highlight": "Patio or balcony \u2022 Outdoor furniture \u2022 BBQ grill \u2022 Hair dryer \u2022 Washer",
+    "highlight": "Patio or balcony \u2022 Outdoor furniture \u2022 Hair dryer \u2022 93 reviews",
     "url": "https://www.airbnb.com/rooms/22626614",
     "lat": 32.79165,
     "lng": -79.94446,
@@ -1004,10 +1090,12 @@ const LISTINGS = [
       "https://a0.muscache.com/im/pictures/8b9a1a9f-e832-4ef7-9b59-a16537e9bb13.jpg",
       "https://a0.muscache.com/im/pictures/2462f4f6-8a14-430b-ab42-dc22fcd2cc1d.jpg"
     ],
+    "hasPool": false,
+    "hasHotTub": false,
     "fav": false
   },
   {
-    "rank": 18,
+    "rank": 19,
     "name": "Group Getaway - 6BR/6BA in Heart of Charleston",
     "id": "1632621775599552961",
     "score": 7.02,
@@ -1021,7 +1109,7 @@ const LISTINGS = [
     "pricePerNight": 2276,
     "rating": 0,
     "reviews": 0,
-    "highlight": "Patio or balcony \u2022 Outdoor furniture \u2022 BBQ grill \u2022 Hair dryer \u2022 Washer",
+    "highlight": "Patio or balcony \u2022 Outdoor furniture \u2022 Hair dryer",
     "url": "https://www.airbnb.com/rooms/1632621775599552961",
     "lat": 32.78914,
     "lng": -79.9453,
@@ -1033,64 +1121,39 @@ const LISTINGS = [
       "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1632621775599552961/original/b5b0d67e-27b7-4e46-9b80-203d2dfc701b.jpeg",
       "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1632621775599552961/original/5febd4fc-9c79-4936-8fdf-dc2f15fa7a25.jpeg"
     ],
-    "fav": false
-  },
-  {
-    "rank": 19,
-    "name": "4 Bedroom - 2 Blocks to King Street!",
-    "id": "1292775761159701427",
-    "score": 7.01,
-    "loc": 8,
-    "val": 6,
-    "bach": 7.0,
-    "bedrooms": 4,
-    "baths": 2.0,
-    "guests": 12,
-    "price": 3378.0,
-    "pricePerNight": 1126,
-    "rating": 5.0,
-    "reviews": 5,
-    "highlight": "Patio or balcony \u2022 Outdoor furniture \u2022 Hair dryer \u2022 Free washer \u2013 In unit \u2022 5 reviews",
-    "url": "https://www.airbnb.com/rooms/1292775761159701427",
-    "lat": 32.79572521161101,
-    "lng": -79.94358142617182,
-    "photos": [
-      "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1292775761159701427/original/03713c65-686e-4df1-92db-94acd6b29953.jpeg",
-      "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1292775761159701427/original/2a424ad0-83f4-4a29-9ed4-dda696d81e6e.jpeg",
-      "https://a0.muscache.com/im/pictures/miso/Hosting-1292775761159701427/original/a6d4c5e3-d66d-4a3c-995f-069b7e13f6c3.jpeg",
-      "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1292775761159701427/original/5b37143d-25b5-4fbc-8337-5f6d3a04eb55.jpeg",
-      "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1292775761159701427/original/8fd4332b-0daf-4720-b938-dbabeda82f88.jpeg",
-      "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1292775761159701427/original/dce00c80-392a-4df8-a3ab-91425aae7996.jpeg"
-    ],
+    "hasPool": false,
+    "hasHotTub": false,
     "fav": false
   },
   {
     "rank": 20,
-    "name": "Downtown Luxury 5 Bed + Elevator, Parking, Bikes!",
-    "id": "1441196533969684509",
-    "score": 6.95,
+    "name": "Hot Tub \u2022 Rooftop \u2022 Parking \u2022 3 Blocks to King St!",
+    "id": "1502332482803310104",
+    "score": 7.02,
     "loc": 9,
-    "val": 4,
-    "bach": 7.8,
-    "bedrooms": 4,
-    "baths": 3.0,
-    "guests": 10,
-    "price": 6381.0,
-    "pricePerNight": 2127,
+    "val": 2,
+    "bach": 10,
+    "bedrooms": 8,
+    "baths": 7.0,
+    "guests": 16,
+    "price": 10401.0,
+    "pricePerNight": 3467,
     "rating": 5.0,
-    "reviews": 23,
-    "highlight": "Patio or balcony \u2022 Outdoor furniture \u2022 Outdoor dining area \u2022 Hair dryer \u2022 Washer",
-    "url": "https://www.airbnb.com/rooms/1441196533969684509",
-    "lat": 32.7895,
-    "lng": -79.9434,
+    "reviews": 9,
+    "highlight": "\u2668\ufe0f Hot Tub \u2022 Klipsch Bluetooth sound system \u2022 Private patio or balcony \u2022 Hair dryer \u2022 9 reviews",
+    "url": "https://www.airbnb.com/rooms/1502332482803310104",
+    "lat": 32.7905,
+    "lng": -79.9446,
     "photos": [
-      "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1441196533969684509/original/6c655d4e-af43-4770-b6b0-218f48eac175.jpeg",
-      "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1441196533969684509/original/9e252342-e23f-48c5-a0ab-cc4aabde9f0b.jpeg",
-      "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1441196533969684509/original/b991a9b2-86dd-45f4-987d-6cc4302e9d05.jpeg",
-      "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1441196533969684509/original/c7d9f0aa-f220-4f60-825c-fb25add5db21.jpeg",
-      "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1441196533969684509/original/039f6c25-794d-456c-b813-4c454fc938f1.jpeg",
-      "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1441196533969684509/original/db345cab-bc89-48ff-aef2-15e1fcf89117.jpeg"
+      "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1502332482803310104/original/07e7fd34-368c-4907-b538-c2c7f4734e87.jpeg",
+      "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1502332482803310104/original/dce78743-bd10-45a7-b8dc-76cfce9a1bc4.jpeg",
+      "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1502332482803310104/original/6646b775-6d16-41a8-a8bc-9ba4140baf37.jpeg",
+      "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1502332482803310104/original/822c0c8a-220d-40e7-9656-61fea9ecce51.jpeg",
+      "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1502332482803310104/original/3e54baa0-5d86-48e6-85f6-b4142fe91aef.jpeg",
+      "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1502332482803310104/original/9715fadd-38b3-4c27-9fa2-c7d7c0725fe4.jpeg"
     ],
+    "hasPool": false,
+    "hasHotTub": true,
     "fav": false
   }
 ];
@@ -1253,8 +1316,10 @@ function renderCards() {
     const ratingStr = l.rating ? `\u2605 ${l.rating} (${l.reviews} reviews)` : 'New listing';
     const displayRank = l._displayRank || l.rank;
 
+    const hasWater = l.hasPool || l.hasHotTub;
+
     return `
-    <div class="card" id="card-${l.id}">
+    <div class="card ${hasWater ? 'has-water-feature' : ''}" id="card-${l.id}">
       ${photos.length > 0 ? `
       <div class="carousel" id="carousel-${l.id}" onclick="event.stopPropagation()">
         ${photos.map((p, idx) => `<img src="${p}" alt="${l.name}" class="${idx === 0 ? 'active' : ''}" loading="lazy">`).join('')}
@@ -1270,6 +1335,10 @@ function renderCards() {
       <div class="card-body" onclick="flyTo(${l.lat}, ${l.lng}, '${l.id}')">
         <div class="card-rank">${displayRank}</div>
         <div class="card-name">${l.name}</div>
+        ${hasWater ? `<div class="amenity-badges">
+          ${l.hasPool ? '<span class="amenity-badge">\u{1F3CA} Pool</span>' : ''}
+          ${l.hasHotTub ? '<span class="amenity-badge hot-tub">\u2668\uFE0F Hot Tub</span>' : ''}
+        </div>` : ''}
         <div class="card-score-badge">Score: ${l.score.toFixed(1)} / 10</div>
         <div class="score-bars">
           <div class="score-bar-row">

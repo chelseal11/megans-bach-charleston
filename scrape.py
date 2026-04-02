@@ -105,8 +105,14 @@ def score_bach_fit(max_guests, bedrooms, bathrooms, amenities_lower):
     elif bathrooms >= 3: score += 0.5
     elif bathrooms <= 1: score -= 1.0
 
-    # Fun / party amenities
-    fun_keywords = ["pool", "hot tub", "rooftop", "fire pit", "game room",
+    # Pool / hot tub — big bump
+    has_pool = any("pool" in a for a in amenities_lower)
+    has_hottub = any("hot tub" in a or "jacuzzi" in a for a in amenities_lower)
+    if has_pool:   score += 1.5
+    if has_hottub: score += 1.5
+
+    # Other fun / party amenities
+    fun_keywords = ["rooftop", "fire pit", "game room",
                     "patio", "deck", "balcony", "grill", "bbq", "outdoor",
                     "sound system", "bluetooth", "piano", "gym"]
     fun_count = sum(1 for kw in fun_keywords if any(kw in a for a in amenities_lower))
