@@ -461,7 +461,7 @@ body {
     <span id="voterDisplay" style="font-size:0.8rem; color:var(--gold-dark); font-weight:600;"></span>
     <button class="header-btn outline" onclick="changeVoter()">Change Name</button>
     <button class="header-btn" onclick="showResults()">View Results</button>
-    <button class="header-btn outline" onclick="copyShareLink()">Share Votes</button>
+    <button class="header-btn outline" onclick="copyShareLink()">Share Link</button>
     <span id="syncStatus" style="font-size:0.7rem; color:var(--sage); font-weight:500;"></span>
   </div>
 </div>
@@ -1103,55 +1103,109 @@ let voterName = '';
 let votes = {}; // { listingId: { voterName: emoji } }
 let currentSort = 'score';
 let sortedListings = [...LISTINGS];
+let fileSha = null; // GitHub file SHA for updates
+let isSaving = false;
 
-// ─── PERSISTENCE (localStorage + URL sharing) ───
-function saveVotes() {
-  localStorage.setItem('bach_votes', JSON.stringify(votes));
+// ─── GITHUB VOTES STORAGE ───
+const GH_TOKEN = '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';
+const GH_API = 'https://api.github.com/repos/chelseal11/megans-bach-charleston/contents/votes.json';
+const GH_HEADERS = {
+  'Authorization': 'Bearer ' + GH_TOKEN,
+  'Content-Type': 'application/json',
+  'Accept': 'application/vnd.github.v3+json'
+};
+
+async function loadVotes() {
+  const dot = document.getElementById('syncStatus');
+  try {
+    const res = await fetch(GH_API, { headers: GH_HEADERS });
+    if (res.ok) {
+      const data = await res.json();
+      fileSha = data.sha;
+      const content = JSON.parse(atob(data.content));
+      votes = content || {};
+      dot.innerHTML = '&#x1f7e2; Synced';
+    }
+  } catch(e) {
+    console.warn('Failed to load votes from GitHub', e);
+    dot.innerHTML = '&#x1f534; Offline';
+    // Fall back to localStorage
+    const saved = localStorage.getItem('bach_votes');
+    if (saved) try { votes = JSON.parse(saved); } catch(e) {}
+  }
 }
 
-function loadVotes() {
-  // Load from localStorage
-  const saved = localStorage.getItem('bach_votes');
-  if (saved) {
-    try { votes = JSON.parse(saved); } catch(e) { votes = {}; }
-  }
-  // Merge votes from URL hash if present
-  const hash = window.location.hash;
-  if (hash && hash.startsWith('#votes=')) {
-    try {
-      const incoming = JSON.parse(atob(decodeURIComponent(hash.slice(7))));
-      // Merge: incoming votes don't overwrite existing ones for the same voter
-      for (const [listingId, voterMap] of Object.entries(incoming)) {
+async function saveVotes() {
+  // Always save locally as backup
+  localStorage.setItem('bach_votes', JSON.stringify(votes));
+
+  if (isSaving) return;
+  isSaving = true;
+  const dot = document.getElementById('syncStatus');
+  dot.innerHTML = '&#x1f7e1; Saving...';
+
+  try {
+    // Fetch latest SHA first to avoid conflicts
+    const getRes = await fetch(GH_API, { headers: GH_HEADERS });
+    if (getRes.ok) {
+      const getData = await getRes.json();
+      fileSha = getData.sha;
+      // Merge remote votes with local to avoid overwrites
+      const remote = JSON.parse(atob(getData.content)) || {};
+      for (const [listingId, voterMap] of Object.entries(remote)) {
         if (!votes[listingId]) votes[listingId] = {};
         for (const [name, emoji] of Object.entries(voterMap)) {
-          if (!votes[listingId][name]) {
+          if (votes[listingId][name] === undefined) {
             votes[listingId][name] = emoji;
           }
         }
       }
-      saveVotes();
-      // Clean the URL hash so it doesn't re-merge on refresh
-      history.replaceState(null, '', window.location.pathname + window.location.search);
-    } catch(e) { console.warn('Could not parse votes from URL', e); }
+    }
+
+    const res = await fetch(GH_API, {
+      method: 'PUT',
+      headers: GH_HEADERS,
+      body: JSON.stringify({
+        message: 'Update votes',
+        content: btoa(JSON.stringify(votes, null, 2)),
+        sha: fileSha
+      })
+    });
+    if (res.ok) {
+      const result = await res.json();
+      fileSha = result.content.sha;
+      dot.innerHTML = '&#x1f7e2; Synced';
+    } else {
+      dot.innerHTML = '&#x1f534; Save failed';
+    }
+  } catch(e) {
+    console.warn('Failed to save votes to GitHub', e);
+    dot.innerHTML = '&#x1f534; Offline';
   }
+  isSaving = false;
 }
 
 // ─── INIT ───
-window.addEventListener('DOMContentLoaded', () => {
+window.addEventListener('DOMContentLoaded', async () => {
   const savedName = localStorage.getItem('bach_voter_name');
   if (savedName) voterName = savedName;
 
-  loadVotes();
+  await loadVotes();
 
   if (!voterName) {
     document.getElementById('voterModal').classList.add('show');
   } else {
     document.getElementById('voterDisplay').textContent = 'Voting as: ' + voterName;
   }
-  document.getElementById('syncStatus').innerHTML = '';
   sortedListings.forEach((l, i) => l._displayRank = i + 1);
   renderCards();
   initMap();
+
+  // Poll for new votes every 10 seconds
+  setInterval(async () => {
+    await loadVotes();
+    renderCards();
+  }, 10000);
 });
 
 // ─── VOTER NAME ───
@@ -1194,16 +1248,13 @@ function castVote(listingId, emojiKey) {
 
 // ─── SHARE LINK ───
 function copyShareLink() {
-  // Encode all votes into URL hash so others can merge them
-  const encoded = btoa(JSON.stringify(votes));
-  const pageUrl = window.location.origin + window.location.pathname;
-  const shareUrl = pageUrl + '#votes=' + encodeURIComponent(encoded);
-  navigator.clipboard.writeText(shareUrl).then(() => {
+  const pageUrl = 'https://chelseal11.github.io/megans-bach-charleston/';
+  navigator.clipboard.writeText(pageUrl).then(() => {
     const btn = event.target;
     btn.textContent = 'Copied!';
-    setTimeout(() => { btn.textContent = 'Share Votes'; }, 2000);
+    setTimeout(() => { btn.textContent = 'Share Link'; }, 2000);
   }).catch(() => {
-    prompt('Copy this link to share your votes with the group:', shareUrl);
+    prompt('Copy this link and share it with the group:', pageUrl);
   });
 }
 
