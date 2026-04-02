@@ -505,7 +505,8 @@ body {
       <button class="sort-btn" onclick="sortListings('bach')" id="sort-bach">Bach Fit</button>
       <button class="sort-btn" onclick="sortListings('price')" id="sort-price">Price</button>
       <span class="sort-label" style="margin-left:8px;">Filter:</span>
-      <button class="sort-btn" onclick="toggleFilter('pool')" id="filter-pool">Pool / Hot Tub</button>
+      <button class="sort-btn" onclick="toggleFilter('pool')" id="filter-pool">Pool</button>
+      <button class="sort-btn" onclick="toggleFilter('hottub')" id="filter-hottub">Hot Tub</button>
       <button class="sort-btn" onclick="toggleFilter('parking')" id="filter-parking">Free Parking</button>
     </div>
     <div id="cardList"></div>
@@ -1438,7 +1439,10 @@ function applyFiltersAndSort() {
 
   // Apply filters
   if (activeFilters.has('pool')) {
-    filtered = filtered.filter(l => l.hasPool || l.hasHotTub);
+    filtered = filtered.filter(l => l.hasPool);
+  }
+  if (activeFilters.has('hottub')) {
+    filtered = filtered.filter(l => l.hasHotTub);
   }
   if (activeFilters.has('parking')) {
     filtered = filtered.filter(l => l.hasParking);
