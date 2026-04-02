@@ -1460,6 +1460,27 @@ function applyFiltersAndSort() {
   sortedListings = filtered;
   sortedListings.forEach((l, i) => l._displayRank = i + 1);
   renderCards();
+  updateMapMarkers();
+}
+
+function updateMapMarkers() {
+  if (!map) return;
+  const visibleIds = new Set(sortedListings.map(l => l.id));
+  LISTINGS.forEach(l => {
+    if (markers[l.id]) {
+      if (visibleIds.has(l.id)) {
+        if (!map.hasLayer(markers[l.id])) markers[l.id].addTo(map);
+      } else {
+        map.removeLayer(markers[l.id]);
+      }
+    }
+  });
+  // Fit bounds to visible markers
+  const visible = sortedListings.map(l => markers[l.id]).filter(Boolean);
+  if (visible.length > 0) {
+    const group = L.featureGroup(visible);
+    map.fitBounds(group.getBounds().pad(0.15));
+  }
 }
 
 function renderCards() {
