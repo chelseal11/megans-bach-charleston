@@ -101,6 +101,40 @@ body {
   border-bottom: 1px solid var(--gold-light);
 }
 
+/* ─── SORT BAR ─── */
+.sort-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+.sort-label {
+  font-size: 0.7rem;
+  color: #999;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-right: 2px;
+}
+.sort-btn {
+  background: var(--blush-light);
+  border: 1px solid var(--blush);
+  color: var(--charcoal);
+  padding: 4px 10px;
+  border-radius: 14px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.sort-btn:hover { background: var(--blush); }
+.sort-btn.active {
+  background: var(--gold);
+  color: var(--white);
+  border-color: var(--gold);
+}
+
 /* ─── LISTING CARD ─── */
 .card {
   background: var(--white);
@@ -435,6 +469,14 @@ body {
 <div class="main">
   <div class="sidebar">
     <div class="sidebar-title">Top 20 Stays &mdash; Jul 16&ndash;19, 2026 &mdash; 10 Guests</div>
+    <div class="sort-bar">
+      <span class="sort-label">Sort by:</span>
+      <button class="sort-btn active" onclick="sortListings('score')" id="sort-score">Score</button>
+      <button class="sort-btn" onclick="sortListings('loc')" id="sort-loc">Location</button>
+      <button class="sort-btn" onclick="sortListings('val')" id="sort-val">Value</button>
+      <button class="sort-btn" onclick="sortListings('bach')" id="sort-bach">Bach Fit</button>
+      <button class="sort-btn" onclick="sortListings('price')" id="sort-price">Price</button>
+    </div>
     <div id="cardList"></div>
   </div>
   <div class="map-container">
@@ -1065,6 +1107,8 @@ let isSaving = false;
 // ─── STATE ───
 let voterName = '';
 let votes = {}; // { listingId: { voterName: emoji } }
+let currentSort = 'score';
+let sortedListings = [...LISTINGS];
 
 // ─── INIT ───
 window.addEventListener('DOMContentLoaded', async () => {
@@ -1080,6 +1124,7 @@ window.addEventListener('DOMContentLoaded', async () => {
   } else {
     document.getElementById('voterDisplay').textContent = 'Voting as: ' + voterName;
   }
+  sortedListings.forEach((l, i) => l._displayRank = i + 1);
   renderCards();
   initMap();
 
@@ -1187,15 +1232,34 @@ function copyShareLink() {
 }
 
 // ─── RENDER CARDS ───
+function sortListings(key) {
+  currentSort = key;
+  document.querySelectorAll('.sort-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('sort-' + key).classList.add('active');
+
+  sortedListings = [...LISTINGS].sort((a, b) => {
+    if (key === 'price') return a.price - b.price; // cheapest first
+    if (key === 'loc') return b.loc - a.loc || b.score - a.score;
+    if (key === 'val') return b.val - a.val || b.score - a.score;
+    if (key === 'bach') return b.bach - a.bach || b.score - a.score;
+    return b.score - a.score; // default: total score
+  });
+
+  // Re-assign display ranks based on sort order
+  sortedListings.forEach((l, i) => l._displayRank = i + 1);
+  renderCards();
+}
+
 function renderCards() {
   const container = document.getElementById('cardList');
-  container.innerHTML = LISTINGS.map(l => {
+  container.innerHTML = sortedListings.map(l => {
     const ppn = Math.round(l.price / 10 / 3);
     const listingVotes = votes[l.id] || {};
     const myVote = voterName ? listingVotes[voterName] : null;
     const voteCount = Object.keys(listingVotes).length;
     const photos = l.photos || [];
     const ratingStr = l.rating ? `\u2605 ${l.rating} (${l.reviews} reviews)` : 'New listing';
+    const displayRank = l._displayRank || l.rank;
 
     return `
     <div class="card" id="card-${l.id}">
@@ -1212,7 +1276,7 @@ function renderCards() {
         ` : ''}
       </div>` : ''}
       <div class="card-body" onclick="flyTo(${l.lat}, ${l.lng}, '${l.id}')">
-        <div class="card-rank">${l.rank}</div>
+        <div class="card-rank">${displayRank}</div>
         <div class="card-name">${l.name}</div>
         <div class="card-score-badge">Score: ${l.score.toFixed(1)} / 10</div>
         <div class="score-bars">
