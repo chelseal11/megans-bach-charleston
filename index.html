@@ -461,8 +461,8 @@ body {
     <span id="voterDisplay" style="font-size:0.8rem; color:var(--gold-dark); font-weight:600;"></span>
     <button class="header-btn outline" onclick="changeVoter()">Change Name</button>
     <button class="header-btn" onclick="showResults()">View Results</button>
-    <button class="header-btn outline" onclick="copyShareLink()">Share Link</button>
-    <span id="syncStatus" style="font-size:0.7rem; color:var(--sage); font-weight:500;">&#x1f7e2; Live</span>
+    <button class="header-btn outline" onclick="copyShareLink()">Share Votes</button>
+    <span id="syncStatus" style="font-size:0.7rem; color:var(--sage); font-weight:500;"></span>
   </div>
 </div>
 
@@ -1098,41 +1098,60 @@ const LISTINGS = [
 // Upper King reference point
 const UPPER_KING = { lat: 32.7876, lng: -79.9378 };
 
-// ─── CLOUD BACKEND (jsonblob.com) ───
-const BLOB_ID = '019d49dd-8f93-7679-aae3-b790aafc64d1';
-const BLOB_URL = 'https://jsonblob.com/api/jsonBlob/' + BLOB_ID;
-let syncInterval = null;
-let isSaving = false;
-
 // ─── STATE ───
 let voterName = '';
 let votes = {}; // { listingId: { voterName: emoji } }
 let currentSort = 'score';
 let sortedListings = [...LISTINGS];
 
+// ─── PERSISTENCE (localStorage + URL sharing) ───
+function saveVotes() {
+  localStorage.setItem('bach_votes', JSON.stringify(votes));
+}
+
+function loadVotes() {
+  // Load from localStorage
+  const saved = localStorage.getItem('bach_votes');
+  if (saved) {
+    try { votes = JSON.parse(saved); } catch(e) { votes = {}; }
+  }
+  // Merge votes from URL hash if present
+  const hash = window.location.hash;
+  if (hash && hash.startsWith('#votes=')) {
+    try {
+      const incoming = JSON.parse(atob(decodeURIComponent(hash.slice(7))));
+      // Merge: incoming votes don't overwrite existing ones for the same voter
+      for (const [listingId, voterMap] of Object.entries(incoming)) {
+        if (!votes[listingId]) votes[listingId] = {};
+        for (const [name, emoji] of Object.entries(voterMap)) {
+          if (!votes[listingId][name]) {
+            votes[listingId][name] = emoji;
+          }
+        }
+      }
+      saveVotes();
+      // Clean the URL hash so it doesn't re-merge on refresh
+      history.replaceState(null, '', window.location.pathname + window.location.search);
+    } catch(e) { console.warn('Could not parse votes from URL', e); }
+  }
+}
+
 // ─── INIT ───
-window.addEventListener('DOMContentLoaded', async () => {
-  // Load voter name from localStorage
+window.addEventListener('DOMContentLoaded', () => {
   const savedName = localStorage.getItem('bach_voter_name');
   if (savedName) voterName = savedName;
 
-  // Load votes from cloud
-  await loadFromCloud();
+  loadVotes();
 
   if (!voterName) {
     document.getElementById('voterModal').classList.add('show');
   } else {
     document.getElementById('voterDisplay').textContent = 'Voting as: ' + voterName;
   }
+  document.getElementById('syncStatus').innerHTML = '';
   sortedListings.forEach((l, i) => l._displayRank = i + 1);
   renderCards();
   initMap();
-
-  // Poll for new votes every 5 seconds
-  syncInterval = setInterval(async () => {
-    await loadFromCloud();
-    renderCards();
-  }, 5000);
 });
 
 // ─── VOTER NAME ───
@@ -1160,11 +1179,8 @@ const EMOJIS = [
   { emoji: '\u{1F44E}', label: 'nah', key: 'nah' }
 ];
 
-async function castVote(listingId, emojiKey) {
+function castVote(listingId, emojiKey) {
   if (!voterName) { document.getElementById('voterModal').classList.add('show'); return; }
-
-  // Fetch latest from cloud first to avoid overwriting
-  await loadFromCloud();
 
   if (!votes[listingId]) votes[listingId] = {};
   if (votes[listingId][voterName] === emojiKey) {
@@ -1172,62 +1188,22 @@ async function castVote(listingId, emojiKey) {
   } else {
     votes[listingId][voterName] = emojiKey;
   }
+  saveVotes();
   renderCards();
-  await saveToCloud();
-}
-
-// ─── CLOUD PERSISTENCE ───
-async function saveToCloud() {
-  if (isSaving) return;
-  isSaving = true;
-  try {
-    await fetch(BLOB_URL, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ votes })
-    });
-  } catch(e) {
-    console.warn('Cloud save failed, retrying...', e);
-  }
-  isSaving = false;
-}
-
-async function loadFromCloud() {
-  try {
-    const res = await fetch(BLOB_URL);
-    if (res.ok) {
-      const data = await res.json();
-      if (data && data.votes) {
-        const oldJson = JSON.stringify(votes);
-        votes = data.votes;
-        // Flash sync indicator if data changed
-        if (JSON.stringify(votes) !== oldJson) {
-          const dot = document.getElementById('syncStatus');
-          dot.innerHTML = '&#x1f7e1; Syncing...';
-          setTimeout(() => { dot.innerHTML = '&#x1f7e2; Live'; }, 1000);
-        }
-      }
-    }
-  } catch(e) {
-    console.warn('Cloud load failed', e);
-    const dot = document.getElementById('syncStatus');
-    dot.innerHTML = '&#x1f534; Offline';
-  }
 }
 
 // ─── SHARE LINK ───
 function copyShareLink() {
-  // Just share the base URL — votes live in the cloud now!
-  const shareUrl = 'https://jsonblob.com/api/jsonBlob/' + BLOB_ID;
-  // Build a nicer shareable page link
+  // Encode all votes into URL hash so others can merge them
+  const encoded = btoa(JSON.stringify(votes));
   const pageUrl = window.location.origin + window.location.pathname;
-  const text = pageUrl;
-  navigator.clipboard.writeText(text).then(() => {
+  const shareUrl = pageUrl + '#votes=' + encodeURIComponent(encoded);
+  navigator.clipboard.writeText(shareUrl).then(() => {
     const btn = event.target;
     btn.textContent = 'Copied!';
-    setTimeout(() => { btn.textContent = 'Share Link'; }, 2000);
+    setTimeout(() => { btn.textContent = 'Share Votes'; }, 2000);
   }).catch(() => {
-    prompt('Copy this link and share it with the group:', text);
+    prompt('Copy this link to share your votes with the group:', shareUrl);
   });
 }
 
