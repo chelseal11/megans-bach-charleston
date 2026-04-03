@@ -1255,7 +1255,7 @@ window.addEventListener('DOMContentLoaded', async () => {
   } else {
     document.getElementById('voterDisplay').textContent = 'Voting as: ' + voterName;
   }
-  sortedListings.forEach((l, i) => l._displayRank = i + 1);
+
   renderCards();
   initMap();
 
@@ -1362,7 +1362,7 @@ function applyFiltersAndSort() {
   });
 
   sortedListings = filtered;
-  sortedListings.forEach((l, i) => l._displayRank = i + 1);
+
   renderCards();
   updateMapMarkers();
 }
@@ -1396,7 +1396,7 @@ function renderCards() {
     const voteCount = Object.keys(listingVotes).length;
     const photos = l.photos || [];
     const ratingStr = l.rating ? `\u2605 ${l.rating} (${l.reviews} reviews)` : 'New listing';
-    const displayRank = l._displayRank || l.rank;
+    const displayRank = l.rank;
 
     const hasWater = l.hasPool || l.hasHotTub;
 
@@ -1551,7 +1551,7 @@ function initMap() {
               <button class="carousel-btn next" onclick="slideCarousel('${popupId}', 1, true)">\u203A</button>
             ` : ''}
           </div>` : ''}
-          <b style="font-family:Playfair Display,serif; font-size:14px;">#${l.rank} ${l.name}</b><br>
+          <b style="font-family:Playfair Display,serif; font-size:14px;">${l.name}</b><br>
           <span style="color:#D4A843; font-weight:600;">Score: ${l.score.toFixed(1)}</span><br>
           ${l.bedrooms}BR \u2022 ${l.baths}ba \u2022 ${ratingStr}<br>
           <b>$${l.price.toLocaleString()}</b> <span style="color:#999;">($${ppn}/pp/night)</span><br>
