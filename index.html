@@ -181,14 +181,14 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 28px; height: 28px;
+  width: 24px; height: 24px;
   background: var(--gold);
   color: var(--white);
+  font-family: 'Montserrat', sans-serif;
   font-weight: 700;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   border-radius: 50%;
-  margin: 12px 0 0 12px;
-  float: left;
+  flex-shrink: 0;
 }
 .card-body { padding: 12px; }
 .card-name {
@@ -196,8 +196,10 @@ body {
   font-size: 1rem;
   font-weight: 700;
   margin-bottom: 4px;
-  margin-left: 40px;
   color: var(--charcoal);
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 .card-score-badge {
   display: inline-block;
@@ -1415,8 +1417,7 @@ function renderCards() {
         ` : ''}
       </div>` : ''}
       <div class="card-body" onclick="flyTo(${l.lat}, ${l.lng}, '${l.id}')">
-        <div class="card-rank">${displayRank}</div>
-        <div class="card-name">${l.name}</div>
+        <div class="card-name"><span class="card-rank">${displayRank}</span>${l.name}</div>
         ${(hasWater || l.hasParking) ? `<div class="amenity-badges">
           ${l.hasPool ? '<span class="amenity-badge">\u{1F3CA} Pool</span>' : ''}
           ${l.hasHotTub ? '<span class="amenity-badge hot-tub">\u2668\uFE0F Hot Tub</span>' : ''}
