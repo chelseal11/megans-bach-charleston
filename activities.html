@@ -593,9 +593,12 @@ body {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  display: none;
+  position: absolute;
+  top: 0; left: 0;
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
-.detail-carousel img.active { display: block; }
+.detail-carousel img.active { opacity: 1; }
 .detail-carousel .carousel-btn { top: 50%; }
 
 /* ─── HAMBURGER MENU ─── */
@@ -2221,7 +2224,7 @@ function showDetail(id) {
   if (photos.length > 0) {
     carousel.style.display = 'block';
     carousel.innerHTML = photos.map((p, i) =>
-      `<img src="${p}" class="${i === 0 ? 'active' : ''}" loading="lazy">`
+      `<img src="${p}" class="${i === 0 ? 'active' : ''}">`
     ).join('') + (photos.length > 1 ? `
       <button class="carousel-btn prev" onclick="slideDetailCarousel(-1)">\u2039</button>
       <button class="carousel-btn next" onclick="slideDetailCarousel(1)">\u203A</button>
