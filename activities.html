@@ -191,6 +191,16 @@ body {
   color: #166534;
   border: 1px solid #86EFAC;
 }
+.category-badge.fun {
+  background: linear-gradient(135deg, #FFF1F2, #FECDD3);
+  color: #9F1239;
+  border: 1px solid #FDA4AF;
+}
+.category-badge.dinner {
+  background: linear-gradient(135deg, #FDF4FF, #F5D0FE);
+  color: #7E22CE;
+  border: 1px solid #E9A8FF;
+}
 
 /* ─── LISTING CARD ─── */
 .card {
@@ -606,6 +616,8 @@ body {
       <button class="sort-btn" onclick="toggleFilter('beach')" id="filter-beach">Beach</button>
       <button class="sort-btn" onclick="toggleFilter('brunch')" id="filter-brunch">Brunch</button>
       <button class="sort-btn" onclick="toggleFilter('hike')" id="filter-hike">Hike</button>
+      <button class="sort-btn" onclick="toggleFilter('dinner')" id="filter-dinner">Dinner</button>
+      <button class="sort-btn" onclick="toggleFilter('fun')" id="filter-fun">Fun</button>
     </div>
     <div id="cardList"></div>
   </div>
@@ -1261,6 +1273,290 @@ const ACTIVITIES = [
       "https://www.visit-historic-charleston.com/images/Brittlebank-Park-Thumb5.jpg",
       "https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/Brittlebank_Park.jpg/1200px-Brittlebank_Park.jpg"
     ]
+  },
+  {
+    "rank": 30,
+    "name": "Old South Carriage Co",
+    "id": "carriage-ride",
+    "category": "tour",
+    "desc": "Horse-drawn carriage tour through Charleston's historic district. 1-hour narrated ride past mansions, churches, and secret gardens.",
+    "price": 50,
+    "duration": "1 hour",
+    "highlight": "\u{1F40E} Historic district \u2022 Narrated tour \u2022 Departs every 15 min \u2022 Near City Market",
+    "walkTime": "12 min walk",
+    "url": "https://oldsouthcarriage.com/",
+    "lat": 32.7810,
+    "lng": -79.9280,
+    "photos": [
+      "https://oldsouthcarriage.com/wp-content/uploads/2022/02/Card_Brand-Carriages.jpg",
+      "https://oldsouthcarriage.com/wp-content/uploads/2022/02/Card_Brand-Horses.jpg",
+      "https://oldsouthcarriage.com/wp-content/uploads/2022/02/Tour-Historic-Gallery-1.jpg",
+      "https://oldsouthcarriage.com/wp-content/uploads/2022/02/Tour-Historic-Gallery-2.jpg",
+      "https://oldsouthcarriage.com/wp-content/uploads/2022/02/Tour-Historic-Gallery-3.jpg",
+      "https://oldsouthcarriage.com/wp-content/uploads/2022/02/Tour-Historic-Gallery-4.jpg"
+    ]
+  },
+  {
+    "rank": 31,
+    "name": "Saltwater Cycle Party Boats",
+    "id": "pedal-pub",
+    "category": "boat",
+    "desc": "BYOB pedal-powered party boat cruising Charleston Harbor. Pedal, drink, and soak up the views with your crew.",
+    "price": 55,
+    "duration": "2 hours",
+    "highlight": "\u{1F6B2} BYOB \u2022 Pedal-powered \u2022 Harbor cruise \u2022 6-16 passengers",
+    "driveTime": "5 min",
+    "uberEstimate": "$9-10",
+    "url": "https://charleston-pedalpub.com/home/",
+    "lat": 32.7761,
+    "lng": -79.9643,
+    "photos": [
+      "https://charleston-pedalpub.com/wp-content/uploads/2025/11/DSC03648-copy.jpg",
+      "https://charleston-pedalpub.com/wp-content/uploads/2026/01/brewbarge1.png",
+      "https://charleston-pedalpub.com/wp-content/uploads/2026/01/cycleboat-battery.jpg",
+      "https://charleston-pedalpub.com/wp-content/uploads/2025/12/1.png",
+      "https://charleston-pedalpub.com/wp-content/uploads/2025/12/2.png",
+      "https://charleston-pedalpub.com/wp-content/uploads/2025/12/3.png"
+    ]
+  },
+  {
+    "rank": 32,
+    "name": "Painting with a Twist",
+    "id": "paint-and-sip",
+    "category": "class",
+    "desc": "BYOB paint & sip class — pick a painting, grab your wine, and let a local artist guide you. No talent required!",
+    "price": 40,
+    "duration": "2 hours",
+    "highlight": "\u{1F3A8} BYOB \u2022 No experience needed \u2022 Take home your art \u2022 Private parties",
+    "driveTime": "15 min",
+    "uberEstimate": "$15-18",
+    "url": "https://www.paintingwithatwist.com/studio/charleston-mt-pleasant/",
+    "lat": 32.8108,
+    "lng": -79.8515,
+    "photos": [
+      "https://14d14a1b70be1f7f7d4a-0863ae42a3340022d3e557e78745c047.ssl.cf5.rackcdn.com/11555_w.jpg",
+      "https://14d14a1b70be1f7f7d4a-0863ae42a3340022d3e557e78745c047.ssl.cf5.rackcdn.com/19206_w.jpg",
+      "https://14d14a1b70be1f7f7d4a-0863ae42a3340022d3e557e78745c047.ssl.cf5.rackcdn.com/22575_w.jpg",
+      "https://14d14a1b70be1f7f7d4a-0863ae42a3340022d3e557e78745c047.ssl.cf5.rackcdn.com/11700_w.jpg",
+      "https://14d14a1b70be1f7f7d4a-0863ae42a3340022d3e557e78745c047.ssl.cf5.rackcdn.com/16659_w.jpg"
+    ]
+  },
+  {
+    "rank": 33,
+    "name": "Hall's Chophouse",
+    "id": "halls-chophouse",
+    "category": "dinner",
+    "desc": "Premier steakhouse on King Street. Live music, incredible steaks, and the kind of service that makes you feel like a VIP. The celebration spot.",
+    "price": 100,
+    "duration": "2-3 hours",
+    "highlight": "\u{1F969} King Street \u2022 Live music \u2022 VIP service \u2022 Celebration vibes",
+    "walkTime": "2 min walk",
+    "url": "https://hallschophousecharleston.com/",
+    "lat": 32.7885,
+    "lng": -79.9378,
+    "photos": [
+      "https://static.spotapps.co/website_images/ab_websites/15819_website/food_back.jpg",
+      "https://static.spotapps.co/website_images/ab_websites/15819_website/parties_left_new.jpg",
+      "https://static.spotapps.co/website_images/ab_websites/15819_website/section_back.jpg",
+      "https://static.spotapps.co/website_images/ab_websites/15819_website/video_poster_1.jpg",
+      "https://static.spotapps.co/website_images/ab_websites/15819_website/reviews_back.jpg",
+      "https://static.spotapps.co/website_images/ab_websites/15819_website/about_main.jpg"
+    ]
+  },
+  {
+    "rank": 34,
+    "name": "Stars Rooftop & Grill Room",
+    "id": "stars-rooftop",
+    "category": "dinner",
+    "desc": "360-degree rooftop restaurant on King Street. Wood-fired grill, private dining rooms, and a legendary Sunday brunch buffet ($22.50/pp).",
+    "price": 42,
+    "duration": "2 hours",
+    "highlight": "\u{1F305} 360\u00B0 rooftop \u2022 Sunday brunch buffet \u2022 Private dining \u2022 King Street",
+    "walkTime": "3 min walk",
+    "url": "https://starsrestaurant.com/",
+    "lat": 32.7897,
+    "lng": -79.9423,
+    "photos": [
+      "https://starsrestaurant.com/wp-content/uploads/2022/09/Rooftop-Large-Image.jpeg",
+      "https://starsrestaurant.com/wp-content/uploads/2022/09/Hero-Image.jpeg",
+      "https://starsrestaurant.com/wp-content/uploads/2022/11/ZT7A0646-1-scaled.jpg",
+      "https://starsrestaurant.com/wp-content/uploads/2022/12/Stars-resturant-Bar-at-Charleston.webp",
+      "https://starsrestaurant.com/wp-content/uploads/2022/11/ZT7A0788-scaled.jpg",
+      "https://starsrestaurant.com/wp-content/uploads/2022/09/Private-Dining-Large-Image.jpeg"
+    ]
+  },
+  {
+    "rank": 35,
+    "name": "Prohibition Charleston",
+    "id": "prohibition",
+    "category": "nightlife",
+    "desc": "Speakeasy-style cocktail bar on King Street with live jazz, craft cocktails, and a hidden patio. The bach night out spot.",
+    "price": 15,
+    "duration": "1-3 hours",
+    "highlight": "\u{1F3B7} Speakeasy vibes \u2022 Live jazz \u2022 Craft cocktails \u2022 Hidden patio",
+    "walkTime": "6 min walk",
+    "url": "https://www.prohibitioncharleston.com/",
+    "lat": 32.7912,
+    "lng": -79.9403,
+    "photos": [
+      "https://cdn.prod.website-files.com/5f2b7226af66e051b0e6398d/5f3c3c5e8f5b523b33f0ff3d_bartender-1-1.jpg",
+      "https://cdn.prod.website-files.com/5f2b7226af66e051b0e6398d/5f3c3d5d19ad50db668e99ab_patio_prohib_chs_02_Jwb-1024x683.jpg",
+      "https://cdn.prod.website-files.com/5f2b7226af66e051b0e6398d/5f3c3a313a81575985812009_Schrute-sour_15_jwb-682x1024.jpg",
+      "https://cdn.prod.website-files.com/5f2b7226af66e051b0e6398d/65beae40c82767caefa3e15f_Gallery5.jpg",
+      "https://cdn.prod.website-files.com/5f2b7226af66e051b0e6398d/5f46d309d851a7890ae74be7_bar.jpg",
+      "https://cdn.prod.website-files.com/5f2b7226af66e051b0e6398d/5f468bfac7838672da6eb2a9_music.jpg"
+    ]
+  },
+  {
+    "rank": 36,
+    "name": "Escape In 60",
+    "id": "escape-in-60",
+    "category": "fun",
+    "desc": "Escape room on Market Street with themed rooms — Davy Jones' Locker, Egyptian Chamber, and more. Race the clock with your crew.",
+    "price": 35,
+    "duration": "1 hour",
+    "highlight": "\u{1F510} 4 themed rooms \u2022 Groups of 2-8 \u2022 Market Street \u2022 Walk-ins welcome",
+    "walkTime": "12 min walk",
+    "url": "https://www.escape60.com/",
+    "lat": 32.7809,
+    "lng": -79.9286,
+    "photos": [
+      "https://images.worldofescapes.com/uploads/quests/6191/large/escape-in-60-davy-jones-locker-4.jpg",
+      "https://images.worldofescapes.com/uploads/quests/8573/large/escape-in-60-the-egyptian-chamber-2.jpg",
+      "https://images.worldofescapes.com/uploads/quests/8573/large/escape-in-60-the-egyptian-chamber-1.jpg",
+      "https://images.worldofescapes.com/uploads/quests/6193/large/escape-in-60-ransom-1.jpg",
+      "https://images.worldofescapes.com/uploads/quests/6193/large/escape-in-60-ransom-2.jpg",
+      "https://images.worldofescapes.com/uploads/quests/6192/large/escape-in-60-roulette.png"
+    ]
+  },
+  {
+    "rank": 37,
+    "name": "Blu Gorilla Tattoo",
+    "id": "blu-gorilla",
+    "category": "fun",
+    "desc": "Charleston's oldest and most awarded tattoo studio. Walk-ins welcome daily. Get matching bach tattoos — small ones start at ~$80.",
+    "price": 100,
+    "duration": "1-2 hours",
+    "highlight": "\u{1F489} Walk-ins welcome \u2022 Matching tattoos \u2022 Award-winning artists \u2022 King & Meeting",
+    "driveTime": "5 min",
+    "uberEstimate": "$9-10",
+    "url": "https://www.blugorilla.com/",
+    "lat": 32.8147,
+    "lng": -79.9513,
+    "photos": [
+      "https://www.blugorilla.com/shop-photos/charleston-03.JPG",
+      "https://www.blugorilla.com/charleston-location.jpg",
+      "https://www.blugorilla.com/charleston-artists/Tim-Dennis/Tim-Dennis-01.jpg",
+      "https://www.blugorilla.com/charleston-artists/Tim-Dennis/Tim-Dennis-02.jpg",
+      "https://www.blugorilla.com/charleston-artists/Corey-Holstein/Corey.jpg",
+      "https://www.blugorilla.com/charleston-artists/Dre-Gebbia/Dre.jpg"
+    ]
+  },
+  {
+    "rank": 38,
+    "name": "Ritual Rooftop",
+    "id": "ritual",
+    "category": "dinner",
+    "desc": "Tulum-inspired rooftop at King & Calhoun. Shareable plates, craft cocktails, DJ nights. Open til 2am Fri/Sat. Weekend brunch too.",
+    "price": 40,
+    "duration": "2 hours",
+    "highlight": "\u{1F334} Tulum vibes \u2022 Largest rooftop in CHS \u2022 DJ nights \u2022 Weekend brunch",
+    "walkTime": "3 min walk",
+    "url": "https://www.ritualchs.com/",
+    "lat": 32.7859,
+    "lng": -79.9357,
+    "photos": [
+      "https://images.squarespace-cdn.com/content/v1/65e0129b6305620bd4cd6aec/df19def7-f141-4170-b397-f381bfe77bc4/lifestyle-45_jwb.jpg",
+      "https://images.squarespace-cdn.com/content/v1/65e0129b6305620bd4cd6aec/1767639448390-TVPZHQLW9WYPLJMQXNSY/image-asset.jpeg",
+      "https://images.squarespace-cdn.com/content/v1/65e0129b6305620bd4cd6aec/1767639449220-78R2EPI77ZVHX3OOX2BW/image-asset.jpeg",
+      "https://images.squarespace-cdn.com/content/v1/65e0129b6305620bd4cd6aec/1767639450908-H9P35MBWBNGQH1E4XA6H/image-asset.jpeg",
+      "https://images.squarespace-cdn.com/content/v1/65e0129b6305620bd4cd6aec/1767639451712-6VWTYPVRKBFNGCO1SBSV/image-asset.jpeg",
+      "https://images.squarespace-cdn.com/content/v1/65e0129b6305620bd4cd6aec/1767639452559-SDSHYDOEJIM3KTL7QASZ/image-asset.jpeg"
+    ]
+  },
+  {
+    "rank": 39,
+    "name": "The Watch Rooftop",
+    "id": "the-watch",
+    "category": "dinner",
+    "desc": "7th-floor rooftop restaurant atop The Restoration Hotel. Harbor views, private Observatory room for groups, and Sunday brunch.",
+    "price": 45,
+    "duration": "2 hours",
+    "highlight": "\u{1F37D}\uFE0F Private dining for 42 \u2022 Harbor views \u2022 Sunday brunch \u2022 Espresso martinis",
+    "walkTime": "10 min walk",
+    "url": "https://thewatchcharleston.com/",
+    "lat": 32.7821,
+    "lng": -79.9344,
+    "photos": [
+      "https://thewatchcharleston.com/wp-content/uploads/2022/08/events.webp",
+      "https://thewatchcharleston.com/wp-content/uploads/2022/08/breakfast-avocado_toast.webp",
+      "https://thewatchcharleston.com/wp-content/uploads/2022/08/mussels.webp",
+      "https://thewatchcharleston.com/wp-content/uploads/2022/08/the_watch_burger.webp",
+      "https://thewatchcharleston.com/wp-content/uploads/2022/08/tomato_watermelon.webp",
+      "https://thewatchcharleston.com/wp-content/uploads/2023/11/espressomartini-1024x576.jpg"
+    ]
+  },
+  {
+    "rank": 40,
+    "name": "MESU",
+    "id": "mesu",
+    "category": "dinner",
+    "desc": "High-energy Upper King spot blending Mexican and sushi. Tacos, specialty rolls, and bottle service. Open til 2am — dinner to nightlife.",
+    "price": 45,
+    "duration": "2 hours",
+    "highlight": "\u{1F363} Mexican-sushi fusion \u2022 Open til 2am \u2022 Bottle service \u2022 Buyout available",
+    "walkTime": "5 min walk",
+    "url": "https://mesuchs.com/",
+    "lat": 32.7928,
+    "lng": -79.9410,
+    "photos": [
+      "https://static.spotapps.co/web/mesuchs--com/custom/video_poster.jpg",
+      "https://static.spotapps.co/web/mesuchs--com/custom/food_back.jpg"
+    ]
+  },
+  {
+    "rank": 41,
+    "name": "Little Palm",
+    "id": "little-palm",
+    "category": "brunch",
+    "desc": "Poolside restaurant at The Ryder Hotel with tropical vibes. Chef-curated family-style menus for groups of 8-20. Instagram-worthy.",
+    "price": 35,
+    "duration": "1.5-2 hours",
+    "highlight": "\u{1F334} Poolside tropical \u2022 Family-style menus \u2022 Photo-worthy \u2022 Events team",
+    "walkTime": "9 min walk",
+    "url": "https://www.littlepalmchs.com/",
+    "lat": 32.7825,
+    "lng": -79.9322,
+    "photos": [
+      "https://images.getbento.com/accounts/4b58992d4c196afb15a7bfcaaa85fc7b/media/images/20645LittlePalm-JUN82021-HolyCityHandcraft-004-2.jpg?w=1200&fit=max&auto=compress,format",
+      "https://images.getbento.com/accounts/4b58992d4c196afb15a7bfcaaa85fc7b/media/images/42394cbd_ryder_17344-Editx.jpg?w=1200&fit=crop&auto=compress,format",
+      "https://images.getbento.com/accounts/4b58992d4c196afb15a7bfcaaa85fc7b/media/images/27158LittlePalm-JUN82021-HolyCityHandcraft-040-2.jpg?w=1200&fit=max&auto=compress,format",
+      "https://images.getbento.com/accounts/4b58992d4c196afb15a7bfcaaa85fc7b/media/images/76794LittlePalm-JUN82021-HolyCityHandcraft-079.jpg?w=1200&fit=max&auto=compress,format",
+      "https://images.getbento.com/accounts/4b58992d4c196afb15a7bfcaaa85fc7b/media/images/66552lpbreakfast.jpg?w=1200&fit=crop&auto=compress,format",
+      "https://images.getbento.com/accounts/4b58992d4c196afb15a7bfcaaa85fc7b/media/images/77666LittlePalm-Spring24-012.jpg?w=1200&fit=crop&auto=compress,format"
+    ]
+  },
+  {
+    "rank": 42,
+    "name": "Indaco",
+    "id": "indaco",
+    "category": "dinner",
+    "desc": "Rustic Italian on King Street. Wood-fired pizzas, handmade pastas, Negronis on tap. Enclosed courtyard seats up to 100.",
+    "price": 38,
+    "duration": "2 hours",
+    "highlight": "\u{1F355} Wood-fired \u2022 Handmade pasta \u2022 Negroni on tap \u2022 Courtyard for 100",
+    "walkTime": "5 min walk",
+    "url": "https://www.indacorestaurant.com/location/indaco-charleston/",
+    "lat": 32.7916,
+    "lng": -79.9399,
+    "photos": [
+      "https://images.getbento.com/accounts/5cbb7ec98a8c1b28f9e7010a07d6860c/media/images/45664Lobster_ravioli_1_Large.jpeg?w=1200&fit=crop&auto=compress,format",
+      "https://images.getbento.com/accounts/5cbb7ec98a8c1b28f9e7010a07d6860c/media/images/327609222022_Indaco_Andrew-Cebulka-11359_Large.jpeg?w=1200&fit=crop&auto=compress,format",
+      "https://images.getbento.com/accounts/5cbb7ec98a8c1b28f9e7010a07d6860c/media/images/30444DSC04117.jpg?w=1200&fit=crop&auto=compress,format",
+      "https://images.getbento.com/accounts/5cbb7ec98a8c1b28f9e7010a07d6860c/media/images/3472504092025_indaco-chs_Andrew-Cebulka-5863_Large.jpeg?w=1200&fit=crop&auto=compress,format",
+      "https://images.getbento.com/accounts/5cbb7ec98a8c1b28f9e7010a07d6860c/media/images/5586209222022_Indaco_Andrew-Cebulka-11375.jpg?w=1200&fit=crop&auto=compress,format",
+      "https://images.getbento.com/accounts/5cbb7ec98a8c1b28f9e7010a07d6860c/media/images/7574909222022_Indaco_Andrew-Cebulka-11308_Large.jpeg?w=1200&fit=crop&auto=compress,format"
+    ]
   }
 ];
 
@@ -1468,7 +1764,9 @@ const CATEGORY_ICONS = {
   class: '\u{1F3A8}',
   beach: '\u{1F3D6}\uFE0F',
   brunch: '\u{1F95E}',
-  hike: '\u{1F6B6}'
+  hike: '\u{1F6B6}',
+  fun: '\u{1F3B2}',
+  dinner: '\u{1F37D}\uFE0F'
 };
 
 const CATEGORY_LABELS = {
@@ -1480,7 +1778,9 @@ const CATEGORY_LABELS = {
   class: 'Class',
   beach: 'Beach',
   brunch: 'Brunch',
-  hike: 'Hike'
+  hike: 'Hike',
+  fun: 'Fun',
+  dinner: 'Dinner'
 };
 
 function renderCards() {
@@ -1570,7 +1870,9 @@ const CATEGORY_COLORS = {
   class: '#DB2777',
   beach: '#0D9488',
   brunch: '#D97706',
-  hike: '#16A34A'
+  hike: '#16A34A',
+  fun: '#E11D48',
+  dinner: '#7E22CE'
 };
 
 function initMap() {
