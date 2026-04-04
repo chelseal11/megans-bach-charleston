@@ -186,6 +186,11 @@ body {
   color: #78350F;
   border: 1px solid #FCD34D;
 }
+.category-badge.hike {
+  background: linear-gradient(135deg, #F0FDF4, #BBF7D0);
+  color: #166534;
+  border: 1px solid #86EFAC;
+}
 
 /* ─── LISTING CARD ─── */
 .card {
@@ -521,6 +526,7 @@ body {
       <button class="sort-btn" onclick="toggleFilter('class')" id="filter-class">Class</button>
       <button class="sort-btn" onclick="toggleFilter('beach')" id="filter-beach">Beach</button>
       <button class="sort-btn" onclick="toggleFilter('brunch')" id="filter-brunch">Brunch</button>
+      <button class="sort-btn" onclick="toggleFilter('hike')" id="filter-hike">Hike</button>
     </div>
     <div id="cardList"></div>
   </div>
@@ -579,17 +585,7 @@ const ACTIVITIES = [
       "https://harborbarchs.com/wp-content/uploads/2024/04/gal-3-5.jpg",
       "https://harborbarchs.com/wp-content/uploads/2025/06/charleston-bachelor-party-cruise.webp"
     ]
-  },
-  {
-    "rank": 2,
-    "name": "Flipper Finders Beach & Dolphin Tour",
-    "id": "flipper-finders",
-    "category": "boat",
-    "desc": "3-hour private charter for up to 12 on a pontoon boat. Cruise the Folly River, spot dolphins, then beach the boat on a sandbar to swim.",
-    "price": 75,
-    "duration": "3 hours",
-    "groupSize": "Up to 12",
-    "highlight": "\u{1F42C} Dolphins \u2022 Sandbar swimming \u2022 Private charter \u2022 BYOB",
+  }, Dolphins \u2022 Sandbar swimming \u2022 Private charter \u2022 BYOB",
     "url": "https://flipperfinders.com/bachelor-bachelorette-party/",
     "lat": 32.6553,
     "lng": -79.9403,
@@ -749,17 +745,7 @@ const ACTIVITIES = [
       "https://www.earthlingdayspa.com/wp-content/uploads/spa-downtown-charleston-1.jpg",
       "https://www.earthlingdayspa.com/wp-content/uploads/spas-in-charleston.jpg"
     ]
-  },
-  {
-    "rank": 10,
-    "name": "Charleston SUP Safaris",
-    "id": "sup-safaris",
-    "category": "beach",
-    "desc": "Guided paddleboard tour on the Folly River through salt marsh. Spot dolphins and explore the ecosystem. No experience needed! Go early or sunset — July is hot.",
-    "price": 45,
-    "duration": "2 hours",
-    "groupSize": "Up to 20",
-    "highlight": "\u{1F3C4} Paddleboarding \u2022 Folly River \u2022 Dolphins \u2022 Beginners welcome",
+  }, Paddleboarding \u2022 Folly River \u2022 Dolphins \u2022 Beginners welcome",
     "url": "https://charlestonsupsafaris.com/",
     "lat": 32.6590,
     "lng": -79.9450,
@@ -793,17 +779,7 @@ const ACTIVITIES = [
       "https://tikitoursofcharleston.com/wp-content/uploads/2026/02/friki-tiki-mimosa-cruise-bachelorette-charleston-1024x1024.jpg",
       "https://tikitoursofcharleston.com/wp-content/uploads/2026/02/Semi_private_cruise-e1762286440726.jpg"
     ]
-  },
-  {
-    "rank": 12,
-    "name": "Charleston Taylor Estate — Wine Blending",
-    "id": "taylor-winery",
-    "category": "food",
-    "desc": "Wine tasting and personalized blending experience at a gorgeous estate. Create your own custom blend to take home.",
-    "price": 45,
-    "duration": "2 hours",
-    "groupSize": "Up to 20",
-    "highlight": "\u{1F377} Custom blending \u2022 Wine tasting \u2022 Estate venue \u2022 Take home a bottle",
+  }, Custom blending \u2022 Wine tasting \u2022 Estate venue \u2022 Take home a bottle",
     "url": "https://charlestontaylor.com/",
     "lat": 32.8556,
     "lng": -80.0790,
@@ -901,17 +877,7 @@ const ACTIVITIES = [
       "https://static.wixstatic.com/media/12988e_20aa8946a2be41c384c4b896f22096f3~mv2.jpg",
       "https://static.wixstatic.com/media/12988e_96abed75159a45e79625b1e1959ffe92~mv2.jpg"
     ]
-  },
-  {
-    "rank": 17,
-    "name": "Folly Beach Day",
-    "id": "folly-beach",
-    "category": "beach",
-    "desc": "Spend a day at Charleston's favorite beach. Rent chairs and umbrellas, grab tacos at Taco Boy, and soak up the sun.",
-    "price": 15,
-    "duration": "Half or full day",
-    "groupSize": "Any size",
-    "highlight": "\u{1F3D6}\uFE0F Beach chairs \u2022 Oceanfront bars \u2022 Taco Boy nearby \u2022 Free parking spots",
+  },\uFE0F Beach chairs \u2022 Oceanfront bars \u2022 Taco Boy nearby \u2022 Free parking spots",
     "url": "https://visitfolly.com/",
     "lat": 32.6552,
     "lng": -79.9404,
@@ -1105,6 +1071,66 @@ const ACTIVITIES = [
       "https://bloomspaday.com/cdn/shop/files/facial.png?v=1764022824&width=800",
       "https://cdn.shopify.com/s/files/1/0631/8686/2258/files/92m5rb1di9cb1f9trbgekgxivzgv.jpg?v=1762528497"
     ]
+  },
+  {
+    "rank": 23,
+    "name": "Hampton Park Morning Walk",
+    "id": "hampton-park",
+    "category": "hike",
+    "desc": "Charleston's largest park with a 1-mile paved loop, ponds, gardens, and shady live oaks. Perfect for a chill morning walk before the July heat kicks in.",
+    "price": 0,
+    "duration": "1-1.5 hours",
+    "groupSize": "Any size",
+    "highlight": "\u{1F333} 1-mile loop \u2022 Shady oaks \u2022 Gardens & ponds \u2022 Free parking",
+    "url": "https://www.alltrails.com/trail/us/south-carolina/hampton-park",
+    "lat": 32.7970,
+    "lng": -79.9530,
+    "photos": []
+  },
+  {
+    "rank": 24,
+    "name": "Waterfront Park Stroll",
+    "id": "waterfront-park",
+    "category": "hike",
+    "desc": "Scenic harborfront walking path with the iconic Pineapple Fountain, porch swings, and a pier with a covered gazebo. Gorgeous sunset views.",
+    "price": 0,
+    "duration": "45 min - 1 hour",
+    "groupSize": "Any size",
+    "highlight": "\u{1F305} Pineapple Fountain \u2022 Harbor views \u2022 Porch swings \u2022 Pier",
+    "url": "https://www.sctrails.net/trails/trail/waterfront-park",
+    "lat": 32.7780,
+    "lng": -79.9255,
+    "photos": []
+  },
+  {
+    "rank": 25,
+    "name": "Charles Towne Landing Trails",
+    "id": "charles-towne",
+    "category": "hike",
+    "desc": "7 miles of trails through historic gardens, live oak alleys, and marshland at the site of SC's first settlement. Has a small zoo and Ashley River views.",
+    "price": 10,
+    "duration": "2-3 hours",
+    "groupSize": "Any size",
+    "highlight": "\u{1F3DE}\uFE0F 7 miles of trails \u2022 Historic gardens \u2022 Animal habitat \u2022 $10 entry",
+    "url": "https://southcarolinaparks.com/charles-towne-landing",
+    "lat": 32.8100,
+    "lng": -79.9953,
+    "photos": []
+  },
+  {
+    "rank": 26,
+    "name": "West Ashley Greenway",
+    "id": "west-ashley-greenway",
+    "category": "hike",
+    "desc": "Paved multi-use trail through Lowcountry scenery — great for a morning jog or casual walk. Flat and shady, easy for any fitness level.",
+    "price": 0,
+    "duration": "1-2 hours",
+    "groupSize": "Any size",
+    "highlight": "\u{1F6B4} Paved trail \u2022 Shady & flat \u2022 Lowcountry scenery \u2022 Free",
+    "url": "https://www.traillink.com/trail/west-ashley-greenway/",
+    "lat": 32.7780,
+    "lng": -79.9700,
+    "photos": []
   }
 ];
 
@@ -1302,7 +1328,8 @@ const CATEGORY_ICONS = {
   tour: '\u{1F6B6}',
   class: '\u{1F3A8}',
   beach: '\u{1F3D6}\uFE0F',
-  brunch: '\u{1F95E}'
+  brunch: '\u{1F95E}',
+  hike: '\u{1F6B6}'
 };
 
 const CATEGORY_LABELS = {
@@ -1313,7 +1340,8 @@ const CATEGORY_LABELS = {
   tour: 'Tour',
   class: 'Class',
   beach: 'Beach',
-  brunch: 'Brunch'
+  brunch: 'Brunch',
+  hike: 'Hike'
 };
 
 function renderCards() {
@@ -1401,7 +1429,8 @@ const CATEGORY_COLORS = {
   tour: '#EA580C',
   class: '#DB2777',
   beach: '#0D9488',
-  brunch: '#D97706'
+  brunch: '#D97706',
+  hike: '#16A34A'
 };
 
 function initMap() {
