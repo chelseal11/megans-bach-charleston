@@ -358,7 +358,29 @@ body {
 .popup-carousel img.active { display: block; }
 .popup-carousel .carousel-btn { width: 22px; height: 22px; font-size: 11px; }
 
-/* ─── VOTING ─── */
+/* ─── CARD ACTIONS ROW ─── */
+.card-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 8px;
+}
+.vote-btns-inline { display: flex; align-items: center; gap: 4px; }
+.vote-btn-sm {
+  font-size: 1.1rem;
+  padding: 2px 6px;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  background: var(--blush-light);
+  transition: all 0.2s;
+}
+.vote-btn-sm:hover { transform: scale(1.15); }
+.vote-btn-sm.selected { border-color: var(--gold); background: var(--gold-light); transform: scale(1.15); }
+.vote-btn-sm.selected.down { border-color: #E8A5A5; background: #FDF0F0; }
+.vote-count { font-size: 0.7rem; color: #999; margin-left: 2px; }
+
+/* ─── VOTING (stays compat) ─── */
 .vote-section { margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--blush); }
 .vote-label { font-size: 0.7rem; color: #999; margin-bottom: 4px; }
 .vote-btns { display: flex; gap: 6px; }
@@ -609,9 +631,7 @@ body {
   <div class="results-panel">
     <h2>Activity Vote Results</h2>
     <div class="legend">
-      <span><span class="legend-dot" style="background:#FF6B8A"></span> Love it</span>
-      <span><span class="legend-dot" style="background:var(--gold)"></span> Like it</span>
-      <span><span class="legend-dot" style="background:#CCC"></span> Meh</span>
+      <span><span class="legend-dot" style="background:#FF6B8A"></span> Yes!</span>
       <span><span class="legend-dot" style="background:#999"></span> Nah</span>
     </div>
     <div id="resultsBody"></div>
@@ -1306,10 +1326,8 @@ function updateVoterDisplays(text) {
 
 // ─── VOTING ───
 const EMOJIS = [
-  { emoji: '\u{1F60D}', label: 'love', key: 'love' },
-  { emoji: '\u{1F970}', label: 'like', key: 'like' },
-  { emoji: '\u{1F610}', label: 'meh', key: 'meh' },
-  { emoji: '\u{1F44E}', label: 'nah', key: 'nah' }
+  { emoji: '\u{1F44D}', label: 'Yes!', key: 'love' },
+  { emoji: '\u{1F44E}', label: 'Nah', key: 'nah' }
 ];
 
 function castVote(activityId, emojiKey) {
@@ -1453,15 +1471,16 @@ function renderCards() {
           <div><span class="label">Travel</span><br>${a.driveTime ? `\u{1F697} ${a.driveTime} \u2022 ~${a.uberEstimate}` : `\u{1F6B6} ${a.walkTime || 'On King St'}`}</div>
         </div>
         <div class="card-highlight">${a.highlight}</div>
-        <a class="card-link" href="${a.url}" target="_blank" onclick="event.stopPropagation()">Learn More \u2192</a>
-        <div class="vote-section">
-          <div class="vote-label">Your vote ${voteCount > 0 ? '(' + voteCount + ' vote' + (voteCount>1?'s':'') + ' total)' : ''}</div>
-          <div class="vote-btns">
-            ${EMOJIS.map(e => `
-              <button class="vote-btn ${myVote === e.key ? 'selected' : ''}"
-                      onclick="event.stopPropagation(); castVote('${a.id}', '${e.key}')"
-                      title="${e.label}">${e.emoji}</button>
-            `).join('')}
+        <div class="card-actions">
+          <a class="card-link" href="${a.url}" target="_blank" onclick="event.stopPropagation()">Learn More \u2192</a>
+          <div class="vote-btns-inline">
+            <button class="vote-btn-sm ${myVote === 'love' ? 'selected' : ''}"
+                    onclick="event.stopPropagation(); castVote('${a.id}', 'love')"
+                    title="Yes!">\u{1F44D}</button>
+            <button class="vote-btn-sm ${myVote === 'nah' ? 'selected down' : ''}"
+                    onclick="event.stopPropagation(); castVote('${a.id}', 'nah')"
+                    title="Nah">\u{1F44E}</button>
+            ${voteCount > 0 ? `<span class="vote-count">${voteCount}</span>` : ''}
           </div>
         </div>
       </div>
@@ -1598,8 +1617,6 @@ function showResults() {
         <div class="result-bar-wrap">
           <div class="result-bar">
             <div class="love" style="width:${pct('love')}%"></div>
-            <div class="like" style="width:${pct('like')}%"></div>
-            <div class="meh" style="width:${pct('meh')}%"></div>
             <div class="nah" style="width:${pct('nah')}%"></div>
           </div>
         </div>
