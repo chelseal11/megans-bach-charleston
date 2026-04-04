@@ -488,11 +488,17 @@ body {
 
 /* ─── MOBILE ─── */
 @media (max-width: 768px) {
-  .main { flex-direction: column; }
-  .sidebar { width: 100%; min-width: unset; max-height: 50vh; order: 2; }
-  .map-container { height: 50vh; order: 1; }
-  .header h1 { font-size: 1.1rem; }
+  .header { flex-direction: column; gap: 8px; padding: 10px 16px; text-align: center; }
+  .header h1 { font-size: 1.2rem; }
+  .header-actions { flex-wrap: wrap; justify-content: center; gap: 6px; }
+  .header-btn { padding: 6px 12px; font-size: 0.7rem; }
+  .main { flex-direction: column; height: calc(100vh - 100px); }
+  body { overflow: auto; height: auto; }
+  .sidebar { width: 100%; min-width: unset; order: 2; max-height: none; overflow-y: visible; }
+  .map-container { height: 35vh; min-height: 200px; order: 1; }
   .card-details { grid-template-columns: 1fr; }
+  .sort-bar { gap: 4px; }
+  .sort-btn { padding: 4px 8px; font-size: 0.65rem; }
 }
 </style>
 </head>
