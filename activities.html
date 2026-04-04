@@ -580,6 +580,8 @@ const ACTIVITIES = [
     "duration": "2 hours",
     "groupSize": "Up to 26",
     "highlight": "\u{1F389} BYOB \u2022 Sunset views \u2022 Downtown marina \u2022 DJ available",
+    "driveTime": "5 min",
+    "uberEstimate": "$9-10",
     "url": "https://harborbarchs.com/bachelorette-party/",
     "lat": 32.7812,
     "lng": -79.9253,
@@ -644,6 +646,8 @@ const ACTIVITIES = [
     "duration": "1.5 hours",
     "groupSize": "Any size",
     "highlight": "\u{1F47B} Evening tour \u2022 Dungeon access \u2022 Historic district \u2022 Private groups available",
+    "driveTime": "5 min",
+    "uberEstimate": "$9-10",
     "url": "https://www.bulldogtours.com/",
     "lat": 32.7780,
     "lng": -79.9310,
@@ -750,6 +754,8 @@ const ACTIVITIES = [
     "duration": "2 hours",
     "groupSize": "Up to 18",
     "highlight": "\u{1F965} Tiki vibes \u2022 BYOB \u2022 Harbor cruise \u2022 Private options",
+    "driveTime": "5 min",
+    "uberEstimate": "$9-10",
     "url": "https://tikitoursofcharleston.com/bachelorette-party-boat-charleston-sc/",
     "lat": 32.7810,
     "lng": -79.9260,
@@ -772,6 +778,8 @@ const ACTIVITIES = [
     "duration": "Evening",
     "groupSize": "Any size",
     "highlight": "\u{1F3C6} Best bar in CHS \u2022 Historic building \u2022 Patio \u2022 Craft cocktails",
+    "driveTime": "5 min",
+    "uberEstimate": "$9-10",
     "url": "https://blindtigerpub.com/",
     "lat": 32.7775,
     "lng": -79.9315,
@@ -879,6 +887,8 @@ const ACTIVITIES = [
     "duration": "2+ hours",
     "groupSize": "Up to 45",
     "highlight": "\u{1F3B5} DJ included \u2022 Catamaran \u2022 Private charter \u2022 Snacks & drinks",
+    "driveTime": "5 min",
+    "uberEstimate": "$9-10",
     "url": "https://charlestonpartycat.com/bachelorette-party/",
     "lat": 32.7808,
     "lng": -79.9248,
@@ -1041,6 +1051,8 @@ const ACTIVITIES = [
     "duration": "1-1.5 hours",
     "groupSize": "Any size",
     "highlight": "\u{1F333} 1-mile loop \u2022 Shady oaks \u2022 Gardens & ponds \u2022 Free parking",
+    "driveTime": "5 min",
+    "uberEstimate": "$10-11",
     "url": "https://www.alltrails.com/trail/us/south-carolina/hampton-park",
     "lat": 32.7970,
     "lng": -79.9530,
@@ -1056,6 +1068,8 @@ const ACTIVITIES = [
     "duration": "45 min - 1 hour",
     "groupSize": "Any size",
     "highlight": "\u{1F305} Pineapple Fountain \u2022 Harbor views \u2022 Porch swings \u2022 Pier",
+    "driveTime": "5 min",
+    "uberEstimate": "$9-10",
     "url": "https://www.sctrails.net/trails/trail/waterfront-park",
     "lat": 32.7780,
     "lng": -79.9255,
@@ -1071,6 +1085,8 @@ const ACTIVITIES = [
     "duration": "2-3 hours",
     "groupSize": "Any size",
     "highlight": "\u{1F3DE}\uFE0F 7 miles of trails \u2022 Historic gardens \u2022 Animal habitat \u2022 $10 entry",
+    "driveTime": "10 min",
+    "uberEstimate": "$14-17",
     "url": "https://southcarolinaparks.com/charles-towne-landing",
     "lat": 32.8100,
     "lng": -79.9953,
@@ -1086,6 +1102,8 @@ const ACTIVITIES = [
     "duration": "1-2 hours",
     "groupSize": "Any size",
     "highlight": "\u{1F6B4} Paved trail \u2022 Shady & flat \u2022 Lowcountry scenery \u2022 Free",
+    "driveTime": "7 min",
+    "uberEstimate": "$11-13",
     "url": "https://www.traillink.com/trail/west-ashley-greenway/",
     "lat": 32.7780,
     "lng": -79.9700,
@@ -1334,6 +1352,7 @@ function renderCards() {
           <div><span class="label">Price</span><br><span class="card-price">${priceStr}</span> <small>/person</small></div>
           <div><span class="label">Duration</span><br>${a.duration}</div>
           <div><span class="label">Group Size</span><br>${a.groupSize}</div>
+          ${a.driveTime ? `<div><span class="label">Getting There</span><br>\u{1F697} ${a.driveTime} drive &bull; ~${a.uberEstimate} Uber</div>` : ''}
         </div>
         <div class="card-highlight">${a.highlight}</div>
         <a class="card-link" href="${a.url}" target="_blank" onclick="event.stopPropagation()">Learn More \u2192</a>
