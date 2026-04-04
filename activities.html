@@ -486,13 +486,53 @@ body {
 .legend span { display: flex; align-items: center; gap: 4px; }
 .legend-dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
 
+/* ─── HAMBURGER MENU ─── */
+.hamburger {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  z-index: 1002;
+}
+.hamburger span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: var(--charcoal);
+  margin: 5px 0;
+  border-radius: 2px;
+  transition: all 0.3s;
+}
+.hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+.hamburger.open span:nth-child(2) { opacity: 0; }
+.hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+.menu-dropdown {
+  display: none;
+  position: absolute;
+  top: 100%;
+  right: 12px;
+  background: var(--white);
+  border: 1px solid var(--blush);
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+  padding: 8px;
+  z-index: 1001;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 160px;
+}
+.menu-dropdown.show { display: flex; }
+.menu-dropdown .header-btn { width: 100%; text-align: center; }
+.menu-dropdown .menu-info { font-size: 0.75rem; color: var(--gold-dark); font-weight: 600; padding: 6px 8px; text-align: center; }
+
 /* ─── MOBILE ─── */
 @media (max-width: 768px) {
-  .header { flex-direction: column; gap: 8px; padding: 10px 16px; text-align: center; }
-  .header h1 { font-size: 1.2rem; }
-  .header-actions { flex-wrap: wrap; justify-content: center; gap: 6px; }
-  .header-btn { padding: 6px 12px; font-size: 0.7rem; }
-  .main { flex-direction: column; height: calc(100vh - 100px); }
+  .hamburger { display: block; }
+  .header-actions { display: none; }
+  .header { padding: 10px 16px; }
+  .header h1 { font-size: 1.1rem; }
+  .main { flex-direction: column; }
   body { overflow: auto; height: auto; }
   .sidebar { width: 100%; min-width: unset; order: 2; max-height: none; overflow-y: visible; }
   .map-container { height: 35vh; min-height: 200px; order: 1; }
@@ -514,11 +554,19 @@ body {
     <button class="header-btn outline" onclick="copyShareLink()">Share Link</button>
     <span id="syncStatus" style="font-size:0.7rem; color:var(--sage); font-weight:500;"></span>
   </div>
+  <button class="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></button>
+  <div class="menu-dropdown" id="menuDropdown">
+    <div class="menu-info" id="voterDisplayMobile"></div>
+    <a href="index.html" class="header-btn outline" style="text-decoration:none;">View Stays</a>
+    <button class="header-btn" onclick="showResults(); toggleMenu();">View Results</button>
+    <button class="header-btn outline" onclick="changeVoter(); toggleMenu();">Change Name</button>
+    <button class="header-btn outline" onclick="copyShareLink(); toggleMenu();">Share Link</button>
+    <div class="menu-info" id="syncStatusMobile"></div>
+  </div>
 </div>
 
 <div class="main">
   <div class="sidebar">
-    <div class="sidebar-title">Activities &mdash; Jul 16&ndash;19, 2026 &mdash; 10 Guests</div>
     <div class="sort-bar">
       <span class="sort-label">Sort by:</span>
       <button class="sort-btn active" onclick="sortListings('rank')" id="sort-rank">Rank</button>
@@ -1120,50 +1168,14 @@ let sortedActivities = [...ACTIVITIES];
 let isSaving = false;
 let pendingSave = false;
 
-// ─── VOTES API ───
-const VOTES_API = 'https://bach-votes.vercel.app/api/activity-votes';
-
+// ─── VOTES (localStorage only for now) ───
 async function loadVotes() {
-  const dot = document.getElementById('syncStatus');
-  try {
-    const res = await fetch(VOTES_API);
-    if (res.ok) {
-      votes = await res.json();
-      dot.innerHTML = '&#x1f7e2; Synced';
-    }
-  } catch(e) {
-    console.warn('Failed to load votes', e);
-    dot.innerHTML = '&#x1f534; Offline';
-    const saved = localStorage.getItem('bach_activity_votes');
-    if (saved) try { votes = JSON.parse(saved); } catch(e) {}
-  }
+  const saved = localStorage.getItem('bach_activity_votes');
+  if (saved) try { votes = JSON.parse(saved); } catch(e) {}
 }
 
 async function saveVotes() {
   localStorage.setItem('bach_activity_votes', JSON.stringify(votes));
-
-  if (isSaving) { pendingSave = true; return; }
-  isSaving = true;
-  const dot = document.getElementById('syncStatus');
-  dot.innerHTML = '&#x1f7e1; Saving...';
-
-  try {
-    const res = await fetch(VOTES_API, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(votes)
-    });
-    if (res.ok) {
-      dot.innerHTML = '&#x1f7e2; Synced';
-    } else {
-      dot.innerHTML = '&#x1f534; Save failed';
-    }
-  } catch(e) {
-    console.warn('Failed to save votes', e);
-    dot.innerHTML = '&#x1f534; Offline';
-  }
-  isSaving = false;
-  if (pendingSave) { pendingSave = false; saveVotes(); }
 }
 
 // ─── INIT ───
@@ -1176,7 +1188,7 @@ window.addEventListener('DOMContentLoaded', async () => {
   if (!voterName) {
     document.getElementById('voterModal').classList.add('show');
   } else {
-    document.getElementById('voterDisplay').textContent = 'Voting as: ' + voterName;
+    updateVoterDisplays('Voting as: ' + voterName);
   }
 
   renderCards();
@@ -1194,7 +1206,7 @@ function setVoterName() {
   if (!input) return;
   voterName = input;
   localStorage.setItem('bach_voter_name', voterName);
-  document.getElementById('voterDisplay').textContent = 'Voting as: ' + voterName;
+  updateVoterDisplays('Voting as: ' + voterName);
   document.getElementById('voterModal').classList.remove('show');
   renderCards();
 }
@@ -1203,6 +1215,17 @@ function changeVoter() {
   document.getElementById('voterNameInput').value = '';
   document.getElementById('voterModal').classList.add('show');
   document.getElementById('voterNameInput').focus();
+}
+
+function toggleMenu() {
+  document.querySelector('.hamburger').classList.toggle('open');
+  document.getElementById('menuDropdown').classList.toggle('show');
+}
+
+function updateVoterDisplays(text) {
+  document.getElementById('voterDisplay').textContent = text;
+  const m = document.getElementById('voterDisplayMobile');
+  if (m) m.textContent = text;
 }
 
 // ─── VOTING ───
@@ -1351,7 +1374,6 @@ function renderCards() {
         <div class="card-details">
           <div><span class="label">Price</span><br><span class="card-price">${priceStr}</span> <small>/person</small></div>
           <div><span class="label">Duration</span><br>${a.duration}</div>
-          <div><span class="label">Group Size</span><br>${a.groupSize}</div>
           ${a.driveTime ? `<div><span class="label">Getting There</span><br>\u{1F697} ${a.driveTime} drive &bull; ~${a.uberEstimate} Uber</div>` : ''}
         </div>
         <div class="card-highlight">${a.highlight}</div>
