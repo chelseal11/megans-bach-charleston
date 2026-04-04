@@ -1208,14 +1208,50 @@ let sortedActivities = [...ACTIVITIES];
 let isSaving = false;
 let pendingSave = false;
 
-// ─── VOTES (localStorage only for now) ───
+// ─── VOTES API (Vercel serverless function) ───
+const VOTES_API = 'https://bach-votes.vercel.app/api/activity-votes';
+
 async function loadVotes() {
-  const saved = localStorage.getItem('bach_activity_votes');
-  if (saved) try { votes = JSON.parse(saved); } catch(e) {}
+  const dot = document.getElementById('syncStatus');
+  try {
+    const res = await fetch(VOTES_API);
+    if (res.ok) {
+      votes = await res.json();
+      if (dot) dot.innerHTML = '&#x1f7e2; Synced';
+    }
+  } catch(e) {
+    console.warn('Failed to load votes', e);
+    if (dot) dot.innerHTML = '&#x1f534; Offline';
+    const saved = localStorage.getItem('bach_activity_votes');
+    if (saved) try { votes = JSON.parse(saved); } catch(e) {}
+  }
 }
 
 async function saveVotes() {
   localStorage.setItem('bach_activity_votes', JSON.stringify(votes));
+
+  if (isSaving) { pendingSave = true; return; }
+  isSaving = true;
+  const dot = document.getElementById('syncStatus');
+  if (dot) dot.innerHTML = '&#x1f7e1; Saving...';
+
+  try {
+    const res = await fetch(VOTES_API, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(votes)
+    });
+    if (res.ok) {
+      if (dot) dot.innerHTML = '&#x1f7e2; Synced';
+    } else {
+      if (dot) dot.innerHTML = '&#x1f534; Save failed';
+    }
+  } catch(e) {
+    console.warn('Failed to save votes', e);
+    if (dot) dot.innerHTML = '&#x1f534; Offline';
+  }
+  isSaving = false;
+  if (pendingSave) { pendingSave = false; saveVotes(); }
 }
 
 // ─── INIT ───
