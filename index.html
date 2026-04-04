@@ -523,7 +523,7 @@ body {
   body { overflow: auto; height: auto; }
   .sidebar { width: 100%; min-width: unset; order: 2; max-height: none; overflow-y: visible; }
   .map-container { height: 35vh; min-height: 200px; order: 1; }
-  .card-details { grid-template-columns: 1fr; }
+  .card-details { grid-template-columns: 1fr 1fr; }
   .sort-bar { gap: 4px; }
   .sort-btn { padding: 4px 8px; font-size: 0.65rem; }
 }
@@ -1505,8 +1505,8 @@ function renderCards() {
         <div class="card-details">
           <div><span class="label">Layout</span><br>${l.bedrooms}BR \u2022 ${l.baths} ba \u2022 ${l.guests} guests</div>
           <div><span class="label">Rating</span><br>${ratingStr}</div>
-          <div><span class="label">Total (3 nights)</span><br><span class="card-price">$${l.price.toLocaleString()}</span></div>
-          <div><span class="label">Per Person (3 nights)</span><br><span class="card-price">$${Math.round(l.price / 10).toLocaleString()} <small>($${ppn}/night)</small></span></div>
+          <div><span class="label">Total</span><br><span class="card-price">$${l.price.toLocaleString()}</span></div>
+          <div><span class="label">Per Person</span><br><span class="card-price">$${Math.round(l.price / 10).toLocaleString()}</span> <small>($${ppn}/night)</small></div>
         </div>
         <div class="card-highlight">${l.highlight}</div>
         <a class="card-link" href="${l.url}" target="_blank" onclick="event.stopPropagation()">View on Airbnb \u2192</a>
