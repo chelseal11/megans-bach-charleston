@@ -1,0 +1,1250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Megan's Charleston Bach — Activities</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --blush: #F2D1D1;
+  --blush-light: #FDF0F0;
+  --blush-dark: #E8A5A5;
+  --gold: #D4A843;
+  --gold-light: #F0DBA8;
+  --gold-dark: #B8922F;
+  --charcoal: #2D2D2D;
+  --white: #FFFFFF;
+  --cream: #FFF9F5;
+  --sage: #B5C4B1;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Montserrat', sans-serif;
+  background: var(--cream);
+  color: var(--charcoal);
+  overflow: hidden;
+  height: 100vh;
+}
+
+/* ─── HEADER ─── */
+.header {
+  background: linear-gradient(135deg, var(--blush) 0%, var(--blush-light) 50%, var(--gold-light) 100%);
+  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 2px solid var(--gold);
+  z-index: 1000;
+  position: relative;
+}
+.header h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.6rem;
+  color: var(--charcoal);
+  letter-spacing: 1px;
+}
+.header h1 span { color: var(--gold-dark); }
+.header-actions { display: flex; gap: 10px; align-items: center; }
+.header-btn {
+  background: var(--gold);
+  color: var(--white);
+  border: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  letter-spacing: 0.5px;
+}
+.header-btn:hover { background: var(--gold-dark); transform: translateY(-1px); }
+.header-btn.outline {
+  background: transparent;
+  border: 2px solid var(--gold);
+  color: var(--gold-dark);
+}
+.header-btn.outline:hover { background: var(--gold); color: var(--white); }
+
+/* ─── MAIN LAYOUT ─── */
+.main {
+  display: flex;
+  height: calc(100vh - 58px);
+}
+
+/* ─── SIDEBAR ─── */
+.sidebar {
+  width: 420px;
+  min-width: 420px;
+  overflow-y: auto;
+  background: var(--cream);
+  border-right: 1px solid var(--blush);
+  padding: 16px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--blush-dark) transparent;
+}
+.sidebar::-webkit-scrollbar { width: 6px; }
+.sidebar::-webkit-scrollbar-thumb { background: var(--blush-dark); border-radius: 3px; }
+
+.sidebar-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem;
+  color: var(--gold-dark);
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--gold-light);
+}
+
+/* ─── SORT BAR ─── */
+.sort-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+.sort-label {
+  font-size: 0.7rem;
+  color: #999;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-right: 2px;
+}
+.sort-btn {
+  background: var(--blush-light);
+  border: 1px solid var(--blush);
+  color: var(--charcoal);
+  padding: 4px 10px;
+  border-radius: 14px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.sort-btn:hover { background: var(--blush); }
+.sort-btn.active {
+  background: var(--gold);
+  color: var(--white);
+  border-color: var(--gold);
+}
+
+/* ─── CATEGORY BADGE ─── */
+.category-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 12px;
+  margin: 4px 0;
+}
+.category-badge.boat {
+  background: linear-gradient(135deg, #E0F2FE, #BAE6FD);
+  color: #0369A1;
+  border: 1px solid #7DD3FC;
+}
+.category-badge.food {
+  background: linear-gradient(135deg, #FEF3C7, #FDE68A);
+  color: #92400E;
+  border: 1px solid #FCD34D;
+}
+.category-badge.nightlife {
+  background: linear-gradient(135deg, #EDE9FE, #DDD6FE);
+  color: #5B21B6;
+  border: 1px solid #C4B5FD;
+}
+.category-badge.wellness {
+  background: linear-gradient(135deg, #ECFDF5, #A7F3D0);
+  color: #065F46;
+  border: 1px solid #6EE7B7;
+}
+.category-badge.tour {
+  background: linear-gradient(135deg, #FFF7ED, #FED7AA);
+  color: #9A3412;
+  border: 1px solid #FDBA74;
+}
+.category-badge.class {
+  background: linear-gradient(135deg, #FDF2F8, #FBCFE8);
+  color: #9D174D;
+  border: 1px solid #F9A8D4;
+}
+.category-badge.beach {
+  background: linear-gradient(135deg, #F0FDFA, #99F6E4);
+  color: #115E59;
+  border: 1px solid #5EEAD4;
+}
+.category-badge.brunch {
+  background: linear-gradient(135deg, #FFFBEB, #FDE68A);
+  color: #78350F;
+  border: 1px solid #FCD34D;
+}
+
+/* ─── LISTING CARD ─── */
+.card {
+  background: var(--white);
+  border-radius: 12px;
+  margin-bottom: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  border: 1px solid var(--blush);
+  transition: all 0.25s;
+  cursor: pointer;
+}
+.card:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(212,168,67,0.15); border-color: var(--gold-light); }
+.card.active { border: 2px solid var(--gold); box-shadow: 0 6px 20px rgba(212,168,67,0.25); }
+
+.card-rank {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px; height: 24px;
+  background: var(--gold);
+  color: var(--white);
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 0.8rem;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.card-body { padding: 12px; }
+.card-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+  color: var(--charcoal);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.card-desc {
+  font-size: 0.8rem;
+  color: #666;
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+.card-details {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px 12px;
+  font-size: 0.78rem;
+  color: #666;
+  margin-bottom: 8px;
+}
+.card-details .label { color: #999; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.5px; }
+.card-price {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--charcoal);
+}
+.card-price small { font-weight: 400; color: #999; font-size: 0.75rem; }
+.card-highlight {
+  font-size: 0.75rem;
+  color: var(--gold-dark);
+  font-weight: 500;
+  font-style: italic;
+  margin-bottom: 8px;
+}
+.card-link {
+  display: inline-block;
+  margin-top: 6px;
+  font-size: 0.75rem;
+  color: var(--gold-dark);
+  text-decoration: none;
+  font-weight: 600;
+}
+.card-link:hover { text-decoration: underline; }
+
+/* ─── PHOTO CAROUSEL ─── */
+.carousel {
+  position: relative;
+  width: 100%;
+  height: 180px;
+  overflow: hidden;
+  border-radius: 12px 12px 0 0;
+  background: var(--blush-light);
+}
+.carousel img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: none;
+}
+.carousel img.active { display: block; }
+.carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255,255,255,0.85);
+  border: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+  transition: all 0.2s;
+  z-index: 2;
+}
+.carousel-btn:hover { background: white; transform: translateY(-50%) scale(1.1); }
+.carousel-btn.prev { left: 6px; }
+.carousel-btn.next { right: 6px; }
+.carousel-dots {
+  position: absolute;
+  bottom: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 4px;
+  z-index: 2;
+}
+.carousel-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.5);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.carousel-dot.active { background: white; }
+.carousel-counter {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(0,0,0,0.5);
+  color: white;
+  font-size: 0.65rem;
+  padding: 2px 7px;
+  border-radius: 10px;
+  z-index: 2;
+}
+
+/* Popup carousel */
+.popup-carousel {
+  position: relative;
+  width: 220px;
+  height: 140px;
+  overflow: hidden;
+  border-radius: 8px;
+  margin-bottom: 8px;
+}
+.popup-carousel img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: none;
+}
+.popup-carousel img.active { display: block; }
+.popup-carousel .carousel-btn { width: 22px; height: 22px; font-size: 11px; }
+
+/* ─── VOTING ─── */
+.vote-section { margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--blush); }
+.vote-label { font-size: 0.7rem; color: #999; margin-bottom: 4px; }
+.vote-btns { display: flex; gap: 6px; }
+.vote-btn {
+  font-size: 1.2rem;
+  padding: 4px 8px;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  background: var(--blush-light);
+  transition: all 0.2s;
+}
+.vote-btn:hover { transform: scale(1.15); }
+.vote-btn.selected { border-color: var(--gold); background: var(--gold-light); transform: scale(1.15); }
+
+/* ─── MAP ─── */
+.map-container { flex: 1; position: relative; }
+#map { width: 100%; height: 100%; }
+
+/* ─── VOTER MODAL ─── */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 2000;
+  align-items: center;
+  justify-content: center;
+}
+.modal-overlay.show { display: flex; }
+.modal {
+  background: var(--white);
+  border-radius: 16px;
+  padding: 32px;
+  max-width: 400px;
+  width: 90%;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+}
+.modal h2 {
+  font-family: 'Playfair Display', serif;
+  color: var(--charcoal);
+  margin-bottom: 8px;
+}
+.modal p { color: #666; font-size: 0.9rem; margin-bottom: 20px; }
+.modal input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid var(--blush);
+  border-radius: 10px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1rem;
+  text-align: center;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.modal input:focus { border-color: var(--gold); }
+.modal button {
+  margin-top: 16px;
+  background: var(--gold);
+  color: var(--white);
+  border: none;
+  padding: 12px 32px;
+  border-radius: 24px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  letter-spacing: 0.5px;
+}
+.modal button:hover { background: var(--gold-dark); }
+
+/* ─── RESULTS OVERLAY ─── */
+.results-overlay {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.6);
+  z-index: 2000;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.results-overlay.show { display: flex; }
+.results-panel {
+  background: var(--white);
+  border-radius: 16px;
+  padding: 32px;
+  max-width: 700px;
+  width: 100%;
+  max-height: 85vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+.results-panel h2 {
+  font-family: 'Playfair Display', serif;
+  text-align: center;
+  margin-bottom: 20px;
+  color: var(--charcoal);
+}
+.results-close {
+  position: absolute;
+  top: 20px; right: 30px;
+  font-size: 2rem;
+  color: var(--white);
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+.result-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--blush-light);
+}
+.result-rank { font-weight: 700; color: var(--gold-dark); width: 30px; text-align: center; }
+.result-name { flex: 1; font-weight: 500; }
+.result-bar-wrap { width: 200px; }
+.result-bar { height: 20px; border-radius: 10px; display: flex; overflow: hidden; background: var(--blush-light); }
+.result-bar div { height: 100%; transition: width 0.5s; }
+.result-bar .love { background: #FF6B8A; }
+.result-bar .like { background: var(--gold); }
+.result-bar .meh { background: #CCC; }
+.result-bar .nah { background: #999; }
+.result-votes { width: 60px; text-align: right; font-size: 0.8rem; color: #999; }
+.legend { display: flex; gap: 16px; justify-content: center; margin-bottom: 16px; font-size: 0.8rem; }
+.legend span { display: flex; align-items: center; gap: 4px; }
+.legend-dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
+
+/* ─── MOBILE ─── */
+@media (max-width: 768px) {
+  .main { flex-direction: column; }
+  .sidebar { width: 100%; min-width: unset; max-height: 50vh; order: 2; }
+  .map-container { height: 50vh; order: 1; }
+  .header h1 { font-size: 1.1rem; }
+  .card-details { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Megan's <span>Charleston</span> Bach &mdash; Activities</h1>
+  <div class="header-actions">
+    <a href="index.html" class="header-btn outline" style="text-decoration:none;">View Stays</a>
+    <span id="voterDisplay" style="font-size:0.8rem; color:var(--gold-dark); font-weight:600;"></span>
+    <button class="header-btn outline" onclick="changeVoter()">Change Name</button>
+    <button class="header-btn" onclick="showResults()">View Results</button>
+    <button class="header-btn outline" onclick="copyShareLink()">Share Link</button>
+    <span id="syncStatus" style="font-size:0.7rem; color:var(--sage); font-weight:500;"></span>
+  </div>
+</div>
+
+<div class="main">
+  <div class="sidebar">
+    <div class="sidebar-title">Activities &mdash; Jul 16&ndash;19, 2026 &mdash; 10 Guests</div>
+    <div class="sort-bar">
+      <span class="sort-label">Sort by:</span>
+      <button class="sort-btn active" onclick="sortListings('rank')" id="sort-rank">Rank</button>
+      <button class="sort-btn" onclick="sortListings('price')" id="sort-price">Price</button>
+      <span class="sort-label" style="margin-left:8px;">Filter:</span>
+      <button class="sort-btn" onclick="toggleFilter('boat')" id="filter-boat">Boat</button>
+      <button class="sort-btn" onclick="toggleFilter('food')" id="filter-food">Food & Drink</button>
+      <button class="sort-btn" onclick="toggleFilter('nightlife')" id="filter-nightlife">Nightlife</button>
+      <button class="sort-btn" onclick="toggleFilter('wellness')" id="filter-wellness">Wellness</button>
+      <button class="sort-btn" onclick="toggleFilter('tour')" id="filter-tour">Tour</button>
+      <button class="sort-btn" onclick="toggleFilter('class')" id="filter-class">Class</button>
+      <button class="sort-btn" onclick="toggleFilter('beach')" id="filter-beach">Beach</button>
+      <button class="sort-btn" onclick="toggleFilter('brunch')" id="filter-brunch">Brunch</button>
+    </div>
+    <div id="cardList"></div>
+  </div>
+  <div class="map-container">
+    <div id="map"></div>
+  </div>
+</div>
+
+<!-- Voter Name Modal -->
+<div class="modal-overlay" id="voterModal">
+  <div class="modal">
+    <h2>Hey girl!</h2>
+    <p>Enter your name to vote on activities for Megan's bach weekend</p>
+    <input type="text" id="voterNameInput" placeholder="Your name" autocomplete="off" />
+    <br>
+    <button onclick="setVoterName()">Let's Go!</button>
+  </div>
+</div>
+
+<!-- Results Overlay -->
+<div class="results-overlay" id="resultsOverlay">
+  <button class="results-close" onclick="closeResults()">&times;</button>
+  <div class="results-panel">
+    <h2>Activity Vote Results</h2>
+    <div class="legend">
+      <span><span class="legend-dot" style="background:#FF6B8A"></span> Love it</span>
+      <span><span class="legend-dot" style="background:var(--gold)"></span> Like it</span>
+      <span><span class="legend-dot" style="background:#CCC"></span> Meh</span>
+      <span><span class="legend-dot" style="background:#999"></span> Nah</span>
+    </div>
+    <div id="resultsBody"></div>
+  </div>
+</div>
+
+<script>
+// ─── ACTIVITY DATA ───
+const ACTIVITIES = [
+  {
+    "rank": 1,
+    "name": "Harbor Bar Party Boat",
+    "id": "harbor-bar",
+    "category": "boat",
+    "desc": "BYOB sunset party cruise around Charleston Harbor. Up to 26 guests, downtown marina departure. The #1 bachelorette boat in Charleston.",
+    "price": 63,
+    "duration": "2 hours",
+    "groupSize": "Up to 26",
+    "highlight": "\u{1F389} BYOB \u2022 Sunset views \u2022 Downtown marina \u2022 DJ available",
+    "url": "https://harborbarchs.com/bachelorette-party/",
+    "lat": 32.7812,
+    "lng": -79.9253,
+    "photos": []
+  },
+  {
+    "rank": 2,
+    "name": "Flipper Finders Beach & Dolphin Tour",
+    "id": "flipper-finders",
+    "category": "boat",
+    "desc": "3-hour private charter for up to 12 on a pontoon boat. Cruise the Folly River, spot dolphins, then beach the boat on a sandbar to swim.",
+    "price": 75,
+    "duration": "3 hours",
+    "groupSize": "Up to 12",
+    "highlight": "\u{1F42C} Dolphins \u2022 Sandbar swimming \u2022 Private charter \u2022 BYOB",
+    "url": "https://flipperfinders.com/bachelor-bachelorette-party/",
+    "lat": 32.6553,
+    "lng": -79.9403,
+    "photos": []
+  },
+  {
+    "rank": 3,
+    "name": "Charleston Cocktail Co",
+    "id": "cocktail-co",
+    "category": "class",
+    "desc": "Custom cocktail-making class brought to your rental. Learn to craft 3 signature drinks with premium spirits and locally-made ingredients.",
+    "price": 85,
+    "duration": "2 hours",
+    "groupSize": "8-20 guests",
+    "highlight": "\u{1F378} Hands-on \u2022 Comes to you \u2022 Cocktail competition \u2022 All supplies included",
+    "url": "https://www.charlestoncocktail.co",
+    "lat": 32.7876,
+    "lng": -79.9378,
+    "photos": []
+  },
+  {
+    "rank": 4,
+    "name": "F\u00EAtes de Fleurs — Flower Crown Party",
+    "id": "fetes-fleurs",
+    "category": "class",
+    "desc": "A host brings all supplies to your rental for a 2-hour flower crown making party. Perfect photo-op before going out!",
+    "price": 50,
+    "duration": "2 hours",
+    "groupSize": "6-25 guests",
+    "highlight": "\u{1F338} Comes to you \u2022 Photo-ready \u2022 Wine-friendly \u2022 All supplies included",
+    "url": "https://www.fetesdefleurs.com/flower-crown-bachelorette-party",
+    "lat": 32.7876,
+    "lng": -79.9378,
+    "photos": []
+  },
+  {
+    "rank": 5,
+    "name": "Bulldog Tours — Ghost Tour",
+    "id": "bulldog-ghost",
+    "category": "tour",
+    "desc": "90-minute walking ghost tour through haunted alleyways and graveyards. Includes exclusive dungeon access. Great for a spooky girls' night.",
+    "price": 35,
+    "duration": "1.5 hours",
+    "groupSize": "Any size",
+    "highlight": "\u{1F47B} Evening tour \u2022 Dungeon access \u2022 Historic district \u2022 Private groups available",
+    "url": "https://www.bulldogtours.com/",
+    "lat": 32.7780,
+    "lng": -79.9310,
+    "photos": []
+  },
+  {
+    "rank": 6,
+    "name": "Poogan's Porch Brunch",
+    "id": "poogans-porch",
+    "category": "brunch",
+    "desc": "Iconic Charleston brunch in a historic house on Queen Street. Classic Southern dishes, biscuits, and bottomless mimosas. Great for groups.",
+    "price": 45,
+    "duration": "1.5-2 hours",
+    "groupSize": "Reservations for 10+",
+    "highlight": "\u{1F95E} Southern brunch \u2022 Historic house \u2022 Bottomless mimosas \u2022 Queen Street",
+    "url": "https://www.poogansporch.com/",
+    "lat": 32.7785,
+    "lng": -79.9325,
+    "photos": []
+  },
+  {
+    "rank": 7,
+    "name": "Republic Garden & Lounge",
+    "id": "republic-lounge",
+    "category": "nightlife",
+    "desc": "Upscale lounge on King Street with outdoor garden, craft cocktails, bottle service, and live DJs. The go-to bach nightlife spot.",
+    "price": 30,
+    "duration": "Evening",
+    "groupSize": "Any size",
+    "highlight": "\u{1F57A} King Street \u2022 Outdoor garden \u2022 Bottle service \u2022 Live DJs",
+    "url": "https://www.republiccharleston.com/",
+    "lat": 32.7873,
+    "lng": -79.9379,
+    "photos": []
+  },
+  {
+    "rank": 8,
+    "name": "Uptown Social Rooftop",
+    "id": "uptown-social",
+    "category": "nightlife",
+    "desc": "Charleston's hippest rooftop bar. Famous frozen cocktails, live music nightly, and amazing pizzas. Multi-level venue with great views.",
+    "price": 25,
+    "duration": "Evening",
+    "groupSize": "Any size",
+    "highlight": "\u{1F305} Rooftop views \u2022 Live music \u2022 Frozen cocktails \u2022 Pizza",
+    "url": "https://www.uptownsocialchs.com/",
+    "lat": 32.7878,
+    "lng": -79.9375,
+    "photos": []
+  },
+  {
+    "rank": 9,
+    "name": "Earthling Day Spa — Group Package",
+    "id": "earthling-spa",
+    "category": "wellness",
+    "desc": "One of the largest spas in Charleston with dedicated group packages. Massages, facials, and body treatments for the whole crew.",
+    "price": 95,
+    "duration": "2-3 hours",
+    "groupSize": "Up to 10",
+    "highlight": "\u{1F9D6} Full spa \u2022 Group packages \u2022 Downtown location \u2022 Customizable",
+    "url": "https://www.earthlingdayspa.com/group-spa-packages/",
+    "lat": 32.7862,
+    "lng": -79.9400,
+    "photos": []
+  },
+  {
+    "rank": 10,
+    "name": "Charleston SUP Safaris",
+    "id": "sup-safaris",
+    "category": "beach",
+    "desc": "Guided paddleboard tour on the Folly River through salt marsh. Spot dolphins and explore the ecosystem. No experience needed!",
+    "price": 55,
+    "duration": "2 hours",
+    "groupSize": "Up to 20",
+    "highlight": "\u{1F3C4} Paddleboarding \u2022 Folly River \u2022 Dolphins \u2022 Beginners welcome",
+    "url": "https://charlestonsupsafaris.com/",
+    "lat": 32.6590,
+    "lng": -79.9450,
+    "photos": []
+  },
+  {
+    "rank": 11,
+    "name": "Tiki Tours Party Boat",
+    "id": "tiki-tours",
+    "category": "boat",
+    "desc": "Private and semi-private tiki-style cruise options around Charleston Harbor. Fun floating bar vibes with your crew.",
+    "price": 60,
+    "duration": "2 hours",
+    "groupSize": "Up to 18",
+    "highlight": "\u{1F965} Tiki vibes \u2022 BYOB \u2022 Harbor cruise \u2022 Private options",
+    "url": "https://tikitoursofcharleston.com/bachelorette-party-boat-charleston-sc/",
+    "lat": 32.7810,
+    "lng": -79.9260,
+    "photos": []
+  },
+  {
+    "rank": 12,
+    "name": "Charleston Taylor Estate — Wine Blending",
+    "id": "taylor-winery",
+    "category": "food",
+    "desc": "Wine tasting and personalized blending experience at a gorgeous estate. Create your own custom blend to take home.",
+    "price": 45,
+    "duration": "2 hours",
+    "groupSize": "Up to 20",
+    "highlight": "\u{1F377} Custom blending \u2022 Wine tasting \u2022 Estate venue \u2022 Take home a bottle",
+    "url": "https://charlestontaylor.com/",
+    "lat": 32.8556,
+    "lng": -80.0790,
+    "photos": []
+  },
+  {
+    "rank": 13,
+    "name": "Blind Tiger Pub",
+    "id": "blind-tiger",
+    "category": "nightlife",
+    "desc": "Award-winning historic pub voted 'Best Bar in Charleston' multiple times. Beautiful patio setting, perfect for a chill night out.",
+    "price": 20,
+    "duration": "Evening",
+    "groupSize": "Any size",
+    "highlight": "\u{1F3C6} Best bar in CHS \u2022 Historic building \u2022 Patio \u2022 Craft cocktails",
+    "url": "https://blindtigerpub.com/",
+    "lat": 32.7775,
+    "lng": -79.9315,
+    "photos": []
+  },
+  {
+    "rank": 14,
+    "name": "The Junction Kitchen — Group Brunch",
+    "id": "junction-brunch",
+    "category": "brunch",
+    "desc": "One of the best brunch spots in Charleston. Famous for serving donuts as sides. Private group dining available.",
+    "price": 35,
+    "duration": "1.5-2 hours",
+    "groupSize": "Private dining for groups",
+    "highlight": "\u{1F369} Donut sides \u2022 Private dining \u2022 Creative menu \u2022 Group-friendly",
+    "url": "https://www.thejunctionkitchen.com/",
+    "lat": 32.7905,
+    "lng": -79.9410,
+    "photos": []
+  },
+  {
+    "rank": 15,
+    "name": "Undiscovered Charleston — Food & History Tour",
+    "id": "undiscovered-chs",
+    "category": "tour",
+    "desc": "Culinary walking tour through Charleston's historic district. Ends with a cooking demo and lunch paired with wine.",
+    "price": 65,
+    "duration": "3 hours",
+    "groupSize": "Up to 12",
+    "highlight": "\u{1F374} Tastings \u2022 Cooking demo \u2022 Wine pairing \u2022 Walking tour",
+    "url": "https://tourofcharleston.com/",
+    "lat": 32.7790,
+    "lng": -79.9340,
+    "photos": []
+  },
+  {
+    "rank": 16,
+    "name": "Charleston Head Spa — Group Booking",
+    "id": "head-spa",
+    "category": "wellness",
+    "desc": "Trendy head spa experience with scalp treatments, aromatherapy, and relaxation. Groups of 6+ get 10% off.",
+    "price": 80,
+    "duration": "1-1.5 hours",
+    "groupSize": "Up to 8 at once",
+    "highlight": "\u{1F486} Scalp massage \u2022 Aromatherapy \u2022 Group discount \u2022 Trendy & relaxing",
+    "url": "https://www.charlestonheadspa.com/group-booking-1",
+    "lat": 32.7910,
+    "lng": -79.9388,
+    "photos": []
+  },
+  {
+    "rank": 17,
+    "name": "Folly Beach Day",
+    "id": "folly-beach",
+    "category": "beach",
+    "desc": "Spend a day at Charleston's favorite beach. Rent chairs and umbrellas, grab tacos at Taco Boy, and soak up the sun.",
+    "price": 15,
+    "duration": "Half or full day",
+    "groupSize": "Any size",
+    "highlight": "\u{1F3D6}\uFE0F Beach chairs \u2022 Oceanfront bars \u2022 Taco Boy nearby \u2022 Free parking spots",
+    "url": "https://visitfolly.com/",
+    "lat": 32.6552,
+    "lng": -79.9404,
+    "photos": []
+  },
+  {
+    "rank": 18,
+    "name": "King Street Shopping Crawl",
+    "id": "king-street",
+    "category": "tour",
+    "desc": "Self-guided stroll down Charleston's famous King Street. Boutiques, Grit & Grace jewelry, and cute shops galore.",
+    "price": 0,
+    "duration": "2-3 hours",
+    "groupSize": "Any size",
+    "highlight": "\u{1F6CD}\uFE0F Boutiques \u2022 Jewelry \u2022 Grit & Grace \u2022 Free to browse",
+    "url": "https://www.kingstreetchs.com/",
+    "lat": 32.7876,
+    "lng": -79.9378,
+    "photos": []
+  }
+];
+
+// ─── STATE ───
+let voterName = '';
+let votes = {};
+let currentSort = 'rank';
+let activeFilters = new Set();
+let sortedActivities = [...ACTIVITIES];
+let isSaving = false;
+let pendingSave = false;
+
+// ─── VOTES API ───
+const VOTES_API = 'https://bach-votes.vercel.app/api/activity-votes';
+
+async function loadVotes() {
+  const dot = document.getElementById('syncStatus');
+  try {
+    const res = await fetch(VOTES_API);
+    if (res.ok) {
+      votes = await res.json();
+      dot.innerHTML = '&#x1f7e2; Synced';
+    }
+  } catch(e) {
+    console.warn('Failed to load votes', e);
+    dot.innerHTML = '&#x1f534; Offline';
+    const saved = localStorage.getItem('bach_activity_votes');
+    if (saved) try { votes = JSON.parse(saved); } catch(e) {}
+  }
+}
+
+async function saveVotes() {
+  localStorage.setItem('bach_activity_votes', JSON.stringify(votes));
+
+  if (isSaving) { pendingSave = true; return; }
+  isSaving = true;
+  const dot = document.getElementById('syncStatus');
+  dot.innerHTML = '&#x1f7e1; Saving...';
+
+  try {
+    const res = await fetch(VOTES_API, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(votes)
+    });
+    if (res.ok) {
+      dot.innerHTML = '&#x1f7e2; Synced';
+    } else {
+      dot.innerHTML = '&#x1f534; Save failed';
+    }
+  } catch(e) {
+    console.warn('Failed to save votes', e);
+    dot.innerHTML = '&#x1f534; Offline';
+  }
+  isSaving = false;
+  if (pendingSave) { pendingSave = false; saveVotes(); }
+}
+
+// ─── INIT ───
+window.addEventListener('DOMContentLoaded', async () => {
+  const savedName = localStorage.getItem('bach_voter_name');
+  if (savedName) voterName = savedName;
+
+  await loadVotes();
+
+  if (!voterName) {
+    document.getElementById('voterModal').classList.add('show');
+  } else {
+    document.getElementById('voterDisplay').textContent = 'Voting as: ' + voterName;
+  }
+
+  renderCards();
+  initMap();
+
+  setInterval(async () => {
+    await loadVotes();
+    renderCards();
+  }, 10000);
+});
+
+// ─── VOTER NAME ───
+function setVoterName() {
+  const input = document.getElementById('voterNameInput').value.trim();
+  if (!input) return;
+  voterName = input;
+  localStorage.setItem('bach_voter_name', voterName);
+  document.getElementById('voterDisplay').textContent = 'Voting as: ' + voterName;
+  document.getElementById('voterModal').classList.remove('show');
+  renderCards();
+}
+
+function changeVoter() {
+  document.getElementById('voterNameInput').value = '';
+  document.getElementById('voterModal').classList.add('show');
+  document.getElementById('voterNameInput').focus();
+}
+
+// ─── VOTING ───
+const EMOJIS = [
+  { emoji: '\u{1F60D}', label: 'love', key: 'love' },
+  { emoji: '\u{1F970}', label: 'like', key: 'like' },
+  { emoji: '\u{1F610}', label: 'meh', key: 'meh' },
+  { emoji: '\u{1F44E}', label: 'nah', key: 'nah' }
+];
+
+function castVote(activityId, emojiKey) {
+  if (!voterName) { document.getElementById('voterModal').classList.add('show'); return; }
+
+  if (!votes[activityId]) votes[activityId] = {};
+  if (votes[activityId][voterName] === emojiKey) {
+    delete votes[activityId][voterName];
+  } else {
+    votes[activityId][voterName] = emojiKey;
+  }
+  saveVotes();
+  renderCards();
+}
+
+// ─── SHARE LINK ───
+function copyShareLink() {
+  const pageUrl = 'https://chelseal11.github.io/megans-bach-charleston/activities.html';
+  navigator.clipboard.writeText(pageUrl).then(() => {
+    const btn = event.target;
+    btn.textContent = 'Copied!';
+    setTimeout(() => { btn.textContent = 'Share Link'; }, 2000);
+  }).catch(() => {
+    prompt('Copy this link and share it with the group:', pageUrl);
+  });
+}
+
+// ─── FILTERS & SORT ───
+function toggleFilter(filter) {
+  const btn = document.getElementById('filter-' + filter);
+  if (activeFilters.has(filter)) {
+    activeFilters.delete(filter);
+    btn.classList.remove('active');
+  } else {
+    activeFilters.add(filter);
+    btn.classList.add('active');
+  }
+  applyFiltersAndSort();
+}
+
+function sortListings(key) {
+  currentSort = key;
+  document.querySelectorAll('.sort-bar .sort-btn').forEach(b => {
+    if (b.id.startsWith('sort-')) b.classList.remove('active');
+  });
+  document.getElementById('sort-' + key).classList.add('active');
+  applyFiltersAndSort();
+}
+
+function applyFiltersAndSort() {
+  let filtered = [...ACTIVITIES];
+
+  if (activeFilters.size > 0) {
+    filtered = filtered.filter(a => activeFilters.has(a.category));
+  }
+
+  filtered.sort((a, b) => {
+    if (currentSort === 'price') return a.price - b.price;
+    return a.rank - b.rank;
+  });
+
+  sortedActivities = filtered;
+  renderCards();
+  updateMapMarkers();
+}
+
+function updateMapMarkers() {
+  if (!map) return;
+  const visibleIds = new Set(sortedActivities.map(a => a.id));
+  ACTIVITIES.forEach(a => {
+    if (markers[a.id]) {
+      if (visibleIds.has(a.id)) {
+        if (!map.hasLayer(markers[a.id])) markers[a.id].addTo(map);
+      } else {
+        map.removeLayer(markers[a.id]);
+      }
+    }
+  });
+  const visible = sortedActivities.map(a => markers[a.id]).filter(Boolean);
+  if (visible.length > 0) {
+    const group = L.featureGroup(visible);
+    map.fitBounds(group.getBounds().pad(0.15));
+  }
+}
+
+// ─── RENDER CARDS ───
+const CATEGORY_ICONS = {
+  boat: '\u{26F5}',
+  food: '\u{1F377}',
+  nightlife: '\u{1F378}',
+  wellness: '\u{1F9D6}',
+  tour: '\u{1F6B6}',
+  class: '\u{1F3A8}',
+  beach: '\u{1F3D6}\uFE0F',
+  brunch: '\u{1F95E}'
+};
+
+const CATEGORY_LABELS = {
+  boat: 'Boat',
+  food: 'Food & Drink',
+  nightlife: 'Nightlife',
+  wellness: 'Wellness',
+  tour: 'Tour',
+  class: 'Class',
+  beach: 'Beach',
+  brunch: 'Brunch'
+};
+
+function renderCards() {
+  const container = document.getElementById('cardList');
+  container.innerHTML = sortedActivities.map(a => {
+    const activityVotes = votes[a.id] || {};
+    const myVote = voterName ? activityVotes[voterName] : null;
+    const voteCount = Object.keys(activityVotes).length;
+    const priceStr = a.price === 0 ? 'Free' : '$' + a.price;
+    const photos = a.photos || [];
+
+    return `
+    <div class="card" id="card-${a.id}">
+      ${photos.length > 0 ? `
+      <div class="carousel" id="carousel-${a.id}" onclick="event.stopPropagation()">
+        ${photos.map((p, idx) => `<img src="${p}" alt="${a.name}" class="${idx === 0 ? 'active' : ''}" loading="lazy">`).join('')}
+        ${photos.length > 1 ? `
+          <button class="carousel-btn prev" onclick="slideCarousel('${a.id}', -1)">\u2039</button>
+          <button class="carousel-btn next" onclick="slideCarousel('${a.id}', 1)">\u203A</button>
+          <div class="carousel-counter"><span id="counter-${a.id}">1</span>/${photos.length}</div>
+          <div class="carousel-dots">
+            ${photos.map((_, idx) => `<button class="carousel-dot ${idx === 0 ? 'active' : ''}" onclick="goToSlide('${a.id}', ${idx})"></button>`).join('')}
+          </div>
+        ` : ''}
+      </div>` : ''}
+      <div class="card-body" onclick="flyTo(${a.lat}, ${a.lng}, '${a.id}')">
+        <div class="card-name"><span class="card-rank">${a.rank}</span>${a.name}</div>
+        <span class="category-badge ${a.category}">${CATEGORY_ICONS[a.category] || ''} ${CATEGORY_LABELS[a.category] || a.category}</span>
+        <div class="card-desc">${a.desc}</div>
+        <div class="card-details">
+          <div><span class="label">Price</span><br><span class="card-price">${priceStr}</span> <small>/person</small></div>
+          <div><span class="label">Duration</span><br>${a.duration}</div>
+          <div><span class="label">Group Size</span><br>${a.groupSize}</div>
+        </div>
+        <div class="card-highlight">${a.highlight}</div>
+        <a class="card-link" href="${a.url}" target="_blank" onclick="event.stopPropagation()">Learn More \u2192</a>
+        <div class="vote-section">
+          <div class="vote-label">Your vote ${voteCount > 0 ? '(' + voteCount + ' vote' + (voteCount>1?'s':'') + ' total)' : ''}</div>
+          <div class="vote-btns">
+            ${EMOJIS.map(e => `
+              <button class="vote-btn ${myVote === e.key ? 'selected' : ''}"
+                      onclick="event.stopPropagation(); castVote('${a.id}', '${e.key}')"
+                      title="${e.label}">${e.emoji}</button>
+            `).join('')}
+          </div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ─── CAROUSEL ───
+function slideCarousel(id, direction, isPopup) {
+  const carousel = document.getElementById(isPopup ? id : 'carousel-' + id);
+  const imgs = carousel.querySelectorAll('img');
+  const dots = carousel.querySelectorAll('.carousel-dot');
+  let current = [...imgs].findIndex(img => img.classList.contains('active'));
+  imgs[current].classList.remove('active');
+  if (dots[current]) dots[current].classList.remove('active');
+  current = (current + direction + imgs.length) % imgs.length;
+  imgs[current].classList.add('active');
+  if (dots[current]) dots[current].classList.add('active');
+  const counter = document.getElementById('counter-' + id);
+  if (counter) counter.textContent = current + 1;
+}
+
+function goToSlide(id, index) {
+  const carousel = document.getElementById('carousel-' + id);
+  const imgs = carousel.querySelectorAll('img');
+  const dots = carousel.querySelectorAll('.carousel-dot');
+  imgs.forEach((img, i) => { img.classList.toggle('active', i === index); });
+  dots.forEach((dot, i) => { dot.classList.toggle('active', i === index); });
+  const counter = document.getElementById('counter-' + id);
+  if (counter) counter.textContent = index + 1;
+}
+
+// ─── MAP ───
+let map, markers = {};
+
+const CATEGORY_COLORS = {
+  boat: '#0369A1',
+  food: '#B8922F',
+  nightlife: '#7C3AED',
+  wellness: '#059669',
+  tour: '#EA580C',
+  class: '#DB2777',
+  beach: '#0D9488',
+  brunch: '#D97706'
+};
+
+function initMap() {
+  map = L.map('map', { zoomControl: true }).setView([32.7855, -79.9390], 14);
+
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+    attribution: '&copy; OpenStreetMap &copy; CARTO',
+    maxZoom: 19
+  }).addTo(map);
+
+  ACTIVITIES.forEach(a => {
+    const color = CATEGORY_COLORS[a.category] || '#5B8DD9';
+    const icon = L.divIcon({
+      className: 'activity-marker',
+      html: `<div style="
+        background:${color};
+        color:white;
+        font-weight:700;
+        font-size:12px;
+        width:26px;
+        height:26px;
+        border-radius:50%;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        border:2px solid white;
+        box-shadow:0 2px 6px rgba(0,0,0,0.3);
+        font-family:Montserrat,sans-serif;
+      ">${a.rank}</div>`,
+      iconSize: [26, 26],
+      iconAnchor: [13, 13]
+    });
+
+    const priceStr = a.price === 0 ? 'Free' : '$' + a.price + '/pp';
+    const marker = L.marker([a.lat, a.lng], { icon })
+      .addTo(map)
+      .bindPopup(`
+        <div style="font-family:Montserrat,sans-serif; max-width:220px;">
+          <b style="font-family:Playfair Display,serif; font-size:14px;">${a.name}</b><br>
+          <span style="color:${color}; font-weight:600;">${CATEGORY_LABELS[a.category]}</span><br>
+          <b>${priceStr}</b> &bull; ${a.duration}<br>
+          <em style="color:#D4A843; font-size:12px;">${a.highlight}</em><br>
+          <a href="${a.url}" target="_blank" style="color:#D4A843;">Learn More</a>
+        </div>
+      `, { maxWidth: 240 });
+    markers[a.id] = marker;
+  });
+
+  const group = L.featureGroup(Object.values(markers));
+  map.fitBounds(group.getBounds().pad(0.15));
+}
+
+function flyTo(lat, lng, id) {
+  map.flyTo([lat, lng], 16, { duration: 0.8 });
+  markers[id].openPopup();
+  document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
+  document.getElementById('card-' + id).classList.add('active');
+}
+
+// ─── RESULTS ───
+function showResults() {
+  const body = document.getElementById('resultsBody');
+  const sorted = [...ACTIVITIES].sort((a, b) => {
+    const aVotes = votes[a.id] || {};
+    const bVotes = votes[b.id] || {};
+    const aScore = calcVoteScore(aVotes);
+    const bScore = calcVoteScore(bVotes);
+    return bScore - aScore;
+  });
+
+  body.innerHTML = sorted.map((a, i) => {
+    const v = votes[a.id] || {};
+    const counts = { love: 0, like: 0, meh: 0, nah: 0 };
+    Object.values(v).forEach(val => { if (counts[val] !== undefined) counts[val]++; });
+    const total = Object.values(counts).reduce((a, b) => a + b, 0);
+    const pct = key => total > 0 ? (counts[key] / total * 100) : 0;
+    const voters = Object.entries(v).map(([name, vote]) => {
+      const em = EMOJIS.find(e => e.key === vote);
+      return em ? em.emoji + ' ' + name : name;
+    }).join(', ');
+
+    return `
+      <div class="result-row">
+        <div class="result-rank">${i + 1}</div>
+        <div class="result-name">
+          ${a.name}
+          ${voters ? '<br><span style="font-size:0.75rem;color:#999;">' + voters + '</span>' : ''}
+        </div>
+        <div class="result-bar-wrap">
+          <div class="result-bar">
+            <div class="love" style="width:${pct('love')}%"></div>
+            <div class="like" style="width:${pct('like')}%"></div>
+            <div class="meh" style="width:${pct('meh')}%"></div>
+            <div class="nah" style="width:${pct('nah')}%"></div>
+          </div>
+        </div>
+        <div class="result-votes">${total} vote${total !== 1 ? 's' : ''}</div>
+      </div>`;
+  }).join('');
+
+  document.getElementById('resultsOverlay').classList.add('show');
+}
+
+function closeResults() {
+  document.getElementById('resultsOverlay').classList.remove('show');
+}
+
+function calcVoteScore(voteObj) {
+  const weights = { love: 3, like: 2, meh: 1, nah: 0 };
+  let total = 0, count = 0;
+  Object.values(voteObj).forEach(v => {
+    if (weights[v] !== undefined) { total += weights[v]; count++; }
+  });
+  return count > 0 ? total / count * count : 0;
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    document.getElementById('resultsOverlay').classList.remove('show');
+  }
+});
+</script>
+</body>
+</html>
