@@ -1198,6 +1198,7 @@ let currentSort = 'score';
 let activeFilters = new Set();
 let sortedListings = [...LISTINGS];
 let isSaving = false;
+let pendingSave = false;
 
 // ─── VOTES API (Vercel serverless function) ───
 const VOTES_API = 'https://bach-votes.vercel.app/api/votes';
@@ -1221,7 +1222,7 @@ async function loadVotes() {
 async function saveVotes() {
   localStorage.setItem('bach_votes', JSON.stringify(votes));
 
-  if (isSaving) return;
+  if (isSaving) { pendingSave = true; return; }
   isSaving = true;
   const dot = document.getElementById('syncStatus');
   dot.innerHTML = '&#x1f7e1; Saving...';
@@ -1242,6 +1243,7 @@ async function saveVotes() {
     dot.innerHTML = '&#x1f534; Offline';
   }
   isSaving = false;
+  if (pendingSave) { pendingSave = false; saveVotes(); }
 }
 
 // ─── INIT ───
