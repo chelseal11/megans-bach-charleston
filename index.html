@@ -445,6 +445,7 @@ body {
   max-height: 85vh;
   overflow-y: auto;
   box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  position: relative;
 }
 .results-panel h2 {
   font-family: 'Playfair Display', serif;
@@ -454,13 +455,15 @@ body {
 }
 .results-close {
   position: absolute;
-  top: 20px; right: 30px;
-  font-size: 2rem;
-  color: var(--white);
+  top: 12px; right: 16px;
+  font-size: 1.5rem;
+  color: #999;
   cursor: pointer;
   background: none;
   border: none;
+  line-height: 1;
 }
+.results-close:hover { color: var(--charcoal); }
 .result-card {
   background: var(--blush-light); border-radius: 12px; padding: 16px;
   margin-bottom: 12px; position: relative;
@@ -687,8 +690,8 @@ body {
 
 <!-- Results Overlay -->
 <div class="results-overlay" id="resultsOverlay">
-  <button class="results-close" onclick="closeResults()">&times;</button>
   <div class="results-panel">
+    <button class="results-close" onclick="closeResults()">&times;</button>
     <h2>Rankings</h2>
     <div class="results-legend">
       <span><span class="results-legend-dot" style="background:var(--gold)"></span> 1st (3 pts)</span>
