@@ -1,0 +1,1474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Megan's Charleston Bach — Food</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --blush: #F2D1D1;
+  --blush-light: #FDF0F0;
+  --blush-dark: #E8A5A5;
+  --gold: #D4A843;
+  --gold-light: #F0DBA8;
+  --gold-dark: #B8922F;
+  --charcoal: #2D2D2D;
+  --white: #FFFFFF;
+  --cream: #FFF9F5;
+  --sage: #B5C4B1;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Montserrat', sans-serif;
+  background: var(--cream);
+  color: var(--charcoal);
+  overflow: hidden;
+  height: 100vh;
+}
+
+/* ─── TAB BAR ─── */
+.tab-bar {
+  display: flex; background: var(--charcoal);
+}
+.tab-bar a {
+  flex: 1; text-align: center; padding: 10px 12px;
+  font-family: 'Montserrat', sans-serif; font-size: 0.8rem; font-weight: 600;
+  color: rgba(255,255,255,0.6); text-decoration: none;
+  letter-spacing: 0.5px; transition: all 0.2s;
+  border-bottom: 3px solid transparent;
+}
+.tab-bar a:hover { color: white; }
+.tab-bar a.active { color: white; border-bottom-color: var(--gold); }
+
+/* ─── HEADER ─── */
+.header {
+  background: linear-gradient(135deg, var(--blush) 0%, var(--blush-light) 50%, var(--gold-light) 100%);
+  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 2px solid var(--gold);
+  z-index: 1000;
+  position: relative;
+}
+.header h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.6rem;
+  color: var(--charcoal);
+  letter-spacing: 1px;
+}
+.header h1 span { color: var(--gold-dark); }
+.header-actions { display: flex; gap: 10px; align-items: center; }
+.header-btn {
+  background: var(--gold);
+  color: var(--white);
+  border: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  letter-spacing: 0.5px;
+}
+.header-btn:hover { background: var(--gold-dark); transform: translateY(-1px); }
+.header-btn.outline {
+  background: transparent;
+  border: 2px solid var(--gold);
+  color: var(--gold-dark);
+}
+.header-btn.outline:hover { background: var(--gold); color: var(--white); }
+
+/* ─── MAIN LAYOUT ─── */
+.main {
+  display: flex;
+  height: calc(100vh - 58px - 39px);
+}
+
+/* ─── SIDEBAR ─── */
+.sidebar {
+  width: 420px;
+  min-width: 420px;
+  overflow-y: auto;
+  background: var(--cream);
+  border-right: 1px solid var(--blush);
+  padding: 16px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--blush-dark) transparent;
+}
+.sidebar::-webkit-scrollbar { width: 6px; }
+.sidebar::-webkit-scrollbar-thumb { background: var(--blush-dark); border-radius: 3px; }
+
+.sidebar-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem;
+  color: var(--gold-dark);
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--gold-light);
+}
+
+/* ─── SORT BAR ─── */
+.sort-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+.sort-label {
+  font-size: 0.7rem;
+  color: #999;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-right: 2px;
+}
+.sort-btn {
+  background: var(--blush-light);
+  border: 1px solid var(--blush);
+  color: var(--charcoal);
+  padding: 4px 10px;
+  border-radius: 14px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.sort-btn:hover { background: var(--blush); }
+.sort-btn.active {
+  background: var(--gold);
+  color: var(--white);
+  border-color: var(--gold);
+}
+
+/* ─── CATEGORY BADGE ─── */
+.category-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 12px;
+  margin: 4px 0;
+}
+.category-badge.boat {
+  background: linear-gradient(135deg, #E0F2FE, #BAE6FD);
+  color: #0369A1;
+  border: 1px solid #7DD3FC;
+}
+.category-badge.food {
+  background: linear-gradient(135deg, #FEF3C7, #FDE68A);
+  color: #92400E;
+  border: 1px solid #FCD34D;
+}
+.category-badge.nightlife {
+  background: linear-gradient(135deg, #EDE9FE, #DDD6FE);
+  color: #5B21B6;
+  border: 1px solid #C4B5FD;
+}
+.category-badge.wellness {
+  background: linear-gradient(135deg, #ECFDF5, #A7F3D0);
+  color: #065F46;
+  border: 1px solid #6EE7B7;
+}
+.category-badge.tour {
+  background: linear-gradient(135deg, #FFF7ED, #FED7AA);
+  color: #9A3412;
+  border: 1px solid #FDBA74;
+}
+.category-badge.class {
+  background: linear-gradient(135deg, #FDF2F8, #FBCFE8);
+  color: #9D174D;
+  border: 1px solid #F9A8D4;
+}
+.category-badge.beach {
+  background: linear-gradient(135deg, #F0FDFA, #99F6E4);
+  color: #115E59;
+  border: 1px solid #5EEAD4;
+}
+.category-badge.brunch {
+  background: linear-gradient(135deg, #FFFBEB, #FDE68A);
+  color: #78350F;
+  border: 1px solid #FCD34D;
+}
+.category-badge.hike {
+  background: linear-gradient(135deg, #F0FDF4, #BBF7D0);
+  color: #166534;
+  border: 1px solid #86EFAC;
+}
+.category-badge.fun {
+  background: linear-gradient(135deg, #FFF1F2, #FECDD3);
+  color: #9F1239;
+  border: 1px solid #FDA4AF;
+}
+.category-badge.dinner {
+  background: linear-gradient(135deg, #FDF4FF, #F5D0FE);
+  color: #7E22CE;
+  border: 1px solid #E9A8FF;
+}
+
+/* ─── LISTING CARD ─── */
+.card {
+  background: var(--white);
+  border-radius: 12px;
+  margin-bottom: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  border: 1px solid var(--blush);
+  transition: all 0.25s;
+  cursor: pointer;
+}
+.card:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(212,168,67,0.15); border-color: var(--gold-light); }
+.card.active { border: 2px solid var(--gold); box-shadow: 0 6px 20px rgba(212,168,67,0.25); }
+
+.card-rank {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px; height: 24px;
+  background: var(--gold);
+  color: var(--white);
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 0.8rem;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.card-body { padding: 12px; }
+.card-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+  color: var(--charcoal);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.card-desc {
+  font-size: 0.8rem;
+  color: #666;
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+.card-details {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px 12px;
+  font-size: 0.78rem;
+  color: #666;
+  margin-bottom: 8px;
+}
+.card-details.inline {
+  grid-template-columns: auto auto 1fr;
+}
+.card-details .label { color: #999; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.5px; }
+.card-price {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--charcoal);
+}
+.card-price small { font-weight: 400; color: #999; font-size: 0.75rem; }
+.card-highlight {
+  font-size: 0.75rem;
+  color: var(--gold-dark);
+  font-weight: 500;
+  font-style: italic;
+  margin-bottom: 8px;
+}
+.card-link {
+  display: inline-block;
+  margin-top: 6px;
+  font-size: 0.75rem;
+  color: var(--gold-dark);
+  text-decoration: none;
+  font-weight: 600;
+}
+.card-link:hover { text-decoration: underline; }
+
+/* ─── PHOTO CAROUSEL ─── */
+.carousel {
+  position: relative;
+  width: 100%;
+  height: 180px;
+  overflow: hidden;
+  border-radius: 12px 12px 0 0;
+  background: var(--blush-light);
+}
+.carousel img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: none;
+}
+.carousel img.active { display: block; }
+.carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255,255,255,0.85);
+  border: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+  transition: all 0.2s;
+  z-index: 2;
+}
+.carousel-btn:hover { background: white; transform: translateY(-50%) scale(1.1); }
+.carousel-btn.prev { left: 6px; }
+.carousel-btn.next { right: 6px; }
+.carousel-dots {
+  position: absolute;
+  bottom: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 4px;
+  z-index: 2;
+}
+.carousel-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.5);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.carousel-dot.active { background: white; }
+.carousel-counter {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(0,0,0,0.5);
+  color: white;
+  font-size: 0.65rem;
+  padding: 2px 7px;
+  border-radius: 10px;
+  z-index: 2;
+}
+
+/* Popup carousel */
+.popup-carousel {
+  position: relative;
+  width: 220px;
+  height: 140px;
+  overflow: hidden;
+  border-radius: 8px;
+  margin-bottom: 8px;
+}
+.popup-carousel img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: none;
+}
+.popup-carousel img.active { display: block; }
+.popup-carousel .carousel-btn { width: 22px; height: 22px; font-size: 11px; }
+
+/* ─── CARD ACTIONS ROW ─── */
+.card-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 8px;
+}
+.vote-btns-inline { display: flex; align-items: center; gap: 4px; }
+.vote-btn-sm {
+  font-size: 1.1rem;
+  padding: 2px 6px;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  background: var(--blush-light);
+  transition: all 0.2s;
+}
+.vote-btn-sm:hover { transform: scale(1.15); }
+.vote-btn-sm.selected { border-color: var(--gold); background: var(--gold-light); transform: scale(1.15); }
+.vote-btn-sm.selected.down { border-color: #E8A5A5; background: #FDF0F0; }
+.vote-count { font-size: 0.7rem; color: #999; margin-left: 2px; }
+
+/* ─── VOTING (stays compat) ─── */
+.vote-section { margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--blush); }
+.vote-label { font-size: 0.7rem; color: #999; margin-bottom: 4px; }
+.vote-btns { display: flex; gap: 6px; }
+.vote-btn {
+  font-size: 1.2rem;
+  padding: 4px 8px;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  background: var(--blush-light);
+  transition: all 0.2s;
+}
+.vote-btn:hover { transform: scale(1.15); }
+.vote-btn.selected { border-color: var(--gold); background: var(--gold-light); transform: scale(1.15); }
+
+/* ─── MAP ─── */
+.map-container { flex: 1; position: relative; }
+#map { width: 100%; height: 100%; }
+
+/* ─── VOTER MODAL ─── */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 2000;
+  align-items: center;
+  justify-content: center;
+}
+.modal-overlay.show { display: flex; }
+.modal {
+  background: var(--white);
+  border-radius: 16px;
+  padding: 32px;
+  max-width: 400px;
+  width: 90%;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+}
+.modal h2 {
+  font-family: 'Playfair Display', serif;
+  color: var(--charcoal);
+  margin-bottom: 8px;
+}
+.modal p { color: #666; font-size: 0.9rem; margin-bottom: 20px; }
+.modal input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid var(--blush);
+  border-radius: 10px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1rem;
+  text-align: center;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.modal input:focus { border-color: var(--gold); }
+.modal button {
+  margin-top: 16px;
+  background: var(--gold);
+  color: var(--white);
+  border: none;
+  padding: 12px 32px;
+  border-radius: 24px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  letter-spacing: 0.5px;
+}
+.modal button:hover { background: var(--gold-dark); }
+
+/* ─── RESULTS OVERLAY ─── */
+.results-overlay {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.6);
+  z-index: 2000;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.results-overlay.show { display: flex; }
+.results-panel {
+  background: var(--white);
+  border-radius: 16px;
+  padding: 32px;
+  max-width: 700px;
+  width: 100%;
+  max-height: 85vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+.results-panel h2 {
+  font-family: 'Playfair Display', serif;
+  text-align: center;
+  margin-bottom: 20px;
+  color: var(--charcoal);
+}
+.results-close {
+  position: absolute;
+  top: 20px; right: 30px;
+  font-size: 2rem;
+  color: var(--white);
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+.result-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--blush-light);
+}
+.result-rank { font-weight: 700; color: var(--gold-dark); width: 30px; text-align: center; }
+.result-name { flex: 1; font-weight: 500; }
+.result-bar-wrap { width: 200px; }
+.result-bar { height: 20px; border-radius: 10px; display: flex; overflow: hidden; background: var(--blush-light); }
+.result-bar div { height: 100%; transition: width 0.5s; }
+.result-bar .love { background: #FF6B8A; }
+.result-bar .like { background: var(--gold); }
+.result-bar .meh { background: #CCC; }
+.result-bar .nah { background: #999; }
+.result-votes { width: 60px; text-align: right; font-size: 0.8rem; color: #999; }
+.legend { display: flex; gap: 16px; justify-content: center; margin-bottom: 16px; font-size: 0.8rem; }
+.legend span { display: flex; align-items: center; gap: 4px; }
+.legend-dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
+
+/* ─── DETAIL MODAL ─── */
+.detail-overlay {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.6);
+  z-index: 2000;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.detail-overlay.show { display: flex; }
+.detail-panel {
+  background: var(--white);
+  border-radius: 16px;
+  padding: 0;
+  max-width: 600px;
+  width: 100%;
+  max-height: 85vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+.detail-header {
+  position: sticky;
+  top: 0;
+  background: var(--white);
+  padding: 16px 20px 12px;
+  border-bottom: 1px solid var(--blush);
+  border-radius: 16px 16px 0 0;
+  z-index: 1;
+}
+.detail-header a {
+  color: var(--gold-dark);
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+.detail-header a:hover { text-decoration: underline; }
+.detail-header h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.2rem;
+  color: var(--charcoal);
+  margin: 4px 0;
+}
+.detail-close {
+  position: absolute;
+  top: 12px; right: 16px;
+  font-size: 1.5rem;
+  color: #999;
+  cursor: pointer;
+  background: none;
+  border: none;
+  line-height: 1;
+}
+.detail-close:hover { color: var(--charcoal); }
+.detail-body {
+  padding: 16px 20px 20px;
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: #444;
+}
+.detail-body b { color: var(--charcoal); }
+.detail-carousel {
+  width: 100%;
+  height: 220px;
+  position: relative;
+  overflow: hidden;
+}
+.detail-carousel img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  top: 0; left: 0;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.detail-carousel img.active { opacity: 1; }
+.detail-carousel .carousel-btn { top: 50%; }
+
+/* ─── HAMBURGER MENU ─── */
+.hamburger {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  z-index: 1002;
+}
+.hamburger span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: var(--charcoal);
+  margin: 5px 0;
+  border-radius: 2px;
+  transition: all 0.3s;
+}
+.hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+.hamburger.open span:nth-child(2) { opacity: 0; }
+.hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+.menu-dropdown {
+  display: none;
+  position: absolute;
+  top: 100%;
+  right: 12px;
+  background: var(--white);
+  border: 1px solid var(--blush);
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+  padding: 8px;
+  z-index: 1001;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 160px;
+}
+.menu-dropdown.show { display: flex; }
+.menu-dropdown .header-btn { width: 100%; text-align: center; }
+.menu-dropdown .menu-info { font-size: 0.75rem; color: var(--gold-dark); font-weight: 600; padding: 6px 8px; text-align: center; }
+
+/* ─── MOBILE ─── */
+@media (max-width: 768px) {
+  .hamburger { display: block; }
+  .header-actions { display: none; }
+  .header { padding: 10px 16px; }
+  .header h1 { font-size: 1.1rem; }
+  .main { flex-direction: column; }
+  body { overflow: auto; height: auto; }
+  .sidebar { width: 100%; min-width: unset; order: 2; max-height: none; overflow-y: visible; }
+  .map-container { height: 35vh; min-height: 200px; order: 1; }
+  .card-details { grid-template-columns: 1fr; }
+  .sort-bar { gap: 4px; }
+  .sort-btn { padding: 4px 8px; font-size: 0.65rem; }
+}
+</style>
+</head>
+<body>
+
+<div class="tab-bar">
+  <a href="index.html">Stays</a>
+  <a href="activities.html">Activities</a>
+  <a href="food.html" class="active">Food</a>
+</div>
+<div class="header">
+  <h1>Megan's <span>Charleston</span> Bach &mdash; Food</h1>
+  <div class="header-actions">
+    <span id="voterDisplay" style="font-size:0.8rem; color:var(--gold-dark); font-weight:600;"></span>
+    <button class="header-btn outline" onclick="changeVoter()">Change Name</button>
+    <button class="header-btn" onclick="showResults()">View Results</button>
+    <button class="header-btn outline" onclick="copyShareLink()">Share Link</button>
+    <span id="syncStatus" style="font-size:0.7rem; color:var(--sage); font-weight:500;"></span>
+  </div>
+  <button class="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></button>
+  <div class="menu-dropdown" id="menuDropdown">
+    <div class="menu-info" id="voterDisplayMobile"></div>
+    <button class="header-btn" onclick="showResults(); toggleMenu();">View Results</button>
+    <button class="header-btn outline" onclick="changeVoter(); toggleMenu();">Change Name</button>
+    <button class="header-btn outline" onclick="copyShareLink(); toggleMenu();">Share Link</button>
+    <div class="menu-info" id="syncStatusMobile"></div>
+  </div>
+</div>
+
+<div class="main">
+  <div class="sidebar">
+    
+    <div id="cardList"></div>
+  </div>
+  <div class="map-container">
+    <div id="map"></div>
+  </div>
+</div>
+
+<!-- Voter Name Modal -->
+<div class="modal-overlay" id="voterModal">
+  <div class="modal">
+    <h2>Hey girl!</h2>
+    <p>Enter your name to vote on activities for Megan's bach weekend</p>
+    <input type="text" id="voterNameInput" placeholder="Your name" autocomplete="off" />
+    <br>
+    <button onclick="setVoterName()">Let's Go!</button>
+  </div>
+</div>
+
+<!-- Results Overlay -->
+<div class="results-overlay" id="resultsOverlay">
+  <button class="results-close" onclick="closeResults()">&times;</button>
+  <div class="results-panel">
+    <h2>Activity Vote Results</h2>
+    <div class="legend">
+      <span><span class="legend-dot" style="background:#FF6B8A"></span> Yes!</span>
+      <span><span class="legend-dot" style="background:#999"></span> Nah</span>
+    </div>
+    <div id="resultsBody"></div>
+  </div>
+</div>
+
+<!-- Detail Modal -->
+<div class="detail-overlay" id="detailOverlay">
+  <div class="detail-panel">
+    <div class="detail-header">
+      <a id="detailLink" href="#" target="_blank">Visit Website &rarr;</a>
+      <button class="detail-close" onclick="closeDetail()">&times;</button>
+      <h2 id="detailTitle"></h2>
+    </div>
+    <div class="detail-carousel" id="detailCarousel"></div>
+    <div class="detail-body" id="detailBody">Loading...</div>
+  </div>
+</div>
+
+<script>
+// ─── ACTIVITY DATA ───
+const ACTIVITIES = [
+  {
+    "rank": 1,
+    "name": "Poogan's Porch Brunch",
+    "id": "poogans-porch",
+    "category": "brunch",
+    "desc": "Iconic Charleston brunch in a historic house on Queen Street. Classic Southern dishes, biscuits, and bottomless mimosas. Great for groups.",
+    "price": 45,
+    "duration": "1.5-2 hours",
+    "groupSize": "Reservations for 10+",
+    "highlight": "\u{1F95E} Southern brunch \u2022 Historic house \u2022 Bottomless mimosas \u2022 Queen Street",
+    "walkTime": "14 min walk",
+    "details": "<b>Poogan's Porch - Southern Restaurant</b><br><br><b>Address:</b> 72 Queen Street, Charleston, SC 29401<br><b>Phone:</b> (843) 829-4332<br><br><b>Hours:</b> Brunch daily 9 AM - 3 PM. Dinner service available.<br><br><b>Brunch Highlights:</b><br>• Award-Winning Shrimp & Grits (USA Today featured)<br>• Bone-In Fried Chicken ($24)<br>• Chicken & Waffles with bourbon huckleberry syrup ($22)<br>• Crab Cake Benedict ($25)<br>• Mimosa carafes ($36) & Bloody Marys ($12)<br><br><b>Desserts:</b> Banana Pudding ($10), Cast-Iron Peach Cobbler ($12)<br><br><b>Tip:</b> A Charleston institution since 1976. Make reservations in advance, especially for weekend brunch. Private events & catering available.",
+    "url": "https://www.poogansporch.com/",
+    "lat": 32.7785,
+    "lng": -79.9325,
+    "photos": [
+      "https://static.wixstatic.com/media/49072f_c979e047009040099743598a1beb41ec~mv2.jpg",
+      "https://static.wixstatic.com/media/49072f_0d8a03510867432ab7671b015d12d24b~mv2.jpg",
+      "https://static.wixstatic.com/media/49072f_1d5d1c732e1d4d1bba5b8226e8a7b9d2~mv2.jpg",
+      "https://static.wixstatic.com/media/49072f_41f9c85a93c64813bdb27bbbf0aca0e2~mv2.jpg",
+      "https://static.wixstatic.com/media/49072f_803db0ae675144ca97b2bd36809bfa1b~mv2.jpg",
+      "https://static.wixstatic.com/media/49072f_b4243cf834544ef793472eee007605cc~mv2.jpg"
+    ]
+  },
+  {
+    "rank": 2,
+    "name": "The Junction Kitchen — Group Brunch",
+    "id": "junction-brunch",
+    "category": "brunch",
+    "desc": "One of the best brunch spots in Charleston. Famous for serving donuts as sides. Private group dining available.",
+    "price": 35,
+    "duration": "1.5-2 hours",
+    "groupSize": "Private dining for groups",
+    "highlight": "\u{1F369} Donut sides \u2022 Private dining \u2022 Creative menu \u2022 Group-friendly",
+    "walkTime": "5 min walk",
+    "details": "<b>The Junction Kitchen & Provisions</b><br><br><b>Address:</b> 4438 Spruill Ave, Park Circle, Charleston, SC 29405<br><b>Phone:</b> (843) 745-9189<br><br><b>About:</b> Solo female-owned neighborhood gem. One of the only full-service breakfast joints in the area. American eclectic cuisine with bold flavors and generous portions.<br><br><b>Menu Highlights:</b> Smokey shrimp & grits, chicken & waffles, blackberry mimosas, creative brunch cocktails.<br><br><b>Private Events:</b> Offers private event space for parties. Inquire through catering/events page.<br><br><b>Note:</b> Located in Park Circle (North Charleston), about 15 min from downtown — not walking distance. Worth the trip for an off-the-beaten-path brunch.",
+    "url": "https://www.thejunctionkitchen.com/",
+    "lat": 32.7905,
+    "lng": -79.9410,
+    "photos": [
+      "https://static.spotapps.co/website_images/ab_websites/17260_website/video_poster.jpg",
+      "https://static.spotapps.co/website_images/ab_websites/17260_website/about_left.png",
+      "https://static.spotapps.co/website_images/ab_websites/17260_website/green_background.jpg",
+      "https://static.spotapps.co/website_images/ab_websites/17260_website/newsletter_back.jpg",
+      "https://static.spotapps.co/website_images/ab_websites/17260_website/reviews_back.jpg"
+    ]
+  },
+  {
+    "rank": 3,
+    "name": "Church and Union — Brunch in a Church",
+    "id": "church-union",
+    "category": "brunch",
+    "desc": "Stunning brunch inside a 105-year-old church. Praline French toast, PB&J cinnamon rolls, and a gorgeous backdrop for photos. Fri-Sun 9am-3:30pm.",
+    "price": 40,
+    "duration": "1.5-2 hours",
+    "groupSize": "Up to 30",
+    "highlight": "\u{26EA} Historic church \u2022 Photogenic \u2022 Praline French toast \u2022 Fri-Sun",
+    "walkTime": "12 min walk",
+    "details": "<b>Church & Union — Charleston</b><br><br><b>Address:</b> 32b North Market Street, Charleston, SC 29401<br><b>Phone:</b> (843) 937-8666<br><br><b>Hours:</b><br>• Dinner: Daily 5pm-Till<br>• Lunch: Mon-Thu 10am-3:30pm<br>• Brunch: Fri-Sun 9am-3:30pm<br><br><b>Chefs:</b> Top Chef Alum Jamie Lynch + Adam Hodgson<br><br><b>Menu Highlights:</b> CU Tower (oysters/shrimp/lobster $116), Tuna Tartare ($23), Seared Scallops ($44), NY Strip ($60), Fried Chicken ($31), Wagyu Lettuce Wraps ($25).<br><br><b>Groups 12+:</b> Credit card on file + group menu selection required. Fill out Private Dining inquiry form.<br><br><b>Tip:</b> Book Friday brunch for a bach-friendly experience, or go for a splashy group dinner. Gorgeous church interior = amazing photos.",
+    "url": "https://www.churchandunion.com/location/charleston/",
+    "lat": 32.7812,
+    "lng": -79.9310,
+    "photos": [
+      "https://images.getbento.com/accounts/87d17677c0314d566918a53f70dbecbf/media/images/433405thStreetGroup.png?w=1200&fit=crop&auto=compress,format",
+      "https://images.getbento.com/accounts/87d17677c0314d566918a53f70dbecbf/media/images/4647464c1c33cc0644.image.jpg?w=1200&fit=crop&auto=compress,format",
+      "https://images.getbento.com/accounts/87d17677c0314d566918a53f70dbecbf/media/images/16914CUCHSInterior-611-f658d65b8cec477e8388b1f5132e70ef_1.webp?w=1200&fit=crop&auto=compress,format",
+      "https://images.getbento.com/accounts/87d17677c0314d566918a53f70dbecbf/media/images/54077Brunch-2.JPG?w=1200&fit=crop&auto=compress,format",
+      "https://images.getbento.com/accounts/87d17677c0314d566918a53f70dbecbf/media/images/169405churchcltmain-dining1justindriscollphotography-1_900xx5760-3228-0-0.jpg?w=1200&fit=crop&auto=compress,format",
+      "https://images.getbento.com/accounts/87d17677c0314d566918a53f70dbecbf/media/images/790635Church_Interior.jpg?w=1200&fit=crop&auto=compress,format"
+    ]
+  },
+  {
+    "rank": 4,
+    "name": "Hall's Chophouse",
+    "id": "halls-chophouse",
+    "category": "dinner",
+    "desc": "Premier steakhouse on King Street. Live music, incredible steaks, and the kind of service that makes you feel like a VIP. The celebration spot.",
+    "price": 100,
+    "duration": "2-3 hours",
+    "highlight": "\u{1F969} King Street \u2022 Live music \u2022 VIP service \u2022 Celebration vibes",
+    "walkTime": "2 min walk",
+    "details": "<b>Hall's Chophouse</b><br><br><b>Address:</b> 434 King Street, Charleston, SC 29403<br><b>Phone:</b> (843) 727-0090<br><br><b>Hours:</b><br>• Dinner: Mon-Sat 4-11pm/12am, Sun 4:30-11pm<br>• Saturday Lunch: 11am-2:30pm<br>• Sunday Brunch: 10am-2pm<br><br><b>About:</b> Family-owned since 2009. Dry-aged steaks, She Crab Soup, seafood tower, live music. Consistently top 10 in Charleston.<br><br><b>Reservations:</b> Book via Resy. <b>Highly recommended</b> — tables fill fast on weekends.<br><br><b>Tip:</b> Staff excels at making celebrations memorable. Expect $75-150+/person. Sunday Brunch is a great alternative if dinner reservations are tough.",
+    "url": "https://hallschophousecharleston.com/",
+    "lat": 32.7885,
+    "lng": -79.9378,
+    "photos": [
+      "https://static.spotapps.co/website_images/ab_websites/15819_website/food_back.jpg",
+      "https://static.spotapps.co/website_images/ab_websites/15819_website/parties_left_new.jpg",
+      "https://static.spotapps.co/website_images/ab_websites/15819_website/section_back.jpg",
+      "https://static.spotapps.co/website_images/ab_websites/15819_website/video_poster_1.jpg",
+      "https://static.spotapps.co/website_images/ab_websites/15819_website/reviews_back.jpg",
+      "https://static.spotapps.co/website_images/ab_websites/15819_website/about_main.jpg"
+    ]
+  },
+  {
+    "rank": 5,
+    "name": "Stars Rooftop & Grill Room",
+    "id": "stars-rooftop",
+    "category": "dinner",
+    "desc": "360-degree rooftop restaurant on King Street. Wood-fired grill, private dining rooms, and a legendary Sunday brunch buffet ($22.50/pp).",
+    "price": 42,
+    "duration": "2 hours",
+    "highlight": "\u{1F305} 360\u00B0 rooftop \u2022 Sunday brunch buffet \u2022 Private dining \u2022 King Street",
+    "walkTime": "3 min walk",
+    "details": "<b>Stars Rooftop & Grill Room</b><br><br><b>Address:</b> 495 King Street<br><b>Phone:</b> (843) 577-0100<br><br><b>Hours:</b> Dinner Sun-Sat. Brunch Sat & Sun 10am-2:30pm. Rooftop Bar Mon-Thu 3pm, Fri-Sun 12pm.<br><br><b>Private Events:</b><br>• Full rooftop: up to 150 seated<br>• Wilkinson Room: 24-75 seated (exposed brick, King St views)<br>• Main banquet: up to 140<br><br><b>Tip:</b> Walk-in friendly at rooftop bar. Weekend brunch is perfect for bach groups. Consider booking private rooftop area for cocktail hour.",
+    "url": "https://starsrestaurant.com/",
+    "lat": 32.7897,
+    "lng": -79.9423,
+    "photos": [
+      "https://starsrestaurant.com/wp-content/uploads/2022/09/Rooftop-Large-Image.jpeg",
+      "https://starsrestaurant.com/wp-content/uploads/2022/09/Hero-Image.jpeg",
+      "https://starsrestaurant.com/wp-content/uploads/2022/11/ZT7A0646-1-scaled.jpg",
+      "https://starsrestaurant.com/wp-content/uploads/2022/12/Stars-resturant-Bar-at-Charleston.webp",
+      "https://starsrestaurant.com/wp-content/uploads/2022/11/ZT7A0788-scaled.jpg",
+      "https://starsrestaurant.com/wp-content/uploads/2022/09/Private-Dining-Large-Image.jpeg"
+    ]
+  },
+  {
+    "rank": 6,
+    "name": "Ritual Rooftop",
+    "id": "ritual",
+    "category": "dinner",
+    "desc": "Tulum-inspired rooftop at King & Calhoun. Shareable plates, craft cocktails, DJ nights. Open til 2am Fri/Sat. Weekend brunch too.",
+    "price": 40,
+    "duration": "2 hours",
+    "highlight": "\u{1F334} Tulum vibes \u2022 Largest rooftop in CHS \u2022 DJ nights \u2022 Weekend brunch",
+    "walkTime": "3 min walk",
+    "details": "<b>Ritual Rooftop Restaurant & Lounge</b><br><br><b>Address:</b> 145 Calhoun Street, Unit 301<br><b>Phone:</b> (843) 410-1747<br><b>Email:</b> vip@ritualchs.com<br><br><b>What It Is:</b> Rooftop restaurant by day, nightclub by night. Part of the Kenner Group.<br><br><b>Features:</b> Full menu, DJ & dancing, VIP tables, private events.<br><br><b>Bach Tips:</b> One of the few true nightclub options downtown. Book a VIP table for guaranteed seating and bottle service. Rooftop dinner → nightclub = easy one-stop evening.",
+    "url": "https://www.ritualchs.com/",
+    "lat": 32.7859,
+    "lng": -79.9357,
+    "photos": [
+      "https://images.squarespace-cdn.com/content/v1/65e0129b6305620bd4cd6aec/df19def7-f141-4170-b397-f381bfe77bc4/lifestyle-45_jwb.jpg",
+      "https://images.squarespace-cdn.com/content/v1/65e0129b6305620bd4cd6aec/1767639448390-TVPZHQLW9WYPLJMQXNSY/image-asset.jpeg",
+      "https://images.squarespace-cdn.com/content/v1/65e0129b6305620bd4cd6aec/1767639449220-78R2EPI77ZVHX3OOX2BW/image-asset.jpeg",
+      "https://images.squarespace-cdn.com/content/v1/65e0129b6305620bd4cd6aec/1767639450908-H9P35MBWBNGQH1E4XA6H/image-asset.jpeg",
+      "https://images.squarespace-cdn.com/content/v1/65e0129b6305620bd4cd6aec/1767639451712-6VWTYPVRKBFNGCO1SBSV/image-asset.jpeg",
+      "https://images.squarespace-cdn.com/content/v1/65e0129b6305620bd4cd6aec/1767639452559-SDSHYDOEJIM3KTL7QASZ/image-asset.jpeg"
+    ]
+  },
+  {
+    "rank": 7,
+    "name": "The Watch Rooftop",
+    "id": "the-watch",
+    "category": "dinner",
+    "desc": "7th-floor rooftop restaurant atop The Restoration Hotel. Harbor views, private Observatory room for groups, and Sunday brunch.",
+    "price": 45,
+    "duration": "2 hours",
+    "highlight": "\u{1F37D}\uFE0F Private dining for 42 \u2022 Harbor views \u2022 Sunday brunch \u2022 Espresso martinis",
+    "walkTime": "10 min walk",
+    "details": "<b>The Watch Rooftop Kitchen & Spirits</b><br><br><b>Location:</b> Atop The Restoration Hotel<br><br><b>Hours:</b> Mon-Thu 11am-11pm, Fri-Sat 11am-12am, Sun 10am-9pm<br><br><b>Menu:</b> Burrata & Jam, Skillet Mac & Cheese, Smoked Wings, burgers, craft cocktails. Sunday Brunch available.<br><br><b>Private Events:</b><br>• Dining Room: 42 seated, 60 reception<br>• Observatory Terrace: 16 seated, 25 standing<br>• Full Buyout: 150 guests, 360° views<br><br><b>Large Parties:</b> 10-20 guests: email directly. 20+: fill out inquiry form.<br><br><b>Bach Tips:</b> Stunning rooftop setting. Private Observatory is ideal for a celebration dinner.",
+    "url": "https://thewatchcharleston.com/",
+    "lat": 32.7821,
+    "lng": -79.9344,
+    "photos": [
+      "https://thewatchcharleston.com/wp-content/uploads/2022/08/events.webp",
+      "https://thewatchcharleston.com/wp-content/uploads/2022/08/breakfast-avocado_toast.webp",
+      "https://thewatchcharleston.com/wp-content/uploads/2022/08/mussels.webp",
+      "https://thewatchcharleston.com/wp-content/uploads/2022/08/the_watch_burger.webp",
+      "https://thewatchcharleston.com/wp-content/uploads/2022/08/tomato_watermelon.webp",
+      "https://thewatchcharleston.com/wp-content/uploads/2023/11/espressomartini-1024x576.jpg"
+    ]
+  },
+  {
+    "rank": 8,
+    "name": "MESU",
+    "id": "mesu",
+    "category": "dinner",
+    "desc": "High-energy Upper King spot blending Mexican and sushi. Tacos, specialty rolls, and bottle service. Open til 2am — dinner to nightlife.",
+    "price": 45,
+    "duration": "2 hours",
+    "highlight": "\u{1F363} Mexican-sushi fusion \u2022 Open til 2am \u2022 Bottle service \u2022 Buyout available",
+    "walkTime": "5 min walk",
+    "details": "<b>MESU — Mexican & Sushi Fusion</b><br><br><b>Address:</b> 570 King Street<br><b>Phone:</b> (854) 429-1011<br><br><b>Hours:</b> Daily 4pm-2am. Kitchen til 10pm. Happy Hour Mon-Fri 4-6pm.<br><br><b>Menu:</b> Nachos, Baja Fish Tacos, Shrimp Tempura Sushi, Street Corn, Churros. Full bar with sake & tequila cocktails.<br><br><b>Reviews:</b> \"Probably the best meal I had in Charleston.\" \"Amazing vibes! Recommend with a group.\"<br><br><b>Bach Tips:</b> Late-night kitchen + bar til 2am = perfect dinner-to-nightlife transition. Shareable plates great for groups. Heart of Upper King nightlife.",
+    "url": "https://mesuchs.com/",
+    "lat": 32.7928,
+    "lng": -79.9410,
+    "photos": [
+      "https://static.spotapps.co/web/mesuchs--com/custom/video_poster.jpg",
+      "https://static.spotapps.co/web/mesuchs--com/custom/food_back.jpg"
+    ]
+  },
+  {
+    "rank": 9,
+    "name": "Little Palm",
+    "id": "little-palm",
+    "category": "brunch",
+    "desc": "Poolside restaurant at The Ryder Hotel with tropical vibes. Chef-curated family-style menus for groups of 8-20. Instagram-worthy.",
+    "price": 35,
+    "duration": "1.5-2 hours",
+    "highlight": "\u{1F334} Poolside tropical \u2022 Family-style menus \u2022 Photo-worthy \u2022 Events team",
+    "walkTime": "9 min walk",
+    "details": "<b>Little Palm — Bar & Swim Club</b><br><br><b>Address:</b> 237 Meeting Street (at The Ryder Hotel)<br><b>Phone:</b> (843) 414-8030<br><br><b>Hours:</b> Sun-Thu 8am-10pm, Fri-Sat 8am-12am<br><br><b>Meals:</b> Breakfast Mon-Sat 8-11am, Brunch Sun 8am-4pm, Lunch Mon-Sat 11am-5pm, Dinner nightly, Happy Hour Mon-Thu 4-6pm.<br><br><b>Features:</b> Pool access, outdoor backyard, gallery. Seasonal cocktails and ingredient-driven dishes.<br><br><b>Large Parties:</b> Up to 7: book on Resy. 8-19: email info@littlepalmbar.com. 20+: fill out large party form. Valet $10.<br><br><b>Bach Tips:</b> Pool + cocktails = standout daytime activity. Chic, Instagrammable setting tailor-made for bachelorette groups.",
+    "url": "https://www.littlepalmchs.com/",
+    "lat": 32.7825,
+    "lng": -79.9322,
+    "photos": [
+      "https://images.getbento.com/accounts/4b58992d4c196afb15a7bfcaaa85fc7b/media/images/20645LittlePalm-JUN82021-HolyCityHandcraft-004-2.jpg?w=1200&fit=max&auto=compress,format",
+      "https://images.getbento.com/accounts/4b58992d4c196afb15a7bfcaaa85fc7b/media/images/42394cbd_ryder_17344-Editx.jpg?w=1200&fit=crop&auto=compress,format",
+      "https://images.getbento.com/accounts/4b58992d4c196afb15a7bfcaaa85fc7b/media/images/27158LittlePalm-JUN82021-HolyCityHandcraft-040-2.jpg?w=1200&fit=max&auto=compress,format",
+      "https://images.getbento.com/accounts/4b58992d4c196afb15a7bfcaaa85fc7b/media/images/76794LittlePalm-JUN82021-HolyCityHandcraft-079.jpg?w=1200&fit=max&auto=compress,format",
+      "https://images.getbento.com/accounts/4b58992d4c196afb15a7bfcaaa85fc7b/media/images/66552lpbreakfast.jpg?w=1200&fit=crop&auto=compress,format",
+      "https://images.getbento.com/accounts/4b58992d4c196afb15a7bfcaaa85fc7b/media/images/77666LittlePalm-Spring24-012.jpg?w=1200&fit=crop&auto=compress,format"
+    ]
+  },
+  {
+    "rank": 10,
+    "name": "Indaco",
+    "id": "indaco",
+    "category": "dinner",
+    "desc": "Rustic Italian on King Street. Wood-fired pizzas, handmade pastas, Negronis on tap. Enclosed courtyard seats up to 100.",
+    "price": 38,
+    "duration": "2 hours",
+    "highlight": "\u{1F355} Wood-fired \u2022 Handmade pasta \u2022 Negroni on tap \u2022 Courtyard for 100",
+    "walkTime": "5 min walk",
+    "details": "<b>Indaco — Rustic Italian</b><br><br><b>Address:</b> 526 King Street<br><b>Phone:</b> (843) 727-1229<br><br><b>Hours:</b> Dinner Sun-Thu 5-10pm, Fri-Sat 5-11pm. Brunch Sat & Sun 10am-2:30pm. Happy Hour Mon-Fri 5-7pm.<br><br><b>Press:</b> Conde Nast Traveler \"40 Best Restaurants in Charleston.\" Eater \"8 Best Italian.\" OpenTable \"12 Top Special Occasion.\"<br><br><b>Menu:</b> Wood-fired pizzas, handmade pastas, house-made salami, Negroni on tap. Family-style available.<br><br><b>Bach Tips:</b> Family-style dining ideal for sharing. Happy hour at the bar is great pre-dinner. Weekend brunch is another excellent option.",
+    "url": "https://www.indacorestaurant.com/location/indaco-charleston/",
+    "lat": 32.7916,
+    "lng": -79.9399,
+    "photos": [
+      "https://images.getbento.com/accounts/5cbb7ec98a8c1b28f9e7010a07d6860c/media/images/45664Lobster_ravioli_1_Large.jpeg?w=1200&fit=crop&auto=compress,format",
+      "https://images.getbento.com/accounts/5cbb7ec98a8c1b28f9e7010a07d6860c/media/images/327609222022_Indaco_Andrew-Cebulka-11359_Large.jpeg?w=1200&fit=crop&auto=compress,format",
+      "https://images.getbento.com/accounts/5cbb7ec98a8c1b28f9e7010a07d6860c/media/images/30444DSC04117.jpg?w=1200&fit=crop&auto=compress,format",
+      "https://images.getbento.com/accounts/5cbb7ec98a8c1b28f9e7010a07d6860c/media/images/3472504092025_indaco-chs_Andrew-Cebulka-5863_Large.jpeg?w=1200&fit=crop&auto=compress,format",
+      "https://images.getbento.com/accounts/5cbb7ec98a8c1b28f9e7010a07d6860c/media/images/5586209222022_Indaco_Andrew-Cebulka-11375.jpg?w=1200&fit=crop&auto=compress,format",
+      "https://images.getbento.com/accounts/5cbb7ec98a8c1b28f9e7010a07d6860c/media/images/7574909222022_Indaco_Andrew-Cebulka-11308_Large.jpeg?w=1200&fit=crop&auto=compress,format"
+    ]
+  }
+];
+
+// ─── STATE ───
+let voterName = '';
+let votes = {};
+let currentSort = 'rank';
+let activeFilters = new Set();
+let sortedActivities = [...ACTIVITIES];
+let isSaving = false;
+let pendingSave = false;
+
+// ─── VOTES API (Vercel serverless function) ───
+const VOTES_API = 'https://bach-votes.vercel.app/api/food-votes';
+
+async function loadVotes() {
+  const dot = document.getElementById('syncStatus');
+  try {
+    const res = await fetch(VOTES_API);
+    if (res.ok) {
+      votes = await res.json();
+      if (dot) dot.innerHTML = '&#x1f7e2; Synced';
+    }
+  } catch(e) {
+    console.warn('Failed to load votes', e);
+    if (dot) dot.innerHTML = '&#x1f534; Offline';
+    const saved = localStorage.getItem('bach_food_votes');
+    if (saved) try { votes = JSON.parse(saved); } catch(e) {}
+  }
+}
+
+async function saveVotes() {
+  localStorage.setItem('bach_food_votes', JSON.stringify(votes));
+
+  if (isSaving) { pendingSave = true; return; }
+  isSaving = true;
+  const dot = document.getElementById('syncStatus');
+  if (dot) dot.innerHTML = '&#x1f7e1; Saving...';
+
+  try {
+    const res = await fetch(VOTES_API, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(votes)
+    });
+    if (res.ok) {
+      if (dot) dot.innerHTML = '&#x1f7e2; Synced';
+    } else {
+      if (dot) dot.innerHTML = '&#x1f534; Save failed';
+    }
+  } catch(e) {
+    console.warn('Failed to save votes', e);
+    if (dot) dot.innerHTML = '&#x1f534; Offline';
+  }
+  isSaving = false;
+  if (pendingSave) { pendingSave = false; saveVotes(); }
+}
+
+// ─── INIT ───
+window.addEventListener('DOMContentLoaded', async () => {
+  const savedName = localStorage.getItem('bach_voter_name');
+  if (savedName) voterName = savedName;
+
+  await loadVotes();
+
+  if (!voterName) {
+    document.getElementById('voterModal').classList.add('show');
+  } else {
+    updateVoterDisplays('Voting as: ' + voterName);
+  }
+
+  renderCards();
+  initMap();
+
+  setInterval(async () => {
+    await loadVotes();
+    renderCards();
+  }, 10000);
+});
+
+// ─── VOTER NAME ───
+function setVoterName() {
+  const input = document.getElementById('voterNameInput').value.trim();
+  if (!input) return;
+  voterName = input;
+  localStorage.setItem('bach_voter_name', voterName);
+  updateVoterDisplays('Voting as: ' + voterName);
+  document.getElementById('voterModal').classList.remove('show');
+  renderCards();
+}
+
+function changeVoter() {
+  document.getElementById('voterNameInput').value = '';
+  document.getElementById('voterModal').classList.add('show');
+  document.getElementById('voterNameInput').focus();
+}
+
+function toggleMenu() {
+  document.querySelector('.hamburger').classList.toggle('open');
+  document.getElementById('menuDropdown').classList.toggle('show');
+}
+
+function updateVoterDisplays(text) {
+  document.getElementById('voterDisplay').textContent = text;
+  const m = document.getElementById('voterDisplayMobile');
+  if (m) m.textContent = text;
+}
+
+// ─── VOTING ───
+const EMOJIS = [
+  { emoji: '\u{1F44D}', label: 'Yes!', key: 'love' },
+  { emoji: '\u{1F44E}', label: 'Nah', key: 'nah' }
+];
+
+function castVote(activityId, emojiKey) {
+  if (!voterName) { document.getElementById('voterModal').classList.add('show'); return; }
+
+  if (!votes[activityId]) votes[activityId] = {};
+  if (votes[activityId][voterName] === emojiKey) {
+    delete votes[activityId][voterName];
+  } else {
+    votes[activityId][voterName] = emojiKey;
+  }
+  saveVotes();
+  renderCards();
+}
+
+// ─── SHARE LINK ───
+function copyShareLink() {
+  const pageUrl = 'https://chelseal11.github.io/megans-bach-charleston/activities.html';
+  navigator.clipboard.writeText(pageUrl).then(() => {
+    const btn = event.target;
+    btn.textContent = 'Copied!';
+    setTimeout(() => { btn.textContent = 'Share Link'; }, 2000);
+  }).catch(() => {
+    prompt('Copy this link and share it with the group:', pageUrl);
+  });
+}
+
+// ─── FILTERS & SORT ───
+function toggleFilter(filter) {
+  const btn = document.getElementById('filter-' + filter);
+  if (activeFilters.has(filter)) {
+    activeFilters.delete(filter);
+    btn.classList.remove('active');
+  } else {
+    activeFilters.add(filter);
+    btn.classList.add('active');
+  }
+  applyFiltersAndSort();
+}
+
+function sortListings(key) {
+  currentSort = key;
+  document.querySelectorAll('.sort-bar .sort-btn').forEach(b => {
+    if (b.id.startsWith('sort-')) b.classList.remove('active');
+  });
+  document.getElementById('sort-' + key).classList.add('active');
+  applyFiltersAndSort();
+}
+
+function applyFiltersAndSort() {
+  let filtered = [...ACTIVITIES];
+
+  if (activeFilters.size > 0) {
+    filtered = filtered.filter(a => activeFilters.has(a.category));
+  }
+
+  filtered.sort((a, b) => {
+    if (currentSort === 'price') return a.price - b.price;
+    return a.rank - b.rank;
+  });
+
+  sortedActivities = filtered;
+  renderCards();
+  updateMapMarkers();
+}
+
+function updateMapMarkers() {
+  if (!map) return;
+  const visibleIds = new Set(sortedActivities.map(a => a.id));
+  ACTIVITIES.forEach(a => {
+    if (markers[a.id]) {
+      if (visibleIds.has(a.id)) {
+        if (!map.hasLayer(markers[a.id])) markers[a.id].addTo(map);
+      } else {
+        map.removeLayer(markers[a.id]);
+      }
+    }
+  });
+  const visible = sortedActivities.map(a => markers[a.id]).filter(Boolean);
+  if (visible.length > 0) {
+    const group = L.featureGroup(visible);
+    map.fitBounds(group.getBounds().pad(0.15));
+  }
+}
+
+// ─── RENDER CARDS ───
+const CATEGORY_ICONS = {
+  boat: '\u{26F5}',
+  food: '\u{1F377}',
+  nightlife: '\u{1F378}',
+  wellness: '\u{1F9D6}',
+  tour: '\u{1F6B6}',
+  class: '\u{1F3A8}',
+  beach: '\u{1F3D6}\uFE0F',
+  brunch: '\u{1F95E}',
+  hike: '\u{1F6B6}',
+  fun: '\u{1F3B2}',
+  dinner: '\u{1F37D}\uFE0F'
+};
+
+const CATEGORY_LABELS = {
+  boat: 'Boat',
+  food: 'Food & Drink',
+  nightlife: 'Nightlife',
+  wellness: 'Wellness',
+  tour: 'Tour',
+  class: 'Class',
+  beach: 'Beach',
+  brunch: 'Brunch',
+  hike: 'Hike',
+  fun: 'Fun',
+  dinner: 'Dinner'
+};
+
+function renderCards() {
+  const container = document.getElementById('cardList');
+  container.innerHTML = sortedActivities.map(a => {
+    const activityVotes = votes[a.id] || {};
+    const myVote = voterName ? activityVotes[voterName] : null;
+    const voteCount = Object.keys(activityVotes).length;
+    const priceStr = a.price === 0 ? 'Free' : '$' + a.price;
+    const photos = a.photos || [];
+
+    return `
+    <div class="card" id="card-${a.id}">
+      ${photos.length > 0 ? `
+      <div class="carousel" id="carousel-${a.id}" onclick="event.stopPropagation()">
+        ${photos.map((p, idx) => `<img src="${p}" alt="${a.name}" class="${idx === 0 ? 'active' : ''}" loading="lazy">`).join('')}
+        ${photos.length > 1 ? `
+          <button class="carousel-btn prev" onclick="slideCarousel('${a.id}', -1)">\u2039</button>
+          <button class="carousel-btn next" onclick="slideCarousel('${a.id}', 1)">\u203A</button>
+          <div class="carousel-counter"><span id="counter-${a.id}">1</span>/${photos.length}</div>
+          <div class="carousel-dots">
+            ${photos.map((_, idx) => `<button class="carousel-dot ${idx === 0 ? 'active' : ''}" onclick="goToSlide('${a.id}', ${idx})"></button>`).join('')}
+          </div>
+        ` : ''}
+      </div>` : ''}
+      <div class="card-body" onclick="flyTo(${a.lat}, ${a.lng}, '${a.id}')">
+        <div class="card-name"><span class="card-rank">${a.rank}</span>${a.name}</div>
+        <span class="category-badge ${a.category}">${CATEGORY_ICONS[a.category] || ''} ${CATEGORY_LABELS[a.category] || a.category}</span>
+        <div class="card-desc">${a.desc}</div>
+        <div class="card-details inline">
+          <div><span class="label">Price</span><br><span class="card-price">${priceStr}</span><small>/pp</small></div>
+          <div><span class="label">Duration</span><br>${a.duration}</div>
+          <div><span class="label">Travel</span><br>${a.driveTime ? `\u{1F697} ${a.driveTime} \u2022 ~${a.uberEstimate}` : `\u{1F6B6} ${a.walkTime || 'On King St'}`}</div>
+        </div>
+        <div class="card-highlight">${a.highlight}</div>
+        <div class="card-actions">
+          <a class="card-link" href="#" onclick="event.stopPropagation(); event.preventDefault(); showDetail('${a.id}');">Learn More \u2192</a>
+          <div class="vote-btns-inline">
+            <button class="vote-btn-sm ${myVote === 'love' ? 'selected' : ''}"
+                    onclick="event.stopPropagation(); castVote('${a.id}', 'love')"
+                    title="Yes!">\u{1F44D}</button>
+            <button class="vote-btn-sm ${myVote === 'nah' ? 'selected down' : ''}"
+                    onclick="event.stopPropagation(); castVote('${a.id}', 'nah')"
+                    title="Nah">\u{1F44E}</button>
+            ${voteCount > 0 ? `<span class="vote-count">${voteCount}</span>` : ''}
+          </div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ─── CAROUSEL ───
+function slideCarousel(id, direction, isPopup) {
+  const carousel = document.getElementById(isPopup ? id : 'carousel-' + id);
+  const imgs = carousel.querySelectorAll('img');
+  const dots = carousel.querySelectorAll('.carousel-dot');
+  let current = [...imgs].findIndex(img => img.classList.contains('active'));
+  imgs[current].classList.remove('active');
+  if (dots[current]) dots[current].classList.remove('active');
+  current = (current + direction + imgs.length) % imgs.length;
+  imgs[current].classList.add('active');
+  if (dots[current]) dots[current].classList.add('active');
+  const counter = document.getElementById('counter-' + id);
+  if (counter) counter.textContent = current + 1;
+}
+
+function goToSlide(id, index) {
+  const carousel = document.getElementById('carousel-' + id);
+  const imgs = carousel.querySelectorAll('img');
+  const dots = carousel.querySelectorAll('.carousel-dot');
+  imgs.forEach((img, i) => { img.classList.toggle('active', i === index); });
+  dots.forEach((dot, i) => { dot.classList.toggle('active', i === index); });
+  const counter = document.getElementById('counter-' + id);
+  if (counter) counter.textContent = index + 1;
+}
+
+// ─── MAP ───
+let map, markers = {};
+
+const CATEGORY_COLORS = {
+  boat: '#0369A1',
+  food: '#B8922F',
+  nightlife: '#7C3AED',
+  wellness: '#059669',
+  tour: '#EA580C',
+  class: '#DB2777',
+  beach: '#0D9488',
+  brunch: '#D97706',
+  hike: '#16A34A',
+  fun: '#E11D48',
+  dinner: '#7E22CE'
+};
+
+function initMap() {
+  map = L.map('map', { zoomControl: true }).setView([32.7855, -79.9390], 14);
+
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+    attribution: '&copy; OpenStreetMap &copy; CARTO',
+    maxZoom: 19
+  }).addTo(map);
+
+  ACTIVITIES.forEach(a => {
+    const color = CATEGORY_COLORS[a.category] || '#5B8DD9';
+    const icon = L.divIcon({
+      className: 'activity-marker',
+      html: `<div style="
+        background:${color};
+        color:white;
+        font-weight:700;
+        font-size:12px;
+        width:26px;
+        height:26px;
+        border-radius:50%;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        border:2px solid white;
+        box-shadow:0 2px 6px rgba(0,0,0,0.3);
+        font-family:Montserrat,sans-serif;
+      ">${a.rank}</div>`,
+      iconSize: [26, 26],
+      iconAnchor: [13, 13]
+    });
+
+    const priceStr = a.price === 0 ? 'Free' : '$' + a.price + '/pp';
+    const marker = L.marker([a.lat, a.lng], { icon })
+      .addTo(map)
+      .bindPopup(`
+        <div style="font-family:Montserrat,sans-serif; max-width:220px;">
+          <b style="font-family:Playfair Display,serif; font-size:14px;">${a.name}</b><br>
+          <span style="color:${color}; font-weight:600;">${CATEGORY_LABELS[a.category]}</span><br>
+          <b>${priceStr}</b> &bull; ${a.duration}<br>
+          <em style="color:#D4A843; font-size:12px;">${a.highlight}</em><br>
+          <a href="${a.url}" target="_blank" style="color:#D4A843;">Learn More</a>
+        </div>
+      `, { maxWidth: 240 });
+    markers[a.id] = marker;
+  });
+
+  const group = L.featureGroup(Object.values(markers));
+  map.fitBounds(group.getBounds().pad(0.15));
+}
+
+function flyTo(lat, lng, id) {
+  map.flyTo([lat, lng], 16, { duration: 0.8 });
+  markers[id].openPopup();
+  document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
+  document.getElementById('card-' + id).classList.add('active');
+}
+
+// ─── RESULTS ───
+function showResults() {
+  const body = document.getElementById('resultsBody');
+  const sorted = [...ACTIVITIES].sort((a, b) => {
+    const aVotes = votes[a.id] || {};
+    const bVotes = votes[b.id] || {};
+    const aScore = calcVoteScore(aVotes);
+    const bScore = calcVoteScore(bVotes);
+    return bScore - aScore;
+  });
+
+  body.innerHTML = sorted.map((a, i) => {
+    const v = votes[a.id] || {};
+    const counts = { love: 0, like: 0, meh: 0, nah: 0 };
+    Object.values(v).forEach(val => { if (counts[val] !== undefined) counts[val]++; });
+    const total = Object.values(counts).reduce((a, b) => a + b, 0);
+    const pct = key => total > 0 ? (counts[key] / total * 100) : 0;
+    const voters = Object.entries(v).map(([name, vote]) => {
+      const em = EMOJIS.find(e => e.key === vote);
+      return em ? em.emoji + ' ' + name : name;
+    }).join(', ');
+
+    return `
+      <div class="result-row">
+        <div class="result-rank">${i + 1}</div>
+        <div class="result-name">
+          ${a.name}
+          ${voters ? '<br><span style="font-size:0.75rem;color:#999;">' + voters + '</span>' : ''}
+        </div>
+        <div class="result-bar-wrap">
+          <div class="result-bar">
+            <div class="love" style="width:${pct('love')}%"></div>
+            <div class="nah" style="width:${pct('nah')}%"></div>
+          </div>
+        </div>
+        <div class="result-votes">${total} vote${total !== 1 ? 's' : ''}</div>
+      </div>`;
+  }).join('');
+
+  document.getElementById('resultsOverlay').classList.add('show');
+}
+
+function closeResults() {
+  document.getElementById('resultsOverlay').classList.remove('show');
+}
+
+function calcVoteScore(voteObj) {
+  const weights = { love: 3, like: 2, meh: 1, nah: 0 };
+  let total = 0, count = 0;
+  Object.values(voteObj).forEach(v => {
+    if (weights[v] !== undefined) { total += weights[v]; count++; }
+  });
+  return count > 0 ? total / count * count : 0;
+}
+
+// ─── DETAIL MODAL ───
+const ACTIVITY_DETAILS = {};
+
+function showDetail(id) {
+  const a = ACTIVITIES.find(x => x.id === id);
+  if (!a) return;
+
+  document.getElementById('detailTitle').textContent = a.name;
+  document.getElementById('detailLink').href = a.url;
+
+  // Carousel
+  const carousel = document.getElementById('detailCarousel');
+  const photos = a.photos || [];
+  if (photos.length > 0) {
+    carousel.style.display = 'block';
+    carousel.innerHTML = photos.map((p, i) =>
+      `<img src="${p}" class="${i === 0 ? 'active' : ''}">`
+    ).join('') + (photos.length > 1 ? `
+      <button class="carousel-btn prev" onclick="slideDetailCarousel(-1)">\u2039</button>
+      <button class="carousel-btn next" onclick="slideDetailCarousel(1)">\u203A</button>
+    ` : '');
+  } else {
+    carousel.style.display = 'none';
+  }
+
+  // Body
+  const body = document.getElementById('detailBody');
+  if (a.details) {
+    body.innerHTML = a.details;
+  } else {
+    const priceStr = a.price === 0 ? 'Free' : '$' + a.price + '/pp';
+    const travel = a.driveTime
+      ? '\u{1F697} ' + a.driveTime + ' drive \u2022 ~' + a.uberEstimate + ' Uber'
+      : '\u{1F6B6} ' + (a.walkTime || 'On King St');
+    body.innerHTML = `
+      <b>${a.desc}</b><br><br>
+      <b>Price:</b> ${priceStr}<br>
+      <b>Duration:</b> ${a.duration}<br>
+      <b>Travel:</b> ${travel}<br><br>
+      <em style="color:var(--gold-dark);">${a.highlight}</em>
+    `;
+  }
+
+  document.getElementById('detailOverlay').classList.add('show');
+}
+
+function closeDetail() {
+  document.getElementById('detailOverlay').classList.remove('show');
+}
+
+function slideDetailCarousel(dir) {
+  const carousel = document.getElementById('detailCarousel');
+  const imgs = carousel.querySelectorAll('img');
+  let current = [...imgs].findIndex(img => img.classList.contains('active'));
+  imgs[current].classList.remove('active');
+  current = (current + dir + imgs.length) % imgs.length;
+  imgs[current].classList.add('active');
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    document.getElementById('resultsOverlay').classList.remove('show');
+    closeDetail();
+  }
+});
+</script>
+</body>
+</html>

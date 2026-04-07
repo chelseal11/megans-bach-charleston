@@ -32,6 +32,20 @@ body {
   height: 100vh;
 }
 
+/* ─── TAB BAR ─── */
+.tab-bar {
+  display: flex; background: var(--charcoal);
+}
+.tab-bar a {
+  flex: 1; text-align: center; padding: 10px 12px;
+  font-family: 'Montserrat', sans-serif; font-size: 0.8rem; font-weight: 600;
+  color: rgba(255,255,255,0.6); text-decoration: none;
+  letter-spacing: 0.5px; transition: all 0.2s;
+  border-bottom: 3px solid transparent;
+}
+.tab-bar a:hover { color: white; }
+.tab-bar a.active { color: white; border-bottom-color: var(--gold); }
+
 /* ─── HEADER ─── */
 .header {
   background: linear-gradient(135deg, var(--blush) 0%, var(--blush-light) 50%, var(--gold-light) 100%);
@@ -75,7 +89,7 @@ body {
 /* ─── MAIN LAYOUT ─── */
 .main {
   display: flex;
-  height: calc(100vh - 58px);
+  height: calc(100vh - 58px - 39px);
 }
 
 /* ─── SIDEBAR ─── */
@@ -659,10 +673,14 @@ body {
 </head>
 <body>
 
+<div class="tab-bar">
+  <a href="index.html">Stays</a>
+  <a href="activities.html" class="active">Activities</a>
+  <a href="food.html">Food</a>
+</div>
 <div class="header">
   <h1>Megan's <span>Charleston</span> Bach &mdash; Activities</h1>
   <div class="header-actions">
-    <a href="index.html" class="header-btn outline" style="text-decoration:none;">View Stays</a>
     <span id="voterDisplay" style="font-size:0.8rem; color:var(--gold-dark); font-weight:600;"></span>
     <button class="header-btn outline" onclick="changeVoter()">Change Name</button>
     <button class="header-btn" onclick="showResults()">View Results</button>
@@ -672,7 +690,6 @@ body {
   <button class="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></button>
   <div class="menu-dropdown" id="menuDropdown">
     <div class="menu-info" id="voterDisplayMobile"></div>
-    <a href="index.html" class="header-btn outline" style="text-decoration:none;">View Stays</a>
     <button class="header-btn" onclick="showResults(); toggleMenu();">View Results</button>
     <button class="header-btn outline" onclick="changeVoter(); toggleMenu();">Change Name</button>
     <button class="header-btn outline" onclick="copyShareLink(); toggleMenu();">Share Link</button>
@@ -693,9 +710,7 @@ body {
       <button class="sort-btn" onclick="toggleFilter('tour')" id="filter-tour">Tour</button>
       <button class="sort-btn" onclick="toggleFilter('class')" id="filter-class">Class</button>
       <button class="sort-btn" onclick="toggleFilter('beach')" id="filter-beach">Beach</button>
-      <button class="sort-btn" onclick="toggleFilter('brunch')" id="filter-brunch">Brunch</button>
       <button class="sort-btn" onclick="toggleFilter('hike')" id="filter-hike">Hike</button>
-      <button class="sort-btn" onclick="toggleFilter('dinner')" id="filter-dinner">Dinner</button>
       <button class="sort-btn" onclick="toggleFilter('fun')" id="filter-fun">Fun</button>
     </div>
     <div id="cardList"></div>
@@ -771,7 +786,7 @@ const ACTIVITIES = [
     ]
   },
   {
-    "rank": 3,
+    "rank": 2,
     "name": "Charleston Cocktail Co",
     "id": "cocktail-co",
     "category": "class",
@@ -792,7 +807,7 @@ const ACTIVITIES = [
     ]
   },
   {
-    "rank": 5,
+    "rank": 3,
     "name": "Bulldog Tours — Ghost Tour",
     "id": "bulldog-ghost",
     "category": "tour",
@@ -817,31 +832,7 @@ const ACTIVITIES = [
     ]
   },
   {
-    "rank": 6,
-    "name": "Poogan's Porch Brunch",
-    "id": "poogans-porch",
-    "category": "brunch",
-    "desc": "Iconic Charleston brunch in a historic house on Queen Street. Classic Southern dishes, biscuits, and bottomless mimosas. Great for groups.",
-    "price": 45,
-    "duration": "1.5-2 hours",
-    "groupSize": "Reservations for 10+",
-    "highlight": "\u{1F95E} Southern brunch \u2022 Historic house \u2022 Bottomless mimosas \u2022 Queen Street",
-    "walkTime": "14 min walk",
-    "details": "<b>Poogan's Porch - Southern Restaurant</b><br><br><b>Address:</b> 72 Queen Street, Charleston, SC 29401<br><b>Phone:</b> (843) 829-4332<br><br><b>Hours:</b> Brunch daily 9 AM - 3 PM. Dinner service available.<br><br><b>Brunch Highlights:</b><br>• Award-Winning Shrimp & Grits (USA Today featured)<br>• Bone-In Fried Chicken ($24)<br>• Chicken & Waffles with bourbon huckleberry syrup ($22)<br>• Crab Cake Benedict ($25)<br>• Mimosa carafes ($36) & Bloody Marys ($12)<br><br><b>Desserts:</b> Banana Pudding ($10), Cast-Iron Peach Cobbler ($12)<br><br><b>Tip:</b> A Charleston institution since 1976. Make reservations in advance, especially for weekend brunch. Private events & catering available.",
-    "url": "https://www.poogansporch.com/",
-    "lat": 32.7785,
-    "lng": -79.9325,
-    "photos": [
-      "https://static.wixstatic.com/media/49072f_c979e047009040099743598a1beb41ec~mv2.jpg",
-      "https://static.wixstatic.com/media/49072f_0d8a03510867432ab7671b015d12d24b~mv2.jpg",
-      "https://static.wixstatic.com/media/49072f_1d5d1c732e1d4d1bba5b8226e8a7b9d2~mv2.jpg",
-      "https://static.wixstatic.com/media/49072f_41f9c85a93c64813bdb27bbbf0aca0e2~mv2.jpg",
-      "https://static.wixstatic.com/media/49072f_803db0ae675144ca97b2bd36809bfa1b~mv2.jpg",
-      "https://static.wixstatic.com/media/49072f_b4243cf834544ef793472eee007605cc~mv2.jpg"
-    ]
-  },
-  {
-    "rank": 7,
+    "rank": 4,
     "name": "Republic Garden & Lounge",
     "id": "republic-lounge",
     "category": "nightlife",
@@ -863,7 +854,7 @@ const ACTIVITIES = [
     ]
   },
   {
-    "rank": 8,
+    "rank": 5,
     "name": "Uptown Social Rooftop",
     "id": "uptown-social",
     "category": "nightlife",
@@ -885,7 +876,7 @@ const ACTIVITIES = [
     ]
   },
   {
-    "rank": 9,
+    "rank": 6,
     "name": "Earthling Day Spa — Group Package",
     "id": "earthling-spa",
     "category": "wellness",
@@ -907,7 +898,7 @@ const ACTIVITIES = [
     ]
   },
   {
-    "rank": 11,
+    "rank": 7,
     "name": "Tiki Tours Party Boat",
     "id": "tiki-tours",
     "category": "boat",
@@ -932,7 +923,7 @@ const ACTIVITIES = [
     ]
   },
   {
-    "rank": 13,
+    "rank": 8,
     "name": "Blind Tiger Pub",
     "id": "blind-tiger",
     "category": "nightlife",
@@ -957,30 +948,7 @@ const ACTIVITIES = [
     ]
   },
   {
-    "rank": 14,
-    "name": "The Junction Kitchen — Group Brunch",
-    "id": "junction-brunch",
-    "category": "brunch",
-    "desc": "One of the best brunch spots in Charleston. Famous for serving donuts as sides. Private group dining available.",
-    "price": 35,
-    "duration": "1.5-2 hours",
-    "groupSize": "Private dining for groups",
-    "highlight": "\u{1F369} Donut sides \u2022 Private dining \u2022 Creative menu \u2022 Group-friendly",
-    "walkTime": "5 min walk",
-    "details": "<b>The Junction Kitchen & Provisions</b><br><br><b>Address:</b> 4438 Spruill Ave, Park Circle, Charleston, SC 29405<br><b>Phone:</b> (843) 745-9189<br><br><b>About:</b> Solo female-owned neighborhood gem. One of the only full-service breakfast joints in the area. American eclectic cuisine with bold flavors and generous portions.<br><br><b>Menu Highlights:</b> Smokey shrimp & grits, chicken & waffles, blackberry mimosas, creative brunch cocktails.<br><br><b>Private Events:</b> Offers private event space for parties. Inquire through catering/events page.<br><br><b>Note:</b> Located in Park Circle (North Charleston), about 15 min from downtown — not walking distance. Worth the trip for an off-the-beaten-path brunch.",
-    "url": "https://www.thejunctionkitchen.com/",
-    "lat": 32.7905,
-    "lng": -79.9410,
-    "photos": [
-      "https://static.spotapps.co/website_images/ab_websites/17260_website/video_poster.jpg",
-      "https://static.spotapps.co/website_images/ab_websites/17260_website/about_left.png",
-      "https://static.spotapps.co/website_images/ab_websites/17260_website/green_background.jpg",
-      "https://static.spotapps.co/website_images/ab_websites/17260_website/newsletter_back.jpg",
-      "https://static.spotapps.co/website_images/ab_websites/17260_website/reviews_back.jpg"
-    ]
-  },
-  {
-    "rank": 15,
+    "rank": 9,
     "name": "Undiscovered Charleston — Food & History Tour",
     "id": "undiscovered-chs",
     "category": "tour",
@@ -1004,7 +972,7 @@ const ACTIVITIES = [
     ]
   },
   {
-    "rank": 16,
+    "rank": 10,
     "name": "Charleston Head Spa — Group Booking",
     "id": "head-spa",
     "category": "wellness",
@@ -1028,7 +996,7 @@ const ACTIVITIES = [
     ]
   },
   {
-    "rank": 18,
+    "rank": 11,
     "name": "King Street Shopping Crawl",
     "id": "king-street",
     "category": "tour",
@@ -1049,7 +1017,7 @@ const ACTIVITIES = [
     ]
   },
   {
-    "rank": 19,
+    "rank": 12,
     "name": "Charleston Party Cat",
     "id": "party-cat",
     "category": "boat",
@@ -1073,7 +1041,7 @@ const ACTIVITIES = [
     ]
   },
   {
-    "rank": 20,
+    "rank": 13,
     "name": "Cocktail Crew — Mobile Mixology",
     "id": "cocktail-crew",
     "category": "class",
@@ -1096,7 +1064,7 @@ const ACTIVITIES = [
     ]
   },
   {
-    "rank": 21,
+    "rank": 14,
     "name": "DivaDance Parties",
     "id": "divadance",
     "category": "class",
@@ -1112,31 +1080,7 @@ const ACTIVITIES = [
     "photos": []
   },
   {
-    "rank": 22,
-    "name": "Church and Union — Brunch in a Church",
-    "id": "church-union",
-    "category": "brunch",
-    "desc": "Stunning brunch inside a 105-year-old church. Praline French toast, PB&J cinnamon rolls, and a gorgeous backdrop for photos. Fri-Sun 9am-3:30pm.",
-    "price": 40,
-    "duration": "1.5-2 hours",
-    "groupSize": "Up to 30",
-    "highlight": "\u{26EA} Historic church \u2022 Photogenic \u2022 Praline French toast \u2022 Fri-Sun",
-    "walkTime": "12 min walk",
-    "details": "<b>Church & Union — Charleston</b><br><br><b>Address:</b> 32b North Market Street, Charleston, SC 29401<br><b>Phone:</b> (843) 937-8666<br><br><b>Hours:</b><br>• Dinner: Daily 5pm-Till<br>• Lunch: Mon-Thu 10am-3:30pm<br>• Brunch: Fri-Sun 9am-3:30pm<br><br><b>Chefs:</b> Top Chef Alum Jamie Lynch + Adam Hodgson<br><br><b>Menu Highlights:</b> CU Tower (oysters/shrimp/lobster $116), Tuna Tartare ($23), Seared Scallops ($44), NY Strip ($60), Fried Chicken ($31), Wagyu Lettuce Wraps ($25).<br><br><b>Groups 12+:</b> Credit card on file + group menu selection required. Fill out Private Dining inquiry form.<br><br><b>Tip:</b> Book Friday brunch for a bach-friendly experience, or go for a splashy group dinner. Gorgeous church interior = amazing photos.",
-    "url": "https://www.churchandunion.com/location/charleston/",
-    "lat": 32.7812,
-    "lng": -79.9310,
-    "photos": [
-      "https://images.getbento.com/accounts/87d17677c0314d566918a53f70dbecbf/media/images/433405thStreetGroup.png?w=1200&fit=crop&auto=compress,format",
-      "https://images.getbento.com/accounts/87d17677c0314d566918a53f70dbecbf/media/images/4647464c1c33cc0644.image.jpg?w=1200&fit=crop&auto=compress,format",
-      "https://images.getbento.com/accounts/87d17677c0314d566918a53f70dbecbf/media/images/16914CUCHSInterior-611-f658d65b8cec477e8388b1f5132e70ef_1.webp?w=1200&fit=crop&auto=compress,format",
-      "https://images.getbento.com/accounts/87d17677c0314d566918a53f70dbecbf/media/images/54077Brunch-2.JPG?w=1200&fit=crop&auto=compress,format",
-      "https://images.getbento.com/accounts/87d17677c0314d566918a53f70dbecbf/media/images/169405churchcltmain-dining1justindriscollphotography-1_900xx5760-3228-0-0.jpg?w=1200&fit=crop&auto=compress,format",
-      "https://images.getbento.com/accounts/87d17677c0314d566918a53f70dbecbf/media/images/790635Church_Interior.jpg?w=1200&fit=crop&auto=compress,format"
-    ]
-  },
-  {
-    "rank": 23,
+    "rank": 15,
     "name": "The Cocktail Club",
     "id": "cocktail-club",
     "category": "nightlife",
@@ -1160,7 +1104,7 @@ const ACTIVITIES = [
     ]
   },
   {
-    "rank": 24,
+    "rank": 16,
     "name": "The Commodore",
     "id": "commodore",
     "category": "nightlife",
@@ -1182,7 +1126,7 @@ const ACTIVITIES = [
     ]
   },
   {
-    "rank": 25,
+    "rank": 17,
     "name": "Sip History — Cocktail Walking Tour",
     "id": "sip-history",
     "category": "tour",
@@ -1202,7 +1146,7 @@ const ACTIVITIES = [
     ]
   },
   {
-    "rank": 26,
+    "rank": 18,
     "name": "Bloom Wellness Spa — Bach Package",
     "id": "bloom-spa",
     "category": "wellness",
@@ -1226,7 +1170,7 @@ const ACTIVITIES = [
     ]
   },
   {
-    "rank": 23,
+    "rank": 19,
     "name": "Hampton Park Morning Walk",
     "id": "hampton-park",
     "category": "hike",
@@ -1251,7 +1195,7 @@ const ACTIVITIES = [
     ]
   },
   {
-    "rank": 24,
+    "rank": 20,
     "name": "Waterfront Park Stroll",
     "id": "waterfront-park",
     "category": "hike",
@@ -1276,7 +1220,7 @@ const ACTIVITIES = [
     ]
   },
   {
-    "rank": 25,
+    "rank": 21,
     "name": "Charles Towne Landing Trails",
     "id": "charles-towne",
     "category": "hike",
@@ -1300,7 +1244,7 @@ const ACTIVITIES = [
     ]
   },
   {
-    "rank": 26,
+    "rank": 22,
     "name": "West Ashley Greenway",
     "id": "west-ashley-greenway",
     "category": "hike",
@@ -1325,7 +1269,7 @@ const ACTIVITIES = [
     ]
   },
   {
-    "rank": 27,
+    "rank": 23,
     "name": "South Carolina Aquarium",
     "id": "sc-aquarium",
     "category": "tour",
@@ -1348,7 +1292,7 @@ const ACTIVITIES = [
     ]
   },
   {
-    "rank": 28,
+    "rank": 24,
     "name": "The Battery & White Point Garden",
     "id": "the-battery",
     "category": "beach",
@@ -1371,7 +1315,7 @@ const ACTIVITIES = [
     ]
   },
   {
-    "rank": 29,
+    "rank": 25,
     "name": "Brittlebank Park",
     "id": "brittlebank-park",
     "category": "beach",
@@ -1395,7 +1339,7 @@ const ACTIVITIES = [
     ]
   },
   {
-    "rank": 30,
+    "rank": 26,
     "name": "Old South Carriage Co",
     "id": "carriage-ride",
     "category": "tour",
@@ -1418,7 +1362,7 @@ const ACTIVITIES = [
     ]
   },
   {
-    "rank": 31,
+    "rank": 27,
     "name": "Saltwater Cycle Party Boats",
     "id": "pedal-pub",
     "category": "boat",
@@ -1442,7 +1386,7 @@ const ACTIVITIES = [
     ]
   },
   {
-    "rank": 32,
+    "rank": 28,
     "name": "Painting with a Twist",
     "id": "paint-and-sip",
     "category": "class",
@@ -1465,53 +1409,7 @@ const ACTIVITIES = [
     ]
   },
   {
-    "rank": 33,
-    "name": "Hall's Chophouse",
-    "id": "halls-chophouse",
-    "category": "dinner",
-    "desc": "Premier steakhouse on King Street. Live music, incredible steaks, and the kind of service that makes you feel like a VIP. The celebration spot.",
-    "price": 100,
-    "duration": "2-3 hours",
-    "highlight": "\u{1F969} King Street \u2022 Live music \u2022 VIP service \u2022 Celebration vibes",
-    "walkTime": "2 min walk",
-    "details": "<b>Hall's Chophouse</b><br><br><b>Address:</b> 434 King Street, Charleston, SC 29403<br><b>Phone:</b> (843) 727-0090<br><br><b>Hours:</b><br>• Dinner: Mon-Sat 4-11pm/12am, Sun 4:30-11pm<br>• Saturday Lunch: 11am-2:30pm<br>• Sunday Brunch: 10am-2pm<br><br><b>About:</b> Family-owned since 2009. Dry-aged steaks, She Crab Soup, seafood tower, live music. Consistently top 10 in Charleston.<br><br><b>Reservations:</b> Book via Resy. <b>Highly recommended</b> — tables fill fast on weekends.<br><br><b>Tip:</b> Staff excels at making celebrations memorable. Expect $75-150+/person. Sunday Brunch is a great alternative if dinner reservations are tough.",
-    "url": "https://hallschophousecharleston.com/",
-    "lat": 32.7885,
-    "lng": -79.9378,
-    "photos": [
-      "https://static.spotapps.co/website_images/ab_websites/15819_website/food_back.jpg",
-      "https://static.spotapps.co/website_images/ab_websites/15819_website/parties_left_new.jpg",
-      "https://static.spotapps.co/website_images/ab_websites/15819_website/section_back.jpg",
-      "https://static.spotapps.co/website_images/ab_websites/15819_website/video_poster_1.jpg",
-      "https://static.spotapps.co/website_images/ab_websites/15819_website/reviews_back.jpg",
-      "https://static.spotapps.co/website_images/ab_websites/15819_website/about_main.jpg"
-    ]
-  },
-  {
-    "rank": 34,
-    "name": "Stars Rooftop & Grill Room",
-    "id": "stars-rooftop",
-    "category": "dinner",
-    "desc": "360-degree rooftop restaurant on King Street. Wood-fired grill, private dining rooms, and a legendary Sunday brunch buffet ($22.50/pp).",
-    "price": 42,
-    "duration": "2 hours",
-    "highlight": "\u{1F305} 360\u00B0 rooftop \u2022 Sunday brunch buffet \u2022 Private dining \u2022 King Street",
-    "walkTime": "3 min walk",
-    "details": "<b>Stars Rooftop & Grill Room</b><br><br><b>Address:</b> 495 King Street<br><b>Phone:</b> (843) 577-0100<br><br><b>Hours:</b> Dinner Sun-Sat. Brunch Sat & Sun 10am-2:30pm. Rooftop Bar Mon-Thu 3pm, Fri-Sun 12pm.<br><br><b>Private Events:</b><br>• Full rooftop: up to 150 seated<br>• Wilkinson Room: 24-75 seated (exposed brick, King St views)<br>• Main banquet: up to 140<br><br><b>Tip:</b> Walk-in friendly at rooftop bar. Weekend brunch is perfect for bach groups. Consider booking private rooftop area for cocktail hour.",
-    "url": "https://starsrestaurant.com/",
-    "lat": 32.7897,
-    "lng": -79.9423,
-    "photos": [
-      "https://starsrestaurant.com/wp-content/uploads/2022/09/Rooftop-Large-Image.jpeg",
-      "https://starsrestaurant.com/wp-content/uploads/2022/09/Hero-Image.jpeg",
-      "https://starsrestaurant.com/wp-content/uploads/2022/11/ZT7A0646-1-scaled.jpg",
-      "https://starsrestaurant.com/wp-content/uploads/2022/12/Stars-resturant-Bar-at-Charleston.webp",
-      "https://starsrestaurant.com/wp-content/uploads/2022/11/ZT7A0788-scaled.jpg",
-      "https://starsrestaurant.com/wp-content/uploads/2022/09/Private-Dining-Large-Image.jpeg"
-    ]
-  },
-  {
-    "rank": 35,
+    "rank": 29,
     "name": "Prohibition Charleston",
     "id": "prohibition",
     "category": "nightlife",
@@ -1534,7 +1432,7 @@ const ACTIVITIES = [
     ]
   },
   {
-    "rank": 36,
+    "rank": 30,
     "name": "Escape In 60",
     "id": "escape-in-60",
     "category": "fun",
@@ -1557,7 +1455,7 @@ const ACTIVITIES = [
     ]
   },
   {
-    "rank": 37,
+    "rank": 31,
     "name": "Blu Gorilla Tattoo",
     "id": "blu-gorilla",
     "category": "fun",
@@ -1581,118 +1479,7 @@ const ACTIVITIES = [
     ]
   },
   {
-    "rank": 38,
-    "name": "Ritual Rooftop",
-    "id": "ritual",
-    "category": "dinner",
-    "desc": "Tulum-inspired rooftop at King & Calhoun. Shareable plates, craft cocktails, DJ nights. Open til 2am Fri/Sat. Weekend brunch too.",
-    "price": 40,
-    "duration": "2 hours",
-    "highlight": "\u{1F334} Tulum vibes \u2022 Largest rooftop in CHS \u2022 DJ nights \u2022 Weekend brunch",
-    "walkTime": "3 min walk",
-    "details": "<b>Ritual Rooftop Restaurant & Lounge</b><br><br><b>Address:</b> 145 Calhoun Street, Unit 301<br><b>Phone:</b> (843) 410-1747<br><b>Email:</b> vip@ritualchs.com<br><br><b>What It Is:</b> Rooftop restaurant by day, nightclub by night. Part of the Kenner Group.<br><br><b>Features:</b> Full menu, DJ & dancing, VIP tables, private events.<br><br><b>Bach Tips:</b> One of the few true nightclub options downtown. Book a VIP table for guaranteed seating and bottle service. Rooftop dinner → nightclub = easy one-stop evening.",
-    "url": "https://www.ritualchs.com/",
-    "lat": 32.7859,
-    "lng": -79.9357,
-    "photos": [
-      "https://images.squarespace-cdn.com/content/v1/65e0129b6305620bd4cd6aec/df19def7-f141-4170-b397-f381bfe77bc4/lifestyle-45_jwb.jpg",
-      "https://images.squarespace-cdn.com/content/v1/65e0129b6305620bd4cd6aec/1767639448390-TVPZHQLW9WYPLJMQXNSY/image-asset.jpeg",
-      "https://images.squarespace-cdn.com/content/v1/65e0129b6305620bd4cd6aec/1767639449220-78R2EPI77ZVHX3OOX2BW/image-asset.jpeg",
-      "https://images.squarespace-cdn.com/content/v1/65e0129b6305620bd4cd6aec/1767639450908-H9P35MBWBNGQH1E4XA6H/image-asset.jpeg",
-      "https://images.squarespace-cdn.com/content/v1/65e0129b6305620bd4cd6aec/1767639451712-6VWTYPVRKBFNGCO1SBSV/image-asset.jpeg",
-      "https://images.squarespace-cdn.com/content/v1/65e0129b6305620bd4cd6aec/1767639452559-SDSHYDOEJIM3KTL7QASZ/image-asset.jpeg"
-    ]
-  },
-  {
-    "rank": 39,
-    "name": "The Watch Rooftop",
-    "id": "the-watch",
-    "category": "dinner",
-    "desc": "7th-floor rooftop restaurant atop The Restoration Hotel. Harbor views, private Observatory room for groups, and Sunday brunch.",
-    "price": 45,
-    "duration": "2 hours",
-    "highlight": "\u{1F37D}\uFE0F Private dining for 42 \u2022 Harbor views \u2022 Sunday brunch \u2022 Espresso martinis",
-    "walkTime": "10 min walk",
-    "details": "<b>The Watch Rooftop Kitchen & Spirits</b><br><br><b>Location:</b> Atop The Restoration Hotel<br><br><b>Hours:</b> Mon-Thu 11am-11pm, Fri-Sat 11am-12am, Sun 10am-9pm<br><br><b>Menu:</b> Burrata & Jam, Skillet Mac & Cheese, Smoked Wings, burgers, craft cocktails. Sunday Brunch available.<br><br><b>Private Events:</b><br>• Dining Room: 42 seated, 60 reception<br>• Observatory Terrace: 16 seated, 25 standing<br>• Full Buyout: 150 guests, 360° views<br><br><b>Large Parties:</b> 10-20 guests: email directly. 20+: fill out inquiry form.<br><br><b>Bach Tips:</b> Stunning rooftop setting. Private Observatory is ideal for a celebration dinner.",
-    "url": "https://thewatchcharleston.com/",
-    "lat": 32.7821,
-    "lng": -79.9344,
-    "photos": [
-      "https://thewatchcharleston.com/wp-content/uploads/2022/08/events.webp",
-      "https://thewatchcharleston.com/wp-content/uploads/2022/08/breakfast-avocado_toast.webp",
-      "https://thewatchcharleston.com/wp-content/uploads/2022/08/mussels.webp",
-      "https://thewatchcharleston.com/wp-content/uploads/2022/08/the_watch_burger.webp",
-      "https://thewatchcharleston.com/wp-content/uploads/2022/08/tomato_watermelon.webp",
-      "https://thewatchcharleston.com/wp-content/uploads/2023/11/espressomartini-1024x576.jpg"
-    ]
-  },
-  {
-    "rank": 40,
-    "name": "MESU",
-    "id": "mesu",
-    "category": "dinner",
-    "desc": "High-energy Upper King spot blending Mexican and sushi. Tacos, specialty rolls, and bottle service. Open til 2am — dinner to nightlife.",
-    "price": 45,
-    "duration": "2 hours",
-    "highlight": "\u{1F363} Mexican-sushi fusion \u2022 Open til 2am \u2022 Bottle service \u2022 Buyout available",
-    "walkTime": "5 min walk",
-    "details": "<b>MESU — Mexican & Sushi Fusion</b><br><br><b>Address:</b> 570 King Street<br><b>Phone:</b> (854) 429-1011<br><br><b>Hours:</b> Daily 4pm-2am. Kitchen til 10pm. Happy Hour Mon-Fri 4-6pm.<br><br><b>Menu:</b> Nachos, Baja Fish Tacos, Shrimp Tempura Sushi, Street Corn, Churros. Full bar with sake & tequila cocktails.<br><br><b>Reviews:</b> \"Probably the best meal I had in Charleston.\" \"Amazing vibes! Recommend with a group.\"<br><br><b>Bach Tips:</b> Late-night kitchen + bar til 2am = perfect dinner-to-nightlife transition. Shareable plates great for groups. Heart of Upper King nightlife.",
-    "url": "https://mesuchs.com/",
-    "lat": 32.7928,
-    "lng": -79.9410,
-    "photos": [
-      "https://static.spotapps.co/web/mesuchs--com/custom/video_poster.jpg",
-      "https://static.spotapps.co/web/mesuchs--com/custom/food_back.jpg"
-    ]
-  },
-  {
-    "rank": 41,
-    "name": "Little Palm",
-    "id": "little-palm",
-    "category": "brunch",
-    "desc": "Poolside restaurant at The Ryder Hotel with tropical vibes. Chef-curated family-style menus for groups of 8-20. Instagram-worthy.",
-    "price": 35,
-    "duration": "1.5-2 hours",
-    "highlight": "\u{1F334} Poolside tropical \u2022 Family-style menus \u2022 Photo-worthy \u2022 Events team",
-    "walkTime": "9 min walk",
-    "details": "<b>Little Palm — Bar & Swim Club</b><br><br><b>Address:</b> 237 Meeting Street (at The Ryder Hotel)<br><b>Phone:</b> (843) 414-8030<br><br><b>Hours:</b> Sun-Thu 8am-10pm, Fri-Sat 8am-12am<br><br><b>Meals:</b> Breakfast Mon-Sat 8-11am, Brunch Sun 8am-4pm, Lunch Mon-Sat 11am-5pm, Dinner nightly, Happy Hour Mon-Thu 4-6pm.<br><br><b>Features:</b> Pool access, outdoor backyard, gallery. Seasonal cocktails and ingredient-driven dishes.<br><br><b>Large Parties:</b> Up to 7: book on Resy. 8-19: email info@littlepalmbar.com. 20+: fill out large party form. Valet $10.<br><br><b>Bach Tips:</b> Pool + cocktails = standout daytime activity. Chic, Instagrammable setting tailor-made for bachelorette groups.",
-    "url": "https://www.littlepalmchs.com/",
-    "lat": 32.7825,
-    "lng": -79.9322,
-    "photos": [
-      "https://images.getbento.com/accounts/4b58992d4c196afb15a7bfcaaa85fc7b/media/images/20645LittlePalm-JUN82021-HolyCityHandcraft-004-2.jpg?w=1200&fit=max&auto=compress,format",
-      "https://images.getbento.com/accounts/4b58992d4c196afb15a7bfcaaa85fc7b/media/images/42394cbd_ryder_17344-Editx.jpg?w=1200&fit=crop&auto=compress,format",
-      "https://images.getbento.com/accounts/4b58992d4c196afb15a7bfcaaa85fc7b/media/images/27158LittlePalm-JUN82021-HolyCityHandcraft-040-2.jpg?w=1200&fit=max&auto=compress,format",
-      "https://images.getbento.com/accounts/4b58992d4c196afb15a7bfcaaa85fc7b/media/images/76794LittlePalm-JUN82021-HolyCityHandcraft-079.jpg?w=1200&fit=max&auto=compress,format",
-      "https://images.getbento.com/accounts/4b58992d4c196afb15a7bfcaaa85fc7b/media/images/66552lpbreakfast.jpg?w=1200&fit=crop&auto=compress,format",
-      "https://images.getbento.com/accounts/4b58992d4c196afb15a7bfcaaa85fc7b/media/images/77666LittlePalm-Spring24-012.jpg?w=1200&fit=crop&auto=compress,format"
-    ]
-  },
-  {
-    "rank": 42,
-    "name": "Indaco",
-    "id": "indaco",
-    "category": "dinner",
-    "desc": "Rustic Italian on King Street. Wood-fired pizzas, handmade pastas, Negronis on tap. Enclosed courtyard seats up to 100.",
-    "price": 38,
-    "duration": "2 hours",
-    "highlight": "\u{1F355} Wood-fired \u2022 Handmade pasta \u2022 Negroni on tap \u2022 Courtyard for 100",
-    "walkTime": "5 min walk",
-    "details": "<b>Indaco — Rustic Italian</b><br><br><b>Address:</b> 526 King Street<br><b>Phone:</b> (843) 727-1229<br><br><b>Hours:</b> Dinner Sun-Thu 5-10pm, Fri-Sat 5-11pm. Brunch Sat & Sun 10am-2:30pm. Happy Hour Mon-Fri 5-7pm.<br><br><b>Press:</b> Conde Nast Traveler \"40 Best Restaurants in Charleston.\" Eater \"8 Best Italian.\" OpenTable \"12 Top Special Occasion.\"<br><br><b>Menu:</b> Wood-fired pizzas, handmade pastas, house-made salami, Negroni on tap. Family-style available.<br><br><b>Bach Tips:</b> Family-style dining ideal for sharing. Happy hour at the bar is great pre-dinner. Weekend brunch is another excellent option.",
-    "url": "https://www.indacorestaurant.com/location/indaco-charleston/",
-    "lat": 32.7916,
-    "lng": -79.9399,
-    "photos": [
-      "https://images.getbento.com/accounts/5cbb7ec98a8c1b28f9e7010a07d6860c/media/images/45664Lobster_ravioli_1_Large.jpeg?w=1200&fit=crop&auto=compress,format",
-      "https://images.getbento.com/accounts/5cbb7ec98a8c1b28f9e7010a07d6860c/media/images/327609222022_Indaco_Andrew-Cebulka-11359_Large.jpeg?w=1200&fit=crop&auto=compress,format",
-      "https://images.getbento.com/accounts/5cbb7ec98a8c1b28f9e7010a07d6860c/media/images/30444DSC04117.jpg?w=1200&fit=crop&auto=compress,format",
-      "https://images.getbento.com/accounts/5cbb7ec98a8c1b28f9e7010a07d6860c/media/images/3472504092025_indaco-chs_Andrew-Cebulka-5863_Large.jpeg?w=1200&fit=crop&auto=compress,format",
-      "https://images.getbento.com/accounts/5cbb7ec98a8c1b28f9e7010a07d6860c/media/images/5586209222022_Indaco_Andrew-Cebulka-11375.jpg?w=1200&fit=crop&auto=compress,format",
-      "https://images.getbento.com/accounts/5cbb7ec98a8c1b28f9e7010a07d6860c/media/images/7574909222022_Indaco_Andrew-Cebulka-11308_Large.jpeg?w=1200&fit=crop&auto=compress,format"
-    ]
-  },
-  {
-    "rank": 43,
+    "rank": 32,
     "name": "Charleston City Market",
     "id": "city-market",
     "category": "tour",
@@ -1715,7 +1502,7 @@ const ACTIVITIES = [
     ]
   },
   {
-    "rank": 44,
+    "rank": 33,
     "name": "The Bangkok Lounge — Karaoke",
     "id": "bangkok-karaoke",
     "category": "nightlife",
@@ -1737,7 +1524,7 @@ const ACTIVITIES = [
     ]
   },
   {
-    "rank": 45,
+    "rank": 34,
     "name": "Theatre 99 — Improv Comedy",
     "id": "theatre-99",
     "category": "fun",
@@ -1757,7 +1544,7 @@ const ACTIVITIES = [
     ]
   },
   {
-    "rank": 46,
+    "rank": 35,
     "name": "Tidal Wave Jet Skis",
     "id": "jet-skis",
     "category": "boat",

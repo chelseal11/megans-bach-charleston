@@ -32,6 +32,20 @@ body {
   height: 100vh;
 }
 
+/* ─── TAB BAR ─── */
+.tab-bar {
+  display: flex; background: var(--charcoal);
+}
+.tab-bar a {
+  flex: 1; text-align: center; padding: 10px 12px;
+  font-family: 'Montserrat', sans-serif; font-size: 0.8rem; font-weight: 600;
+  color: rgba(255,255,255,0.6); text-decoration: none;
+  letter-spacing: 0.5px; transition: all 0.2s;
+  border-bottom: 3px solid transparent;
+}
+.tab-bar a:hover { color: white; }
+.tab-bar a.active { color: white; border-bottom-color: var(--gold); }
+
 /* ─── HEADER ─── */
 .header {
   background: linear-gradient(135deg, var(--blush) 0%, var(--blush-light) 50%, var(--gold-light) 100%);
@@ -75,7 +89,7 @@ body {
 /* ─── MAIN LAYOUT ─── */
 .main {
   display: flex;
-  height: calc(100vh - 58px);
+  height: calc(100vh - 58px - 39px);
 }
 
 /* ─── SIDEBAR ─── */
@@ -636,10 +650,14 @@ body {
 </head>
 <body>
 
+<div class="tab-bar">
+  <a href="index.html" class="active">Stays</a>
+  <a href="activities.html">Activities</a>
+  <a href="food.html">Food</a>
+</div>
 <div class="header">
   <h1>Megan's <span>Charleston</span> Bachelorette</h1>
   <div class="header-actions">
-    <a href="activities.html" class="header-btn outline" style="text-decoration:none;">View Activities</a>
     <span id="voterDisplay" style="font-size:0.8rem; color:var(--gold-dark); font-weight:600;"></span>
     <button class="header-btn outline" onclick="changeVoter()">Change Name</button>
     <button class="header-btn" onclick="showResults()">View Results</button>
@@ -649,7 +667,6 @@ body {
   <button class="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></button>
   <div class="menu-dropdown" id="menuDropdown">
     <div class="menu-info" id="voterDisplayMobile"></div>
-    <a href="activities.html" class="header-btn outline" style="text-decoration:none;">View Activities</a>
     <button class="header-btn" onclick="showResults(); toggleMenu();">View Results</button>
     <button class="header-btn outline" onclick="changeVoter(); toggleMenu();">Change Name</button>
     <button class="header-btn outline" onclick="copyShareLink(); toggleMenu();">Share Link</button>
