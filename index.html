@@ -1073,30 +1073,60 @@ const ALL_PHOTOS = {
 };
 
 const LISTING_INFO = {
-  '1067027116202514008': {
-    description: 'Welcome to this three-story retreat  where historic Charleston charm and modern design meet. 4 kings, 1 queens, and an extra full bed offer plush sleeping arrangements, while en-suite bathrooms in each bedroom ensure privacy and convenience. With multiple piazzas, 3 off-street parking spaces, and a prime location near restaurants, shopping, and historical sights, a fantastic stay is guaranteed. Private pool & outdoor sitting area newly constructed! \nPermit # OP2025-06192',
-    checkin: '4:00 PM',
-    checkout: '10:00 AM',
+  "1067027116202514008": {
+    description: 'Welcome to this three-story retreat where historic Charleston charm and modern design meet. 4 kings, 1 queen, and an extra full bed offer plush sleeping arrangements, while en-suite bathrooms in each bedroom ensure privacy and convenience. With multiple piazzas, 3 off-street parking spaces, and a prime location near restaurants, shopping, and historical sights, a fantastic stay is guaranteed. Private pool & outdoor sitting area newly constructed!',
+    checkin: '4:00 PM',
+    checkout: '10:00 AM',
+    host: 'The Respite & Revelry Co.',
+    superhost: true,
+    sleeping: '4 king beds, 1 queen bed, 1 full bed • En-suite bathrooms in each bedroom',
+    amenities: ['Pool (private, newly built)', '3 off-street parking spaces', 'Multiple piazzas', 'BBQ grill', 'Outdoor furniture', 'Full kitchen', 'WiFi', 'Washer & dryer', 'A/C', 'TV'],
+    neighborhood: 'Walking distance to restaurants, shopping, and historic sights in downtown Charleston',
+    vibe: 'Spacious group retreat with private pool and historic Charleston charm',
   },
-  '1644553657110726515': {
+  "1644553657110726515": {
     description: 'Welcome to The Sullivan & Palm, a beautifully restored Victorian home in the heart of downtown Charleston. This spacious 5-bedroom retreat blends historic charm with modern comforts, featuring stylish living spaces, a chef\'s kitchen, and inviting porches. Step outside to your private courtyard with a rare downtown luxury—a saltwater pool—perfect for relaxing after a day exploring Charleston\'s restaurants, shops, and historic sights just minutes away.',
-    checkin: '4:00 PM',
-    checkout: '10:00 AM',
+    checkin: '4:00 PM',
+    checkout: '10:00 AM',
+    host: 'Curated Vacation Properties',
+    superhost: true,
+    sleeping: '5 bedrooms with 6 beds • 3.5 bathrooms',
+    amenities: ['Saltwater plunge pool', 'Private courtyard', 'Chef's kitchen', 'Porches', 'Outdoor furniture', 'Free parking', 'WiFi', 'Washer & dryer', 'A/C', 'TV'],
+    neighborhood: 'Heart of downtown Charleston — close to bars, restaurants, and shops',
+    vibe: 'Restored Victorian home with rare downtown saltwater pool',
   },
-  '1062996081939528524': {
+  "1062996081939528524": {
     description: 'Experience luxury living just steps from King Street in this chic penthouse retreat. Featuring sleek design, refined finishes, and a serene setting atop a renovated building, it offers the perfect balance of sophistication and convenience. Explore boutiques, dining, and Charleston\'s vibrant culture at your doorstep.',
-    checkin: '4:00 PM',
-    checkout: '10:00 AM',
+    checkin: '4:00 PM',
+    checkout: '10:00 AM',
+    host: 'YOURPAD Charleston',
+    superhost: true,
+    sleeping: '3 bedrooms with 4 beds • 3 bathrooms',
+    amenities: ['Large porch', 'Private patio/balcony', 'Outdoor furniture', 'Full kitchen', 'Parking', 'WiFi', 'Washer & dryer', 'A/C', 'Dedicated workspace', 'Smart lock'],
+    neighborhood: 'Steps from King Street — boutiques, dining, and vibrant nightlife at your doorstep',
+    vibe: 'Chic penthouse with sleek design and rooftop-level living',
   },
-  '1142370073998644614': {
+  "1142370073998644614": {
     description: 'Step into timeless elegance and Southern charm at The Big Palmetto, a stunning 4-bedroom, 4.5-bath retreat that blends historic architecture with modern comforts. Perfect for families, friends, or anyone seeking history, warmth, and a touch of grandeur, it offers a stay both luxurious and inviting. Nestled in a storied neighborhood surrounded by classic Charleston homes, you\'ll enjoy easy access to local dining, boutiques, landmarks, and a short ride to King Street, parks, and museums.',
-    checkin: '4:00 PM',
-    checkout: '10:00 AM',
+    checkin: '4:00 PM',
+    checkout: '10:00 AM',
+    host: 'YOURPAD Charleston',
+    superhost: true,
+    sleeping: '4 bedrooms with 5 beds • 4.5 bathrooms',
+    amenities: ['Patio/balcony', 'Outdoor furniture', 'Full kitchen', 'Parking', 'WiFi', 'Washer & dryer', 'A/C', 'Smart lock', 'Dedicated workspace', 'Hair dryer'],
+    neighborhood: 'Storied neighborhood with classic Charleston homes, near dining, boutiques, and landmarks',
+    vibe: 'Grand historic home with timeless Southern elegance',
   },
-  '998569848645397009': {
+  "998569848645397009": {
     description: 'Experience Charleston in style at this 5BR, 4.5BA home where historic charm meets modern design. Each king bedroom offers comfort, three with private en-suites. Gather in the spacious living areas or cook in the fully stocked kitchen before exploring King Street just steps away. With Smart TVs, high-speed WiFi, and on-site parking, this professionally designed retreat is ideal for groups seeking both luxury and convenience.',
-    checkin: '4:00 PM',
-    checkout: '10:00 AM',
+    checkin: '4:00 PM',
+    checkout: '10:00 AM',
+    host: 'YOURPAD Charleston',
+    superhost: true,
+    sleeping: '5 king beds (3 with en-suites) • Queen air mattress available • 4.5 bathrooms',
+    amenities: ['1 free parking space', '3 porches', 'Private patio/balcony', 'Full kitchen', 'Smart TVs', 'High-speed WiFi', 'Washer & dryer', 'A/C', 'Smart lock self check-in', 'Coffee maker'],
+    neighborhood: 'Elliotborough/Cannonborough — 1 block to King Street. Near Xiao Bao Biscuit, Chubby Fish, Kudu Coffee, and more',
+    vibe: 'Professionally designed group retreat, steps from King Street',
   },
 };
 
@@ -1589,18 +1619,35 @@ function openInfo(listingId) {
     l.bedrooms + ' bedrooms \u2022 ' + l.baths + ' baths \u2022 sleeps ' + l.guests;
   document.getElementById('infoDesc').textContent = info.description || '';
 
-  const details = [];
-  details.push({ icon: '\u{1F4B0}', text: '$' + l.price.toLocaleString() + ' total \u2022 $' + Math.round(l.price / 10) + '/person \u2022 $' + ppn + '/person/night' });
-  if (l.rating) details.push({ icon: '\u2B50', text: l.rating + ' stars (' + l.reviews + ' reviews)' });
-  details.push({ icon: '\u{1F552}', text: 'Check-in: ' + (info.checkin || '4:00 PM') + ' \u2022 Checkout: ' + (info.checkout || '10:00 AM') });
-  if (l.hasPool) details.push({ icon: '\u{1F3CA}', text: 'Private pool' });
-  if (l.hasParking) details.push({ icon: '\u{1F17F}\uFE0F', text: 'Free parking' });
-  details.push({ icon: '\u{1F4CD}', text: l.highlight });
+  let html = '';
 
-  document.getElementById('infoDetails').innerHTML = details.map(d =>
+  if (info.vibe) {
+    html += '<div style="background:var(--gold-light);padding:8px 12px;border-radius:8px;font-size:0.85rem;font-weight:500;color:var(--gold-dark);margin-bottom:12px;">' + info.vibe + '</div>';
+  }
+
+  const details = [];
+  details.push({ icon: '\u{1F4B0}', text: '$' + l.price.toLocaleString() + ' total \u2022 $' + Math.round(l.price / 10) + '/person \u2022 $' + ppn + '/pp/night' });
+  if (l.rating) details.push({ icon: '\u2B50', text: l.rating + ' stars (' + l.reviews + ' reviews)' });
+  if (info.sleeping) details.push({ icon: '\u{1F6CF}\uFE0F', text: info.sleeping });
+  details.push({ icon: '\u{1F552}', text: 'Check-in ' + (info.checkin || '4:00 PM') + ' \u2022 Checkout ' + (info.checkout || '10:00 AM') });
+  if (info.host) details.push({ icon: '\u{1F3E0}', text: 'Hosted by ' + info.host + (info.superhost ? ' \u2022 Superhost' : '') });
+  if (info.neighborhood) details.push({ icon: '\u{1F4CD}', text: info.neighborhood });
+
+  html += details.map(d =>
     '<div class="info-detail"><span class="info-detail-icon">' + d.icon + '</span><span>' + d.text + '</span></div>'
   ).join('');
 
+  if (info.amenities && info.amenities.length > 0) {
+    html += '<div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--blush);">';
+    html += '<div style="font-weight:600;font-size:0.85rem;margin-bottom:8px;">Top amenities</div>';
+    html += '<div style="display:flex;flex-wrap:wrap;gap:6px;">';
+    html += info.amenities.map(a =>
+      '<span style="background:white;border:1px solid var(--blush);border-radius:16px;padding:4px 10px;font-size:0.75rem;">' + a + '</span>'
+    ).join('');
+    html += '</div></div>';
+  }
+
+  document.getElementById('infoDetails').innerHTML = html;
   document.getElementById('infoOverlay').classList.add('show');
 }
 
