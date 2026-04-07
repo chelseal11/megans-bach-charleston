@@ -461,25 +461,53 @@ body {
   background: none;
   border: none;
 }
-.result-row {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 10px 0;
-  border-bottom: 1px solid var(--blush-light);
+.result-card {
+  background: var(--blush-light); border-radius: 12px; padding: 16px;
+  margin-bottom: 12px; position: relative;
 }
-.result-rank { font-weight: 700; color: var(--gold-dark); width: 30px; text-align: center; }
-.result-name { flex: 1; font-weight: 500; }
-.result-bar-wrap { width: 200px; }
-.result-bar { height: 20px; border-radius: 10px; display: flex; overflow: hidden; background: var(--blush-light); }
-.result-bar div { height: 100%; transition: width 0.5s; }
-.result-bar .love { background: #FF6B8A; } /* 1st choice */
-.result-bar .like { background: var(--gold); } /* 2nd choice */
-.result-bar .meh { background: #CCC; } /* 3rd choice */
-.result-votes { width: 60px; text-align: right; font-size: 0.8rem; color: #999; }
-.legend { display: flex; gap: 16px; justify-content: center; margin-bottom: 16px; font-size: 0.8rem; }
-.legend span { display: flex; align-items: center; gap: 4px; }
-.legend-dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
+.result-card.leader { border: 2px solid var(--gold); background: linear-gradient(135deg, var(--gold-light) 0%, var(--blush-light) 100%); }
+.result-header { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+.result-position {
+  width: 32px; height: 32px; border-radius: 50%; display: flex;
+  align-items: center; justify-content: center; font-weight: 700;
+  font-size: 0.9rem; flex-shrink: 0; color: white;
+}
+.result-position.p1 { background: var(--gold); }
+.result-position.p2 { background: var(--blush-dark); }
+.result-position.p3 { background: #B5C4B1; }
+.result-position.p4, .result-position.p5 { background: #CCC; }
+.result-listing-name { font-weight: 600; font-size: 0.95rem; flex: 1; }
+.result-score { font-weight: 700; color: var(--gold-dark); font-size: 1.1rem; white-space: nowrap; }
+.result-score small { font-weight: 400; font-size: 0.75rem; color: #999; }
+.result-voters {
+  display: flex; flex-wrap: wrap; gap: 6px;
+}
+.voter-chip {
+  display: inline-flex; align-items: center; gap: 4px;
+  background: white; border-radius: 20px; padding: 4px 10px;
+  font-size: 0.75rem; font-weight: 500; border: 1px solid var(--blush);
+}
+.voter-chip .voter-rank {
+  width: 18px; height: 18px; border-radius: 50%; display: inline-flex;
+  align-items: center; justify-content: center; font-size: 0.65rem;
+  font-weight: 700; color: white; flex-shrink: 0;
+}
+.voter-rank.r1 { background: var(--gold); }
+.voter-rank.r2 { background: var(--blush-dark); }
+.voter-rank.r3 { background: #B5C4B1; }
+.result-no-votes { color: #999; font-size: 0.8rem; font-style: italic; }
+.results-summary {
+  text-align: center; margin-bottom: 20px; padding: 12px;
+  background: var(--blush-light); border-radius: 10px; font-size: 0.85rem;
+}
+.results-summary strong { color: var(--gold-dark); }
+.results-legend {
+  display: flex; gap: 12px; justify-content: center; margin-bottom: 16px; font-size: 0.75rem; color: #666;
+}
+.results-legend span { display: flex; align-items: center; gap: 4px; }
+.results-legend-dot {
+  width: 10px; height: 10px; border-radius: 50%; display: inline-block;
+}
 
 /* ─── HAMBURGER MENU ─── */
 .hamburger {
@@ -661,13 +689,13 @@ body {
 <div class="results-overlay" id="resultsOverlay">
   <button class="results-close" onclick="closeResults()">&times;</button>
   <div class="results-panel">
-    <h2>Vote Results</h2>
-    <div class="legend">
-      <span><span class="legend-dot" style="background:#FF6B8A"></span> Love it</span>
-      <span><span class="legend-dot" style="background:var(--gold)"></span> Like it</span>
-      <span><span class="legend-dot" style="background:#CCC"></span> Meh</span>
-      <span><span class="legend-dot" style="background:#999"></span> Nah</span>
+    <h2>Rankings</h2>
+    <div class="results-legend">
+      <span><span class="results-legend-dot" style="background:var(--gold)"></span> 1st (3 pts)</span>
+      <span><span class="results-legend-dot" style="background:var(--blush-dark)"></span> 2nd (2 pts)</span>
+      <span><span class="results-legend-dot" style="background:#B5C4B1"></span> 3rd (1 pt)</span>
     </div>
+    <div id="resultsSummary" class="results-summary"></div>
     <div id="resultsBody"></div>
   </div>
 </div>
@@ -1496,33 +1524,37 @@ function showResults() {
     return bScore - aScore;
   });
 
+  // Count total unique voters
+  const allVoters = new Set();
+  LISTINGS.forEach(l => {
+    const v = votes[l.id] || {};
+    Object.keys(v).forEach(name => allVoters.add(name));
+  });
+  const voterCount = allVoters.size;
+  document.getElementById('resultsSummary').innerHTML = voterCount > 0
+    ? `<strong>${voterCount}</strong> ${voterCount === 1 ? 'person has' : 'people have'} voted`
+    : 'No votes yet \u2014 be the first to rank your favorites!';
+
   body.innerHTML = sorted.map((l, i) => {
     const v = votes[l.id] || {};
-    const counts = { '1': 0, '2': 0, '3': 0 };
-    Object.values(v).forEach(val => { if (counts[val] !== undefined) counts[val]++; });
-    const total = Object.values(counts).reduce((a, b) => a + b, 0);
-    const maxVoters = 10; // scale bar against reasonable max
-    const pct = key => total > 0 ? (counts[key] / maxVoters * 100) : 0;
-    const voters = Object.entries(v).map(([name, rank]) => {
-      const label = rank === '1' ? '1st' : rank === '2' ? '2nd' : '3rd';
-      return label + ': ' + name;
-    }).join(', ');
+    const score = calcVoteScore(v);
+    const voterEntries = Object.entries(v).sort((a, b) => a[1].localeCompare(b[1]));
+
+    const chips = voterEntries.map(([name, rank]) =>
+      `<span class="voter-chip"><span class="voter-rank r${rank}">${rank}</span>${name}</span>`
+    ).join('');
 
     return `
-      <div class="result-row">
-        <div class="result-rank">${i + 1}</div>
-        <div class="result-name">
-          ${l.name}
-          ${voters ? '<br><span style="font-size:0.75rem;color:#999;">' + voters + '</span>' : ''}
+      <div class="result-card ${i === 0 && score > 0 ? 'leader' : ''}">
+        <div class="result-header">
+          <div class="result-position p${i + 1}">${i + 1}</div>
+          <div class="result-listing-name">${l.name}</div>
+          <div class="result-score">${score} <small>pts</small></div>
         </div>
-        <div class="result-bar-wrap">
-          <div class="result-bar">
-            <div class="love" style="width:${pct('1')}%" title="1st choice"></div>
-            <div class="like" style="width:${pct('2')}%" title="2nd choice"></div>
-            <div class="meh" style="width:${pct('3')}%" title="3rd choice"></div>
-          </div>
-        </div>
-        <div class="result-votes">${total} vote${total !== 1 ? 's' : ''}</div>
+        ${voterEntries.length > 0
+          ? '<div class="result-voters">' + chips + '</div>'
+          : '<div class="result-no-votes">No votes yet</div>'
+        }
       </div>`;
   }).join('');
 
