@@ -659,6 +659,7 @@ body {
 
 <div class="main">
   <div class="sidebar">
+    <!-- sort/filter bar commented out — now sorted by vote results
     <div class="sort-bar">
       <span class="sort-label">Sort by:</span>
       <button class="sort-btn active" onclick="sortListings('score')" id="sort-score">Score</button>
@@ -670,6 +671,7 @@ body {
       <button class="sort-btn" onclick="toggleFilter('pool')" id="filter-pool">Pool</button>
       <button class="sort-btn" onclick="toggleFilter('parking')" id="filter-parking">Free Parking</button>
     </div>
+    -->
     <div id="cardList"></div>
   </div>
   <div class="map-container">
@@ -1311,20 +1313,11 @@ function sortListings(key) {
 function applyFiltersAndSort() {
   let filtered = [...LISTINGS];
 
-  // Apply filters
-  if (activeFilters.has('pool')) {
-    filtered = filtered.filter(l => l.hasPool);
-  }
-  if (activeFilters.has('parking')) {
-    filtered = filtered.filter(l => l.hasParking);
-  }
-
-  // Apply sort
+  // Sort by vote results (ranked choice score), then by listing score as tiebreaker
   filtered.sort((a, b) => {
-    if (currentSort === 'price') return a.price - b.price;
-    if (currentSort === 'loc') return b.loc - a.loc || b.score - a.score;
-    if (currentSort === 'val') return b.val - a.val || b.score - a.score;
-    if (currentSort === 'bach') return b.bach - a.bach || b.score - a.score;
+    const aVoteScore = calcVoteScore(votes[a.id] || {});
+    const bVoteScore = calcVoteScore(votes[b.id] || {});
+    if (bVoteScore !== aVoteScore) return bVoteScore - aVoteScore;
     return b.score - a.score;
   });
 
