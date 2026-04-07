@@ -347,16 +347,21 @@ body {
 .vote-label { font-size: 0.7rem; color: #999; margin-bottom: 4px; }
 .vote-btns { display: flex; gap: 6px; }
 .vote-btn {
-  font-size: 1.2rem;
-  padding: 4px 8px;
-  border: 2px solid transparent;
-  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  font-family: 'Montserrat', sans-serif;
+  width: 32px; height: 32px;
+  border: 2px solid var(--blush-dark);
+  border-radius: 50%;
   cursor: pointer;
   background: var(--blush-light);
+  color: var(--charcoal);
   transition: all 0.2s;
+  display: flex; align-items: center; justify-content: center;
 }
-.vote-btn:hover { transform: scale(1.15); }
-.vote-btn.selected { border-color: var(--gold); background: var(--gold-light); transform: scale(1.15); }
+.vote-btn:hover { transform: scale(1.15); border-color: var(--gold); }
+.vote-btn.selected { border-color: var(--gold); background: var(--gold); color: white; transform: scale(1.15); }
+.rank-voters { font-size: 0.7rem; color: #999; margin-top: 2px; }
 
 /* ─── MAP ─── */
 .map-container { flex: 1; position: relative; }
@@ -464,10 +469,9 @@ body {
 .result-bar-wrap { width: 200px; }
 .result-bar { height: 20px; border-radius: 10px; display: flex; overflow: hidden; background: var(--blush-light); }
 .result-bar div { height: 100%; transition: width 0.5s; }
-.result-bar .love { background: #FF6B8A; }
-.result-bar .like { background: var(--gold); }
-.result-bar .meh { background: #CCC; }
-.result-bar .nah { background: #999; }
+.result-bar .love { background: #FF6B8A; } /* 1st choice */
+.result-bar .like { background: var(--gold); } /* 2nd choice */
+.result-bar .meh { background: #CCC; } /* 3rd choice */
 .result-votes { width: 60px; text-align: right; font-size: 0.8rem; color: #999; }
 .legend { display: flex; gap: 16px; justify-content: center; margin-bottom: 16px; font-size: 0.8rem; }
 .legend span { display: flex; align-items: center; gap: 4px; }
@@ -1131,23 +1135,37 @@ function updateVoterDisplays(text) {
   if (m) m.textContent = text;
 }
 
-// ─── VOTING ───
-const EMOJIS = [
-  { emoji: '\u{1F60D}', label: 'love', key: 'love' },
-  { emoji: '\u{1F970}', label: 'like', key: 'like' },
-  { emoji: '\u{1F610}', label: 'meh', key: 'meh' },
-  { emoji: '\u{1F44E}', label: 'nah', key: 'nah' }
+// ─── VOTING (Ranked Choice 1-3) ───
+const RANKS = [
+  { label: '1st', key: '1' },
+  { label: '2nd', key: '2' },
+  { label: '3rd', key: '3' }
 ];
 
-function castVote(listingId, emojiKey) {
+function castVote(listingId, rankKey) {
   if (!voterName) { document.getElementById('voterModal').classList.add('show'); return; }
 
+  // If this listing already has this rank from this voter, toggle it off
   if (!votes[listingId]) votes[listingId] = {};
-  if (votes[listingId][voterName] === emojiKey) {
+  if (votes[listingId][voterName] === rankKey) {
     delete votes[listingId][voterName];
-  } else {
-    votes[listingId][voterName] = emojiKey;
+    if (Object.keys(votes[listingId]).length === 0) delete votes[listingId];
+    saveVotes();
+    renderCards();
+    return;
   }
+
+  // Clear this rank from any other listing for this voter
+  for (const lid of Object.keys(votes)) {
+    if (votes[lid][voterName] === rankKey) {
+      delete votes[lid][voterName];
+      if (Object.keys(votes[lid]).length === 0) delete votes[lid];
+    }
+  }
+
+  // Assign the rank to this listing
+  if (!votes[listingId]) votes[listingId] = {};
+  votes[listingId][voterName] = rankKey;
   saveVotes();
   renderCards();
 }
@@ -1239,6 +1257,10 @@ function renderCards() {
     const listingVotes = votes[l.id] || {};
     const myVote = voterName ? listingVotes[voterName] : null;
     const voteCount = Object.keys(listingVotes).length;
+    const rankVoters = Object.entries(listingVotes).map(([name, rank]) => {
+      const label = rank === '1' ? '1st' : rank === '2' ? '2nd' : '3rd';
+      return label + ': ' + name;
+    }).join(' \u2022 ');
     const photos = l.photos || [];
     const ratingStr = l.rating ? `\u2605 ${l.rating} (${l.reviews} reviews)` : 'New listing';
     const displayRank = l.rank;
@@ -1293,14 +1315,15 @@ function renderCards() {
           <a class="card-link" href="${l.url}" target="_blank" onclick="event.stopPropagation()" style="margin:0;">View on Airbnb</a>
         </div>
         <div class="vote-section">
-          <div class="vote-label">Your vote ${voteCount > 0 ? '(' + voteCount + ' vote' + (voteCount>1?'s':'') + ' total)' : ''}</div>
+          <div class="vote-label">Your ranking</div>
           <div class="vote-btns">
-            ${EMOJIS.map(e => `
-              <button class="vote-btn ${myVote === e.key ? 'selected' : ''}"
-                      onclick="event.stopPropagation(); castVote('${l.id}', '${e.key}')"
-                      title="${e.label}">${e.emoji}</button>
+            ${RANKS.map(r => `
+              <button class="vote-btn ${myVote === r.key ? 'selected' : ''}"
+                      onclick="event.stopPropagation(); castVote('${l.id}', '${r.key}')"
+                      title="${r.label} choice">${r.key}</button>
             `).join('')}
           </div>
+          ${rankVoters ? '<div class="rank-voters">' + rankVoters + '</div>' : ''}
         </div>
       </div>
     </div>`;
@@ -1434,13 +1457,14 @@ function showResults() {
 
   body.innerHTML = sorted.map((l, i) => {
     const v = votes[l.id] || {};
-    const counts = { love: 0, like: 0, meh: 0, nah: 0 };
+    const counts = { '1': 0, '2': 0, '3': 0 };
     Object.values(v).forEach(val => { if (counts[val] !== undefined) counts[val]++; });
     const total = Object.values(counts).reduce((a, b) => a + b, 0);
-    const pct = key => total > 0 ? (counts[key] / total * 100) : 0;
-    const voters = Object.entries(v).map(([name, vote]) => {
-      const em = EMOJIS.find(e => e.key === vote);
-      return em ? em.emoji + ' ' + name : name;
+    const maxVoters = 10; // scale bar against reasonable max
+    const pct = key => total > 0 ? (counts[key] / maxVoters * 100) : 0;
+    const voters = Object.entries(v).map(([name, rank]) => {
+      const label = rank === '1' ? '1st' : rank === '2' ? '2nd' : '3rd';
+      return label + ': ' + name;
     }).join(', ');
 
     return `
@@ -1452,10 +1476,9 @@ function showResults() {
         </div>
         <div class="result-bar-wrap">
           <div class="result-bar">
-            <div class="love" style="width:${pct('love')}%"></div>
-            <div class="like" style="width:${pct('like')}%"></div>
-            <div class="meh" style="width:${pct('meh')}%"></div>
-            <div class="nah" style="width:${pct('nah')}%"></div>
+            <div class="love" style="width:${pct('1')}%" title="1st choice"></div>
+            <div class="like" style="width:${pct('2')}%" title="2nd choice"></div>
+            <div class="meh" style="width:${pct('3')}%" title="3rd choice"></div>
           </div>
         </div>
         <div class="result-votes">${total} vote${total !== 1 ? 's' : ''}</div>
@@ -1470,12 +1493,12 @@ function closeResults() {
 }
 
 function calcVoteScore(voteObj) {
-  const weights = { love: 3, like: 2, meh: 1, nah: 0 };
-  let total = 0, count = 0;
+  const weights = { '1': 3, '2': 2, '3': 1 };
+  let total = 0;
   Object.values(voteObj).forEach(v => {
-    if (weights[v] !== undefined) { total += weights[v]; count++; }
+    if (weights[v] !== undefined) total += weights[v];
   });
-  return count > 0 ? total / count * count : 0;
+  return total;
 }
 
 // ─── PHOTO GALLERY MODAL ───
