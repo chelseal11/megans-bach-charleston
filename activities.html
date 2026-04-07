@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Megan's Charleston Bach — Activities</title>
+<title>Megan's Charleston Bach — Daytime</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
@@ -675,11 +675,12 @@ body {
 
 <div class="tab-bar">
   <a href="index.html">Stays</a>
-  <a href="activities.html" class="active">Activities</a>
+  <a href="activities.html" class="active">Daytime</a>
+  <a href="night.html">Nightlife</a>
   <a href="food.html">Food</a>
 </div>
 <div class="header">
-  <h1>Megan's <span>Charleston</span> Bach &mdash; Activities</h1>
+  <h1>Megan's <span>Charleston</span> Bach &mdash; Daytime</h1>
   <div class="header-actions">
     <span id="voterDisplay" style="font-size:0.8rem; color:var(--gold-dark); font-weight:600;"></span>
     <button class="header-btn outline" onclick="changeVoter()">Change Name</button>
@@ -705,7 +706,6 @@ body {
       <button class="sort-btn" onclick="sortListings('price')" id="sort-price">Price</button>
       <span class="sort-label" style="margin-left:8px;">Filter:</span>
       <button class="sort-btn" onclick="toggleFilter('boat')" id="filter-boat">Boat</button>
-      <button class="sort-btn" onclick="toggleFilter('nightlife')" id="filter-nightlife">Nightlife</button>
       <button class="sort-btn" onclick="toggleFilter('wellness')" id="filter-wellness">Wellness</button>
       <button class="sort-btn" onclick="toggleFilter('tour')" id="filter-tour">Tour</button>
       <button class="sort-btn" onclick="toggleFilter('class')" id="filter-class">Class</button>
@@ -833,50 +833,6 @@ const ACTIVITIES = [
   },
   {
     "rank": 4,
-    "name": "Republic Garden & Lounge",
-    "id": "republic-lounge",
-    "category": "nightlife",
-    "desc": "Upscale lounge on King Street with outdoor garden, craft cocktails, bottle service, and live DJs. The go-to bach nightlife spot.",
-    "price": 30,
-    "duration": "Evening",
-    "groupSize": "Any size",
-    "highlight": "\u{1F57A} King Street \u2022 Outdoor garden \u2022 Bottle service \u2022 Live DJs",
-    "details": "<b>Republic Garden & Lounge</b><br><br><b>Address:</b> 462 King Street, Charleston, SC 29403<br><br><b>What to Expect:</b><br>• DJ-driven nightclub with dance floor<br>• Indoor/outdoor spaces including a garden area<br>• Craft cocktails and bottle service<br>• Upper King Street — heart of the nightlife district<br><br><b>Bach Tips:</b> Great late-night stop during a bar crawl. Inquire about VIP/bottle service for groups. Check Instagram (@republiccharleston) for events and DJ lineups.",
-    "url": "https://www.republiccharleston.com/",
-    "lat": 32.7873,
-    "lng": -79.9379,
-    "photos": [
-      "https://static.spotapps.co/web/republicreign--com/custom/background.jpg",
-      "https://static.spotapps.co/web/republicreign--com/custom/our_garden_new.jpg",
-      "https://static.spotapps.co/web/republicreign--com/custom/video_poster_new.jpg",
-      "https://static.spotapps.co/web/republicreign--com/custom/newsletter_bg.jpg",
-      "https://static.spotapps.co/web/republicreign--com/custom/reviews_bg.jpg"
-    ]
-  },
-  {
-    "rank": 5,
-    "name": "Uptown Social Rooftop",
-    "id": "uptown-social",
-    "category": "nightlife",
-    "desc": "Charleston's hippest rooftop bar. Famous frozen cocktails, live music nightly, and amazing pizzas. Multi-level venue with great views.",
-    "price": 25,
-    "duration": "Evening",
-    "groupSize": "Any size",
-    "highlight": "\u{1F305} Rooftop views \u2022 Live music \u2022 Frozen cocktails \u2022 Pizza",
-    "details": "<b>Uptown Social</b><br><br><b>Address:</b> 587 King Street, Charleston, SC 29403<br><b>Phone:</b> (843) 793-1837<br><br><b>Hours:</b> Mon-Thu 12PM-2AM, Fri-Sun 11:30AM-2AM<br><br><b>Features:</b><br>• 48 TVs, live music every night, DJs<br>• Iconic \"Social Butterfly\" mural — perfect for group photos!<br>• 12\" bar pies by Brooklyn pizza legend Anthony Falco<br>• Private event rooms available<br>• Skip the line via LineLeap app<br><br><b>Tip:</b> Great for groups wanting food, drinks, and dancing all in one spot. Make reservations online for groups.",
-    "url": "https://www.uptownsocialchs.com/",
-    "lat": 32.7878,
-    "lng": -79.9375,
-    "photos": [
-      "https://images.getbento.com/accounts/7e7099f99447a3ca8a173829176a5383/media/images/15249DSC07597.JPG?w=1200&fit=max&auto=compress,format",
-      "https://images.getbento.com/accounts/7e7099f99447a3ca8a173829176a5383/media/images/25577DSC04872.jpg?w=1200&fit=max&auto=compress,format",
-      "https://images.getbento.com/accounts/7e7099f99447a3ca8a173829176a5383/media/images/27270IMG_4984-2.jpg?w=1200&fit=max&auto=compress,format",
-      "https://images.getbento.com/accounts/7e7099f99447a3ca8a173829176a5383/media/images/43399UptownSocialEditsJan31-38_1.jpg?w=1200&fit=max&auto=compress,format",
-      "https://images.getbento.com/accounts/7e7099f99447a3ca8a173829176a5383/media/images/8035UptownEventsSpace-4764.jpg?w=1200&fit=max&auto=compress,format"
-    ]
-  },
-  {
-    "rank": 6,
     "name": "Earthling Day Spa — Group Package",
     "id": "earthling-spa",
     "category": "wellness",
@@ -898,7 +854,7 @@ const ACTIVITIES = [
     ]
   },
   {
-    "rank": 7,
+    "rank": 5,
     "name": "Tiki Tours Party Boat",
     "id": "tiki-tours",
     "category": "boat",
@@ -923,32 +879,7 @@ const ACTIVITIES = [
     ]
   },
   {
-    "rank": 8,
-    "name": "Blind Tiger Pub",
-    "id": "blind-tiger",
-    "category": "nightlife",
-    "desc": "Award-winning historic pub voted 'Best Bar in Charleston' multiple times. Beautiful patio setting, perfect for a chill night out.",
-    "price": 20,
-    "duration": "Evening",
-    "groupSize": "Any size",
-    "highlight": "\u{1F3C6} Best bar in CHS \u2022 Historic building \u2022 Patio \u2022 Craft cocktails",
-    "driveTime": "5 min",
-    "uberEstimate": "$9-10",
-    "details": "<b>Blind Tiger Pub</b><br><br><b>Address:</b> 36-38 Broad Street, Charleston, SC 29401<br><b>Phone:</b> (843) 577-0088<br><br><b>What to Expect:</b><br>• Beautiful outdoor courtyard — one of the best patios in Charleston<br>• Historic building dating to 1803<br>• Full bar with craft cocktails and local beers<br>• Casual, laid-back atmosphere<br>• No cover charge<br><br><b>Bach Tips:</b> Gorgeous courtyard for group photos. Perfect first stop or afternoon drinks before heading to King Street nightlife. Courtyard fills up on weekends — arrive early.",
-    "url": "https://blindtigerpub.com/",
-    "lat": 32.7775,
-    "lng": -79.9315,
-    "photos": [
-      "https://s3-media0.fl.yelpcdn.com/bphoto/-GeCGlHwfFVufcU8mVf7kw/l.jpg",
-      "https://s3-media0.fl.yelpcdn.com/bphoto/0xLOzb-Z0ZOmKJEK0d-Mzg/l.jpg",
-      "https://s3-media0.fl.yelpcdn.com/bphoto/1G35X0WTEZulf8aW1UBCAA/l.jpg",
-      "https://s3-media0.fl.yelpcdn.com/bphoto/7EAQNi4ou5QnlCZNkyw0MQ/l.jpg",
-      "https://s3-media0.fl.yelpcdn.com/bphoto/9aGMWatJ6ls-gKt5WY36IQ/l.jpg",
-      "https://s3-media0.fl.yelpcdn.com/bphoto/dSK1LO-QYfh12yj4VyaGEw/l.jpg"
-    ]
-  },
-  {
-    "rank": 9,
+    "rank": 6,
     "name": "Undiscovered Charleston — Food & History Tour",
     "id": "undiscovered-chs",
     "category": "tour",
@@ -972,7 +903,7 @@ const ACTIVITIES = [
     ]
   },
   {
-    "rank": 10,
+    "rank": 7,
     "name": "Charleston Head Spa — Group Booking",
     "id": "head-spa",
     "category": "wellness",
@@ -996,7 +927,7 @@ const ACTIVITIES = [
     ]
   },
   {
-    "rank": 11,
+    "rank": 8,
     "name": "King Street Shopping Crawl",
     "id": "king-street",
     "category": "tour",
@@ -1017,7 +948,7 @@ const ACTIVITIES = [
     ]
   },
   {
-    "rank": 12,
+    "rank": 9,
     "name": "Charleston Party Cat",
     "id": "party-cat",
     "category": "boat",
@@ -1041,7 +972,7 @@ const ACTIVITIES = [
     ]
   },
   {
-    "rank": 13,
+    "rank": 10,
     "name": "Cocktail Crew — Mobile Mixology",
     "id": "cocktail-crew",
     "category": "class",
@@ -1064,7 +995,7 @@ const ACTIVITIES = [
     ]
   },
   {
-    "rank": 14,
+    "rank": 11,
     "name": "DivaDance Parties",
     "id": "divadance",
     "category": "class",
@@ -1080,53 +1011,7 @@ const ACTIVITIES = [
     "photos": []
   },
   {
-    "rank": 15,
-    "name": "The Cocktail Club",
-    "id": "cocktail-club",
-    "category": "nightlife",
-    "desc": "Upscale craft cocktail lounge above The Macintosh on upper King Street. House-made infusions, rare liquors, farm-to-shaker drinks. Multiple 'Best Cocktails' awards.",
-    "price": 16,
-    "duration": "1-3 hours",
-    "groupSize": "Up to 15",
-    "highlight": "\u{1F943} Award-winning cocktails \u2022 Upper King \u2022 Tue-Sun 5PM-2AM",
-    "walkTime": "2 min walk",
-    "details": "<b>The Cocktail Club</b><br><br><b>Address:</b> 479 King Street, Charleston, SC 29403<br><b>Phone:</b> (843) 724-9411<br><br><b>Hours:</b> Tue-Sun 5PM-2AM (Closed Mondays)<br><br><b>Features:</b><br>• Craft cocktails with creative, expertly made drinks<br>• Rooftop terrace — perfect for warm evenings<br>• Speakeasy-inspired interior with moody, upscale ambiance<br>• Private events available<br><br><b>Bach Tips:</b> Go early (~5-6pm) to snag rooftop seats, then stay as energy picks up. THE spot for a bach night out in Charleston. Pairs perfectly with nearby King Street restaurants.",
-    "url": "https://www.thecocktailclubcharleston.com/",
-    "lat": 32.7890,
-    "lng": -79.9382,
-    "photos": [
-      "https://images.getbento.com/accounts/a311ad0694794355eff2b270f4002ce9/media/images/7403302012023_Cocktail-Club_Andrew-Cebulka-16525_Large.jpeg?w=1200&fit=crop&auto=compress,format",
-      "https://images.getbento.com/accounts/a311ad0694794355eff2b270f4002ce9/media/images/64102012023_Cocktail-Club_Andrew-Cebulka-16640_Large.jpeg?w=1200&fit=crop&auto=compress,format",
-      "https://images.getbento.com/accounts/a311ad0694794355eff2b270f4002ce9/media/images/8719502102023_Cocktail-Club-CHS_Andrew-Cebulka-18132_Large.jpeg?w=1200&fit=crop&auto=compress,format",
-      "https://images.getbento.com/accounts/a311ad0694794355eff2b270f4002ce9/media/images/102709222022_Cocktail-Club_Andrew-Cebulka-11591.jpg?w=1200&fit=crop&auto=compress,format",
-      "https://images.getbento.com/accounts/a311ad0694794355eff2b270f4002ce9/media/images/8782802102023_Cocktail-Club-CHS_Andrew-Cebulka-18002_Large.jpeg?w=1200&fit=crop&auto=compress,format",
-      "https://images.getbento.com/accounts/a311ad0694794355eff2b270f4002ce9/media/images/2503502012023_Cocktail-Club_Andrew-Cebulka-16571_Large.jpeg?w=1200&fit=crop&auto=compress,format"
-    ]
-  },
-  {
-    "rank": 16,
-    "name": "The Commodore",
-    "id": "commodore",
-    "category": "nightlife",
-    "desc": "Vintage cocktail bar with 1950s decor and live R&B, soul, and funk bands up to 5 nights a week. Dim lighting and mid-century vibes.",
-    "price": 15,
-    "duration": "2-3 hours",
-    "groupSize": "Up to 20",
-    "highlight": "\u{1F3B7} Live music \u2022 Retro vibes \u2022 R&B/soul/funk \u2022 Great cocktails",
-    "walkTime": "7 min walk",
-    "details": "<b>The Commodore - Live Music & Jazz Club</b><br><br><b>Address:</b> 504 Meeting Street, Charleston, SC 29403<br><br><b>Hours:</b><br>Sunday - Wednesday: 7:30 PM - 1:00 AM<br>Thursday - Saturday: 7:30 PM - 2:00 AM<br><br><b>Age Requirement:</b> 23 & Up<br><br><b>What to Expect:</b> Vintage jazz club that started in the early 80s as \"Touch of Class.\" Unparalleled live music and bar scene with a throwback-meets-modern atmosphere, fantastic dance floor, and craft cocktails.<br><br><b>Live Music:</b> Up to 5 nights a week — Lady & The Brass, The Majestics, The Funktastics, Future Funk, plus touring acts.<br><br><b>Bach Tips:</b> No formal packages but the dance floor + live funk/jazz + craft cocktails = ideal group night. 23+ age policy keeps it mature. Arrive early on weekends.",
-    "url": "https://thecommodorechs.com/",
-    "lat": 32.7925,
-    "lng": -79.9368,
-    "photos": [
-      "https://thecommodorechs.com/images/banner-img.jpg",
-      "https://thecommodorechs.com/images/banner-img-02.jpg",
-      "https://thecommodorechs.com/images/banner-img-03.jpg",
-      "https://thecommodorechs.com/images/content-img.jpg"
-    ]
-  },
-  {
-    "rank": 17,
+    "rank": 12,
     "name": "Sip History — Cocktail Walking Tour",
     "id": "sip-history",
     "category": "tour",
@@ -1146,7 +1031,7 @@ const ACTIVITIES = [
     ]
   },
   {
-    "rank": 18,
+    "rank": 13,
     "name": "Bloom Wellness Spa — Bach Package",
     "id": "bloom-spa",
     "category": "wellness",
@@ -1170,7 +1055,7 @@ const ACTIVITIES = [
     ]
   },
   {
-    "rank": 19,
+    "rank": 14,
     "name": "Hampton Park Morning Walk",
     "id": "hampton-park",
     "category": "hike",
@@ -1195,7 +1080,7 @@ const ACTIVITIES = [
     ]
   },
   {
-    "rank": 20,
+    "rank": 15,
     "name": "Waterfront Park Stroll",
     "id": "waterfront-park",
     "category": "hike",
@@ -1220,7 +1105,7 @@ const ACTIVITIES = [
     ]
   },
   {
-    "rank": 21,
+    "rank": 16,
     "name": "Charles Towne Landing Trails",
     "id": "charles-towne",
     "category": "hike",
@@ -1244,7 +1129,7 @@ const ACTIVITIES = [
     ]
   },
   {
-    "rank": 22,
+    "rank": 17,
     "name": "West Ashley Greenway",
     "id": "west-ashley-greenway",
     "category": "hike",
@@ -1269,7 +1154,7 @@ const ACTIVITIES = [
     ]
   },
   {
-    "rank": 23,
+    "rank": 18,
     "name": "South Carolina Aquarium",
     "id": "sc-aquarium",
     "category": "tour",
@@ -1292,7 +1177,7 @@ const ACTIVITIES = [
     ]
   },
   {
-    "rank": 24,
+    "rank": 19,
     "name": "The Battery & White Point Garden",
     "id": "the-battery",
     "category": "beach",
@@ -1315,7 +1200,7 @@ const ACTIVITIES = [
     ]
   },
   {
-    "rank": 25,
+    "rank": 20,
     "name": "Brittlebank Park",
     "id": "brittlebank-park",
     "category": "beach",
@@ -1339,7 +1224,7 @@ const ACTIVITIES = [
     ]
   },
   {
-    "rank": 26,
+    "rank": 21,
     "name": "Old South Carriage Co",
     "id": "carriage-ride",
     "category": "tour",
@@ -1362,7 +1247,7 @@ const ACTIVITIES = [
     ]
   },
   {
-    "rank": 27,
+    "rank": 22,
     "name": "Saltwater Cycle Party Boats",
     "id": "pedal-pub",
     "category": "boat",
@@ -1386,7 +1271,7 @@ const ACTIVITIES = [
     ]
   },
   {
-    "rank": 28,
+    "rank": 23,
     "name": "Painting with a Twist",
     "id": "paint-and-sip",
     "category": "class",
@@ -1409,30 +1294,7 @@ const ACTIVITIES = [
     ]
   },
   {
-    "rank": 29,
-    "name": "Prohibition Charleston",
-    "id": "prohibition",
-    "category": "nightlife",
-    "desc": "Speakeasy-style cocktail bar on King Street with live jazz, craft cocktails, and a hidden patio. The bach night out spot.",
-    "price": 15,
-    "duration": "1-3 hours",
-    "highlight": "\u{1F3B7} Speakeasy vibes \u2022 Live jazz \u2022 Craft cocktails \u2022 Hidden patio",
-    "walkTime": "6 min walk",
-    "details": "<b>Prohibition — Speakeasy Bar & Restaurant</b><br><br><b>Address:</b> 547 King Street<br><b>Phone:</b> (843) 459-7214<br><br><b>Hours:</b> Mon-Wed 4pm, Thu-Sun 11am. Happy Hour Mon-Thu 4-6pm.<br><br><b>Live Music:</b><br>• Sat/Sun Brunch: live bands (11am-2pm)<br>• Mon-Thu: rotating artists (8-11pm)<br>• Fri/Sat: Live DJs (10pm-2am, 23+)<br><br><b>Private Events:</b> 3 bookable areas, up to 150 people. Bottle service available.<br><br><b>Awards:</b> \"Best Downtown Bar\" and \"Best Cocktails\" — Charleston City Paper.<br><br><b>Tip:</b> Walk-ins encouraged. Brunch with live music is a great daytime option. Late-night DJs go til 2am (must be 23+).",
-    "url": "https://www.prohibitioncharleston.com/",
-    "lat": 32.7912,
-    "lng": -79.9403,
-    "photos": [
-      "https://cdn.prod.website-files.com/5f2b7226af66e051b0e6398d/5f3c3c5e8f5b523b33f0ff3d_bartender-1-1.jpg",
-      "https://cdn.prod.website-files.com/5f2b7226af66e051b0e6398d/5f3c3d5d19ad50db668e99ab_patio_prohib_chs_02_Jwb-1024x683.jpg",
-      "https://cdn.prod.website-files.com/5f2b7226af66e051b0e6398d/5f3c3a313a81575985812009_Schrute-sour_15_jwb-682x1024.jpg",
-      "https://cdn.prod.website-files.com/5f2b7226af66e051b0e6398d/65beae40c82767caefa3e15f_Gallery5.jpg",
-      "https://cdn.prod.website-files.com/5f2b7226af66e051b0e6398d/5f46d309d851a7890ae74be7_bar.jpg",
-      "https://cdn.prod.website-files.com/5f2b7226af66e051b0e6398d/5f468bfac7838672da6eb2a9_music.jpg"
-    ]
-  },
-  {
-    "rank": 30,
+    "rank": 24,
     "name": "Escape In 60",
     "id": "escape-in-60",
     "category": "fun",
@@ -1455,7 +1317,7 @@ const ACTIVITIES = [
     ]
   },
   {
-    "rank": 31,
+    "rank": 25,
     "name": "Blu Gorilla Tattoo",
     "id": "blu-gorilla",
     "category": "fun",
@@ -1479,7 +1341,7 @@ const ACTIVITIES = [
     ]
   },
   {
-    "rank": 32,
+    "rank": 26,
     "name": "Charleston City Market",
     "id": "city-market",
     "category": "tour",
@@ -1502,49 +1364,7 @@ const ACTIVITIES = [
     ]
   },
   {
-    "rank": 33,
-    "name": "The Bangkok Lounge — Karaoke",
-    "id": "bangkok-karaoke",
-    "category": "nightlife",
-    "desc": "Karaoke bar on King Street, 2nd floor. Karaoke nightly at 8:30pm, no cover. Sing your hearts out with the crew.",
-    "price": 0,
-    "duration": "1-3 hours",
-    "highlight": "\u{1F3A4} Nightly karaoke \u2022 King Street \u2022 No cover \u2022 Private parties available",
-    "walkTime": "1 min walk",
-    "details": "<b>The Bangkok Lounge — Karaoke Bar</b><br><br><b>Address:</b> 353 King St, 2nd Floor<br><b>Hours:</b> Nightly 5pm-2am. Karaoke starts 6pm.<br><br><b>Theme Nights:</b><br>• Monday: Half-Priced Punch Bowls<br>• Tuesday: $3 Bourbon<br>• Wednesday: Country Karaoke<br>• Thursday: Hip Hop Karaoke<br>• Saturday: Opens at Noon<br>• Sunday: 90s Karaoke<br><br><b>Drinks:</b> Bangkok Punch, frozen drinks, daily specials.<br><br><b>Bach Tips:</b> Top bachelorette activity in Charleston. Monday's half-priced punch bowls and Thursday's hip hop karaoke are crowd favorites. The whole bar sings along — no private room needed!",
-    "url": "https://www.thebangkoklounge.com/",
-    "lat": 32.7870,
-    "lng": -79.9381,
-    "photos": [
-      "https://static.wixstatic.com/media/fbb480_7feb98abb3654879a5853a108f9e7174~mv2.jpeg",
-      "https://static.wixstatic.com/media/fbb480_c4ee32eaa1944c229820b35d75670fd6~mv2.jpg",
-      "https://static.wixstatic.com/media/fbb480_9540f5dc589d456c89b6a824bf90c144~mv2.jpeg",
-      "https://static.wixstatic.com/media/fbb480_ef3110573cec4c5481de5782485dabcd~mv2.jpg",
-      "https://static.wixstatic.com/media/fbb480_09c81f2d9175413287df3c0a8a29e741~mv2_d_1440_1440_s_2.jpg"
-    ]
-  },
-  {
-    "rank": 34,
-    "name": "Theatre 99 — Improv Comedy",
-    "id": "theatre-99",
-    "category": "fun",
-    "desc": "Charleston's home for improv comedy. Shows Wed-Sat at 8pm. Cheap, hilarious, and a perfect pre-bar activity. Cash only at the door.",
-    "price": 10,
-    "duration": "1-1.5 hours",
-    "highlight": "\u{1F923} Live improv \u2022 Wed-Sat 8pm \u2022 $5-12 \u2022 BYOB-friendly area",
-    "walkTime": "8 min walk",
-    "details": "<b>Theatre 99 — Improv Comedy</b><br><br><b>Address:</b> 280 Meeting Street, Charleston, SC 29401<br><b>Phone:</b> 843-853-6687<br><br><b>Shows:</b> Wed-Sat at 8pm<br>• Wednesdays: 3 acts of improv & sketch<br>• Thursdays: \"Laugh for a Lincoln\" — just $5!<br>• Fri/Sat: \"Take the Funny and Run\" flagship show<br><br><b>Bar (Cash Only):</b> Local craft beers $5-7, wine $6/glass, ATM in lobby.<br><br><b>Fun Extras:</b> Buy the Cast a Round ($20), Birthday Shout-out ($10) — make the bride the star!<br><br><b>Private Shows:</b> Rent the theatre for a private show, or hire them at your location.<br><br><b>Tip:</b> Interactive improv means the bride-to-be will likely get pulled on stage. Shows ~90 min, perfect pre-dinner activity.",
-    "url": "https://theatre99.com/",
-    "lat": 32.7838,
-    "lng": -79.9319,
-    "photos": [
-      "https://theatre99.com/wp-content/uploads/2019/08/CrowdLaughing.1.jpg",
-      "https://theatre99.com/wp-content/uploads/2019/08/THN2024.bar_-300x225.jpg",
-      "https://theatre99.com/wp-content/uploads/2019/08/StudentJam.no_.knife_-300x297.png"
-    ]
-  },
-  {
-    "rank": 35,
+    "rank": 27,
     "name": "Tidal Wave Jet Skis",
     "id": "jet-skis",
     "category": "boat",
