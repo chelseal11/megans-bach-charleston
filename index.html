@@ -1404,21 +1404,6 @@ function renderCards() {
           ${l.hasHotTub ? '<span class="amenity-badge hot-tub">\u2668\uFE0F Hot Tub</span>' : ''}
           ${l.hasParking ? '<span class="amenity-badge parking">\u{1F17F}\uFE0F Free Parking</span>' : ''}
         </div>` : ''}
-        <div class="card-score-badge">Score: ${l.score.toFixed(1)} / 10</div>
-        <div class="score-bars">
-          <div class="score-bar-row">
-            <span class="score-bar-label">Location</span>
-            <div class="score-bar-track"><div class="score-bar-fill location" style="width:${l.loc*10}%"></div></div>
-          </div>
-          <div class="score-bar-row">
-            <span class="score-bar-label">Value</span>
-            <div class="score-bar-track"><div class="score-bar-fill value" style="width:${l.val*10}%"></div></div>
-          </div>
-          <div class="score-bar-row">
-            <span class="score-bar-label">Bach Fit</span>
-            <div class="score-bar-track"><div class="score-bar-fill bach" style="width:${l.bach*10}%"></div></div>
-          </div>
-        </div>
         <div class="card-details">
           <div><span class="label">Layout</span><br>${l.bedrooms}BR \u2022 ${l.baths} ba \u2022 ${l.guests} guests</div>
           <div><span class="label">Rating</span><br>${ratingStr}</div>
