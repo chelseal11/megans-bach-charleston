@@ -675,10 +675,10 @@ body {
 
 <div class="tab-bar">
   <a href="index.html">Stays</a>
-  <a href="activities.html">Daytime</a>
-  <a href="night.html">Nightlife</a>
   <a href="food.html" class="active">Brunch</a>
+  <a href="activities.html">Daytime</a>
   <a href="dinner.html">Dinner</a>
+  <a href="night.html">Nightlife</a>
 </div>
 <div class="header">
   <h1>Megan's <span>Charleston</span> Bach &mdash; Brunch</h1>
@@ -842,7 +842,109 @@ const ACTIVITIES = [
       "https://images.getbento.com/accounts/4b58992d4c196afb15a7bfcaaa85fc7b/media/images/66552lpbreakfast.jpg?w=1200&fit=crop&auto=compress,format",
       "https://images.getbento.com/accounts/4b58992d4c196afb15a7bfcaaa85fc7b/media/images/77666LittlePalm-Spring24-012.jpg?w=1200&fit=crop&auto=compress,format"
     ]
-  }
+  },
+  {
+    "name": "Millers All Day",
+    "id": "millers-all-day",
+    "category": "brunch",
+    "desc": "Trendy, photogenic King Street spot in a restored building. Creative brunch cocktails and Southern-inspired menu. Very popular weekend brunch.",
+    "price": 25,
+    "duration": "1.5-2 hours",
+    "groupSize": "Reservations for 10+",
+    "highlight": "Creative cocktails • King Street • Photogenic space • Weekend hot spot",
+    "walkTime": "10 min walk",
+    "details": "<b>Millers All Day</b><br><br><b>Address:</b> 120 King Street, Charleston, SC 29401<br><br><b>About:</b> Trendy all-day restaurant in a beautifully restored building on King Street. Known for creative brunch drinks and Southern-inspired dishes.<br><br><b>Tip:</b> Reservations strongly recommended for a group of 10, especially weekends. Book well in advance.",
+    "url": "https://millersallday.com/",
+    "lat": 32.781,
+    "lng": -79.933,
+    "photos": [],
+    "rank": 5
+},
+  {
+    "name": "The Darling Oyster Bar",
+    "id": "darling-oyster-brunch",
+    "category": "brunch",
+    "desc": "Chic, Instagram-worthy raw bar in a restored 115-year-old storefront on Upper King. Excellent brunch cocktails and seafood.",
+    "price": 30,
+    "duration": "1.5-2 hours",
+    "groupSize": "Semi-private events available",
+    "highlight": "Oysters & seafood • Upper King • Instagram-worthy • Craft cocktails",
+    "walkTime": "8 min walk",
+    "details": "<b>The Darling Oyster Bar</b><br><br><b>Address:</b> 513 King Street, Charleston, SC 29403<br><br><b>Tip:</b> For group events, email chsinfo@thedarling.com. Book early.",
+    "url": "https://thedarling.com/",
+    "lat": 32.7895,
+    "lng": -79.938,
+    "photos": [],
+    "rank": 6
+},
+  {
+    "name": "Husk — Weekend Brunch",
+    "id": "husk-brunch",
+    "category": "brunch",
+    "desc": "James Beard Award-winning restaurant in a beautiful historic house. Elevated Southern brunch with a daily-changing locally sourced menu.",
+    "price": 35,
+    "duration": "1.5-2 hours",
+    "groupSize": "Book via Resy for 10",
+    "highlight": "James Beard winner • Historic house • Farm-to-table • Queen Street",
+    "walkTime": "12 min walk",
+    "details": "<b>Husk</b><br><br><b>Address:</b> 76 Queen Street, Charleston, SC 29401<br><br><b>Tip:</b> Reserve on Resy well in advance. Weekend brunch is extremely popular.",
+    "url": "https://huskrestaurant.com/",
+    "lat": 32.779,
+    "lng": -79.931,
+    "photos": [],
+    "rank": 7
+},
+  {
+    "name": "Toast! All Day",
+    "id": "toast-all-day",
+    "category": "brunch",
+    "desc": "Casual, colorful brunch spot known for boozy brunch cocktails and mimosa flights. Laid-back and affordable, perfect for groups.",
+    "price": 18,
+    "duration": "1-1.5 hours",
+    "groupSize": "Call ahead for 10",
+    "highlight": "Mimosa flights • Casual & fun • Affordable • Meeting Street",
+    "walkTime": "10 min walk",
+    "details": "<b>Toast! All Day</b><br><br><b>Address:</b> 155 Meeting Street, Charleston, SC 29401<br><br><b>Tip:</b> Walk-in friendly but call ahead for 10 people.",
+    "url": "https://toast-online.com/",
+    "lat": 32.7805,
+    "lng": -79.931,
+    "photos": [],
+    "rank": 8
+},
+  {
+    "name": "82 Queen",
+    "id": "82-queen-brunch",
+    "category": "brunch",
+    "desc": "Beautiful courtyard dining with classic Charleston charm. Strong Southern brunch menu and great cocktails. Request the courtyard for photos.",
+    "price": 28,
+    "duration": "1.5-2 hours",
+    "groupSize": "Courtyard seats groups",
+    "highlight": "Courtyard dining • Classic Southern • Queen Street • Cocktails",
+    "walkTime": "14 min walk",
+    "details": "<b>82 Queen</b><br><br><b>Address:</b> 82 Queen Street, Charleston, SC 29401<br><br><b>Tip:</b> Request courtyard seating for the group — gorgeous for photos. Reserve ahead.",
+    "url": "https://82queen.com/",
+    "lat": 32.7788,
+    "lng": -79.931,
+    "photos": [],
+    "rank": 9
+},
+  {
+    "name": "Hall's Chophouse — Sunday Gospel Brunch",
+    "id": "halls-brunch",
+    "category": "brunch",
+    "desc": "Upscale brunch with live gospel music on Sundays. Outstanding food and service. One of the hardest brunch reservations in Charleston.",
+    "price": 45,
+    "duration": "1.5-2 hours",
+    "groupSize": "Reserve weeks ahead for 10",
+    "highlight": "Live gospel music • Upscale • Special occasion • King Street",
+    "walkTime": "6 min walk",
+    "details": "<b>Hall's Chophouse</b><br><br><b>Address:</b> 434 King Street, Charleston, SC 29403<br><br><b>Tip:</b> Sunday gospel brunch is their signature. Reserve weeks in advance for a group of 10.",
+    "url": "https://hallschophouse.com/",
+    "lat": 32.788,
+    "lng": -79.938,
+    "photos": [],
+    "rank": 10
+}
 ];
 
 // ─── STATE ───
