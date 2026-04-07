@@ -1238,6 +1238,7 @@ function renderCards() {
         <div class="card-highlight">${a.highlight}</div>
         <div class="card-actions">
           <button class="action-icon-btn" onclick="event.stopPropagation(); openGallery('${a.id}')" title="Photos">\u{1F4F7}</button>
+          \${a.foodPhotos && a.foodPhotos.length > 0 ? \`<button class="action-icon-btn" onclick="event.stopPropagation(); openFoodGallery('\${a.id}')" title="Food & Drinks">\u{1F37D}\uFE0F</button>\` : ''}
           <button class="action-icon-btn" onclick="event.stopPropagation(); openMenu('${a.id}')" title="Menu">\u{1F4CB}</button>
           <div class="action-divider"></div>
           <button class="vote-btn ${myVote === 'love' ? 'selected' : ''}"
@@ -1503,6 +1504,19 @@ function galleryNav(dir) {
   img.style.opacity = '0';
   setTimeout(() => { img.src = galleryPhotos[galleryIndex]; img.style.opacity = '1'; }, 150);
   document.getElementById('galleryCounter').textContent = (galleryIndex + 1) + ' / ' + galleryPhotos.length;
+}
+
+
+function openFoodGallery(activityId) {
+  const a = ACTIVITIES.find(x => x.id === activityId);
+  if (!a || !a.foodPhotos || a.foodPhotos.length === 0) return;
+  galleryPhotos = a.foodPhotos;
+  galleryIndex = 0;
+  document.getElementById('galleryTitle').textContent = a.name + ' — Food & Drinks';
+  document.getElementById('galleryImg').src = galleryPhotos[0];
+  document.getElementById('galleryCounter').textContent = '1 / ' + galleryPhotos.length;
+  document.getElementById('galleryOverlay').classList.add('show');
+  document.body.style.overflow = 'hidden';
 }
 
 // ─── MENU/INFO MODAL ───
