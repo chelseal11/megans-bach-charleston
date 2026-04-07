@@ -235,15 +235,21 @@ body {
   color: var(--charcoal);
 }
 .card-price small { font-weight: 400; color: #999; font-size: 0.75rem; }
-.card-link {
-  display: inline-block;
-  margin-top: 6px;
-  font-size: 0.75rem;
-  color: var(--gold-dark);
-  text-decoration: none;
-  font-weight: 600;
+.card-actions {
+  display: flex; align-items: center; gap: 6px; margin-top: 8px;
+  padding-top: 8px; border-top: 1px dashed var(--blush);
 }
-.card-link:hover { text-decoration: underline; }
+.card-actions .rank-voters {
+  width: 100%; margin-top: 2px;
+}
+.action-icon-btn {
+  width: 34px; height: 34px; border-radius: 50%;
+  border: 2px solid var(--gold); background: var(--gold-light);
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  font-size: 1rem; transition: all 0.2s; flex-shrink: 0;
+}
+.action-icon-btn:hover { background: var(--gold); transform: translateY(-1px); }
+.action-divider { width: 1px; height: 24px; background: var(--blush-dark); margin: 0 2px; flex-shrink: 0; }
 
 /* ─── PHOTO CAROUSEL ─── */
 .carousel {
@@ -343,9 +349,7 @@ body {
 .score-bar-fill.bach { background: linear-gradient(90deg, var(--blush), var(--blush-dark)); }
 
 /* ─── VOTING ─── */
-.vote-section { margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--blush); }
-.vote-label { font-size: 0.7rem; color: #999; margin-bottom: 4px; }
-.vote-btns { display: flex; gap: 6px; }
+.vote-btns { display: flex; gap: 5px; }
 .vote-btn {
   font-size: 0.8rem;
   font-weight: 700;
@@ -546,11 +550,6 @@ body {
   font-family: 'Playfair Display', serif; color: white;
   font-size: 1.1rem; flex: 1;
 }
-.gallery-airbnb-link {
-  color: var(--gold); font-size: 0.85rem; font-weight: 600;
-  text-decoration: none; white-space: nowrap;
-}
-.gallery-airbnb-link:hover { text-decoration: underline; }
 .gallery-close {
   background: none; border: none; color: white;
   font-size: 2rem; cursor: pointer; padding: 0 8px; line-height: 1;
@@ -578,14 +577,30 @@ body {
   text-align: center; color: rgba(255,255,255,0.7);
   font-size: 0.85rem; padding: 8px; font-weight: 500;
 }
-.card-gallery-btn {
-  display: inline-block; background: var(--gold); color: white;
-  padding: 8px 16px; border-radius: 20px; font-weight: 600;
-  font-size: 0.8rem; cursor: pointer; border: none;
-  font-family: 'Montserrat', sans-serif; letter-spacing: 0.3px;
-  transition: all 0.2s; margin-top: 4px;
+/* ─── INFO MODAL ─── */
+.info-overlay {
+  display: none; position: fixed; inset: 0; z-index: 10000;
+  background: rgba(0,0,0,0.6); align-items: center; justify-content: center;
 }
-.card-gallery-btn:hover { background: var(--gold-dark); transform: translateY(-1px); }
+.info-overlay.show { display: flex; }
+.info-modal {
+  background: var(--cream); border-radius: 16px; max-width: 500px; width: 90%;
+  max-height: 80vh; overflow-y: auto; padding: 28px; position: relative;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+.info-modal h2 {
+  font-family: 'Playfair Display', serif; font-size: 1.3rem;
+  margin-bottom: 4px; color: var(--charcoal);
+}
+.info-modal .info-subtitle { color: var(--gold-dark); font-size: 0.85rem; font-weight: 600; margin-bottom: 16px; }
+.info-modal .info-desc { font-size: 0.9rem; line-height: 1.6; color: #444; margin-bottom: 16px; }
+.info-modal .info-detail { display: flex; gap: 8px; align-items: center; padding: 8px 0; border-top: 1px solid var(--blush); font-size: 0.85rem; }
+.info-modal .info-detail-icon { font-size: 1.1rem; width: 28px; text-align: center; flex-shrink: 0; }
+.info-modal .info-close {
+  position: absolute; top: 12px; right: 16px; background: none; border: none;
+  font-size: 1.5rem; cursor: pointer; color: #999; line-height: 1;
+}
+.info-modal .info-close:hover { color: var(--charcoal); }
 </style>
 </head>
 <body>
@@ -1026,6 +1041,34 @@ const ALL_PHOTOS = {
   ],
 };
 
+const LISTING_INFO = {
+  '1067027116202514008': {
+    description: 'Welcome to this three-story retreat  where historic Charleston charm and modern design meet. 4 kings, 1 queens, and an extra full bed offer plush sleeping arrangements, while en-suite bathrooms in each bedroom ensure privacy and convenience. With multiple piazzas, 3 off-street parking spaces, and a prime location near restaurants, shopping, and historical sights, a fantastic stay is guaranteed. Private pool & outdoor sitting area newly constructed! \nPermit # OP2025-06192',
+    checkin: '4:00 PM',
+    checkout: '10:00 AM',
+  },
+  '1644553657110726515': {
+    description: 'Welcome to The Sullivan & Palm, a beautifully restored Victorian home in the heart of downtown Charleston. This spacious 5-bedroom retreat blends historic charm with modern comforts, featuring stylish living spaces, a chef\'s kitchen, and inviting porches. Step outside to your private courtyard with a rare downtown luxury—a saltwater pool—perfect for relaxing after a day exploring Charleston\'s restaurants, shops, and historic sights just minutes away.',
+    checkin: '4:00 PM',
+    checkout: '10:00 AM',
+  },
+  '1062996081939528524': {
+    description: 'Experience luxury living just steps from King Street in this chic penthouse retreat. Featuring sleek design, refined finishes, and a serene setting atop a renovated building, it offers the perfect balance of sophistication and convenience. Explore boutiques, dining, and Charleston\'s vibrant culture at your doorstep.',
+    checkin: '4:00 PM',
+    checkout: '10:00 AM',
+  },
+  '1142370073998644614': {
+    description: 'Step into timeless elegance and Southern charm at The Big Palmetto, a stunning 4-bedroom, 4.5-bath retreat that blends historic architecture with modern comforts. Perfect for families, friends, or anyone seeking history, warmth, and a touch of grandeur, it offers a stay both luxurious and inviting. Nestled in a storied neighborhood surrounded by classic Charleston homes, you\'ll enjoy easy access to local dining, boutiques, landmarks, and a short ride to King Street, parks, and museums.',
+    checkin: '4:00 PM',
+    checkout: '10:00 AM',
+  },
+  '998569848645397009': {
+    description: 'Experience Charleston in style at this 5BR, 4.5BA home where historic charm meets modern design. Each king bedroom offers comfort, three with private en-suites. Gather in the spacious living areas or cook in the fully stocked kitchen before exploring King Street just steps away. With Smart TVs, high-speed WiFi, and on-site parking, this professionally designed retreat is ideal for groups seeking both luxury and convenience.',
+    checkin: '4:00 PM',
+    checkout: '10:00 AM',
+  },
+};
+
 // Upper King reference point
 const UPPER_KING = { lat: 32.7876, lng: -79.9378 };
 
@@ -1310,12 +1353,10 @@ function renderCards() {
           <div><span class="label">Per Person</span><br><span class="card-price">$${Math.round(l.price / 10).toLocaleString()}</span> <small>($${ppn}/night)</small></div>
         </div>
         <div class="card-highlight">${l.highlight}</div>
-        <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
-          <button class="card-gallery-btn" onclick="event.stopPropagation(); openGallery('${l.id}')">See the Space \u2192</button>
-          <a class="card-link" href="${l.url}" target="_blank" onclick="event.stopPropagation()" style="margin:0;">View on Airbnb</a>
-        </div>
-        <div class="vote-section">
-          <div class="vote-label">Your ranking</div>
+        <div class="card-actions">
+          <button class="action-icon-btn" onclick="event.stopPropagation(); openGallery('${l.id}')" title="Photos">\u{1F4F7}</button>
+          <button class="action-icon-btn" onclick="event.stopPropagation(); openInfo('${l.id}')" title="Details">\u{1F4CB}</button>
+          <div class="action-divider"></div>
           <div class="vote-btns">
             ${RANKS.map(r => `
               <button class="vote-btn ${myVote === r.key ? 'selected' : ''}"
@@ -1323,8 +1364,8 @@ function renderCards() {
                       title="${r.label} choice">${r.key}</button>
             `).join('')}
           </div>
-          ${rankVoters ? '<div class="rank-voters">' + rankVoters + '</div>' : ''}
         </div>
+        ${rankVoters ? '<div class="rank-voters">' + rankVoters + '</div>' : ''}
       </div>
     </div>`;
   }).join('');
@@ -1501,6 +1542,37 @@ function calcVoteScore(voteObj) {
   return total;
 }
 
+// ─── INFO MODAL ───
+function openInfo(listingId) {
+  const l = LISTINGS.find(x => x.id === listingId);
+  if (!l) return;
+  const info = LISTING_INFO[listingId] || {};
+  const ppn = Math.round(l.price / 10 / 3);
+
+  document.getElementById('infoTitle').textContent = l.name;
+  document.getElementById('infoSubtitle').textContent =
+    l.bedrooms + ' bedrooms \u2022 ' + l.baths + ' baths \u2022 sleeps ' + l.guests;
+  document.getElementById('infoDesc').textContent = info.description || '';
+
+  const details = [];
+  details.push({ icon: '\u{1F4B0}', text: '$' + l.price.toLocaleString() + ' total \u2022 $' + Math.round(l.price / 10) + '/person \u2022 $' + ppn + '/person/night' });
+  if (l.rating) details.push({ icon: '\u2B50', text: l.rating + ' stars (' + l.reviews + ' reviews)' });
+  details.push({ icon: '\u{1F552}', text: 'Check-in: ' + (info.checkin || '4:00 PM') + ' \u2022 Checkout: ' + (info.checkout || '10:00 AM') });
+  if (l.hasPool) details.push({ icon: '\u{1F3CA}', text: 'Private pool' });
+  if (l.hasParking) details.push({ icon: '\u{1F17F}\uFE0F', text: 'Free parking' });
+  details.push({ icon: '\u{1F4CD}', text: l.highlight });
+
+  document.getElementById('infoDetails').innerHTML = details.map(d =>
+    '<div class="info-detail"><span class="info-detail-icon">' + d.icon + '</span><span>' + d.text + '</span></div>'
+  ).join('');
+
+  document.getElementById('infoOverlay').classList.add('show');
+}
+
+function closeInfo() {
+  document.getElementById('infoOverlay').classList.remove('show');
+}
+
 // ─── PHOTO GALLERY MODAL ───
 let galleryPhotos = [];
 let galleryIndex = 0;
@@ -1515,10 +1587,8 @@ function openGallery(listingId) {
   const img = document.getElementById('galleryImg');
   const counter = document.getElementById('galleryCounter');
   const title = document.getElementById('galleryTitle');
-  const link = document.getElementById('galleryLink');
 
   title.textContent = l.name;
-  link.href = l.url;
   img.src = galleryPhotos[0];
   counter.textContent = `1 / ${galleryPhotos.length}`;
   overlay.classList.add('show');
@@ -1546,6 +1616,7 @@ document.addEventListener('keydown', e => {
   if (e.key === 'Escape') {
     document.getElementById('resultsOverlay').classList.remove('show');
     closeGallery();
+    closeInfo();
   }
   if (document.getElementById('galleryOverlay').classList.contains('show')) {
     if (e.key === 'ArrowLeft') galleryNav(-1);
@@ -1554,11 +1625,21 @@ document.addEventListener('keydown', e => {
 });
 </script>
 
+<!-- Info Modal -->
+<div class="info-overlay" id="infoOverlay" onclick="closeInfo()">
+  <div class="info-modal" onclick="event.stopPropagation()">
+    <button class="info-close" onclick="closeInfo()">&times;</button>
+    <h2 id="infoTitle"></h2>
+    <div class="info-subtitle" id="infoSubtitle"></div>
+    <div class="info-desc" id="infoDesc"></div>
+    <div id="infoDetails"></div>
+  </div>
+</div>
+
 <!-- Photo Gallery Modal -->
 <div class="gallery-overlay" id="galleryOverlay">
   <div class="gallery-header">
     <span class="gallery-title" id="galleryTitle"></span>
-    <a class="gallery-airbnb-link" id="galleryLink" href="#" target="_blank">View on Airbnb</a>
     <button class="gallery-close" onclick="closeGallery()">&times;</button>
   </div>
   <div class="gallery-body" onclick="closeGallery()">
