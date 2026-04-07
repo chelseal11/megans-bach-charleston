@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Megan's Charleston Bach — Nightlife</title>
+<title>Megan's Charleston Bach — Dinner</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
@@ -676,12 +676,12 @@ body {
 <div class="tab-bar">
   <a href="index.html">Stays</a>
   <a href="activities.html">Daytime</a>
-  <a href="night.html" class="active">Nightlife</a>
+  <a href="night.html">Nightlife</a>
   <a href="food.html">Brunch</a>
-  <a href="dinner.html">Dinner</a>
+  <a href="dinner.html" class="active">Dinner</a>
 </div>
 <div class="header">
-  <h1>Megan's <span>Charleston</span> Bach &mdash; Nightlife</h1>
+  <h1>Megan's <span>Charleston</span> Bach &mdash; Dinner</h1>
   <div class="header-actions">
     <span id="voterDisplay" style="font-size:0.8rem; color:var(--gold-dark); font-weight:600;"></span>
     <button class="header-btn outline" onclick="changeVoter()">Change Name</button>
@@ -751,182 +751,136 @@ body {
 const ACTIVITIES = [
   {
     "rank": 1,
-    "name": "Republic Garden & Lounge",
-    "id": "republic-lounge",
-    "category": "nightlife",
-    "desc": "Upscale lounge on King Street with outdoor garden, craft cocktails, bottle service, and live DJs. The go-to bach nightlife spot.",
-    "price": 30,
-    "duration": "Evening",
-    "groupSize": "Any size",
-    "highlight": "\u{1F57A} King Street \u2022 Outdoor garden \u2022 Bottle service \u2022 Live DJs",
-    "details": "<b>Republic Garden & Lounge</b><br><br><b>Address:</b> 462 King Street, Charleston, SC 29403<br><br><b>What to Expect:</b><br>• DJ-driven nightclub with dance floor<br>• Indoor/outdoor spaces including a garden area<br>• Craft cocktails and bottle service<br>• Upper King Street — heart of the nightlife district<br><br><b>Bach Tips:</b> Great late-night stop during a bar crawl. Inquire about VIP/bottle service for groups. Check Instagram (@republiccharleston) for events and DJ lineups.",
-    "url": "https://www.republiccharleston.com/",
-    "lat": 32.7873,
-    "lng": -79.9379,
+    "name": "Hall's Chophouse",
+    "id": "halls-chophouse",
+    "category": "dinner",
+    "desc": "Premier steakhouse on King Street. Live music, incredible steaks, and the kind of service that makes you feel like a VIP. The celebration spot.",
+    "price": 100,
+    "duration": "2-3 hours",
+    "highlight": "\u{1F969} King Street \u2022 Live music \u2022 VIP service \u2022 Celebration vibes",
+    "walkTime": "2 min walk",
+    "details": "<b>Hall's Chophouse</b><br><br><b>Address:</b> 434 King Street, Charleston, SC 29403<br><b>Phone:</b> (843) 727-0090<br><br><b>Hours:</b><br>• Dinner: Mon-Sat 4-11pm/12am, Sun 4:30-11pm<br>• Saturday Lunch: 11am-2:30pm<br>• Sunday Brunch: 10am-2pm<br><br><b>About:</b> Family-owned since 2009. Dry-aged steaks, She Crab Soup, seafood tower, live music. Consistently top 10 in Charleston.<br><br><b>Reservations:</b> Book via Resy. <b>Highly recommended</b> — tables fill fast on weekends.<br><br><b>Tip:</b> Staff excels at making celebrations memorable. Expect $75-150+/person. Sunday Brunch is a great alternative if dinner reservations are tough.",
+    "url": "https://hallschophousecharleston.com/",
+    "lat": 32.7885,
+    "lng": -79.9378,
     "photos": [
-      "https://static.spotapps.co/web/republicreign--com/custom/background.jpg",
-      "https://static.spotapps.co/web/republicreign--com/custom/our_garden_new.jpg",
-      "https://static.spotapps.co/web/republicreign--com/custom/video_poster_new.jpg",
-      "https://static.spotapps.co/web/republicreign--com/custom/newsletter_bg.jpg",
-      "https://static.spotapps.co/web/republicreign--com/custom/reviews_bg.jpg"
+      "https://static.spotapps.co/website_images/ab_websites/15819_website/food_back.jpg",
+      "https://static.spotapps.co/website_images/ab_websites/15819_website/parties_left_new.jpg",
+      "https://static.spotapps.co/website_images/ab_websites/15819_website/section_back.jpg",
+      "https://static.spotapps.co/website_images/ab_websites/15819_website/video_poster_1.jpg",
+      "https://static.spotapps.co/website_images/ab_websites/15819_website/reviews_back.jpg",
+      "https://static.spotapps.co/website_images/ab_websites/15819_website/about_main.jpg"
     ]
   },
   {
     "rank": 2,
-    "name": "Uptown Social Rooftop",
-    "id": "uptown-social",
-    "category": "nightlife",
-    "desc": "Charleston's hippest rooftop bar. Famous frozen cocktails, live music nightly, and amazing pizzas. Multi-level venue with great views.",
-    "price": 25,
-    "duration": "Evening",
-    "groupSize": "Any size",
-    "highlight": "\u{1F305} Rooftop views \u2022 Live music \u2022 Frozen cocktails \u2022 Pizza",
-    "details": "<b>Uptown Social</b><br><br><b>Address:</b> 587 King Street, Charleston, SC 29403<br><b>Phone:</b> (843) 793-1837<br><br><b>Hours:</b> Mon-Thu 12PM-2AM, Fri-Sun 11:30AM-2AM<br><br><b>Features:</b><br>• 48 TVs, live music every night, DJs<br>• Iconic \"Social Butterfly\" mural — perfect for group photos!<br>• 12\" bar pies by Brooklyn pizza legend Anthony Falco<br>• Private event rooms available<br>• Skip the line via LineLeap app<br><br><b>Tip:</b> Great for groups wanting food, drinks, and dancing all in one spot. Make reservations online for groups.",
-    "url": "https://www.uptownsocialchs.com/",
-    "lat": 32.7878,
-    "lng": -79.9375,
+    "name": "Stars Rooftop & Grill Room",
+    "id": "stars-rooftop",
+    "category": "dinner",
+    "desc": "360-degree rooftop restaurant on King Street. Wood-fired grill, private dining rooms, and a legendary Sunday brunch buffet ($22.50/pp).",
+    "price": 42,
+    "duration": "2 hours",
+    "highlight": "\u{1F305} 360\u00B0 rooftop \u2022 Sunday brunch buffet \u2022 Private dining \u2022 King Street",
+    "walkTime": "3 min walk",
+    "details": "<b>Stars Rooftop & Grill Room</b><br><br><b>Address:</b> 495 King Street<br><b>Phone:</b> (843) 577-0100<br><br><b>Hours:</b> Dinner Sun-Sat. Brunch Sat & Sun 10am-2:30pm. Rooftop Bar Mon-Thu 3pm, Fri-Sun 12pm.<br><br><b>Private Events:</b><br>• Full rooftop: up to 150 seated<br>• Wilkinson Room: 24-75 seated (exposed brick, King St views)<br>• Main banquet: up to 140<br><br><b>Tip:</b> Walk-in friendly at rooftop bar. Weekend brunch is perfect for bach groups. Consider booking private rooftop area for cocktail hour.",
+    "url": "https://starsrestaurant.com/",
+    "lat": 32.7897,
+    "lng": -79.9423,
     "photos": [
-      "https://images.getbento.com/accounts/7e7099f99447a3ca8a173829176a5383/media/images/15249DSC07597.JPG?w=1200&fit=max&auto=compress,format",
-      "https://images.getbento.com/accounts/7e7099f99447a3ca8a173829176a5383/media/images/25577DSC04872.jpg?w=1200&fit=max&auto=compress,format",
-      "https://images.getbento.com/accounts/7e7099f99447a3ca8a173829176a5383/media/images/27270IMG_4984-2.jpg?w=1200&fit=max&auto=compress,format",
-      "https://images.getbento.com/accounts/7e7099f99447a3ca8a173829176a5383/media/images/43399UptownSocialEditsJan31-38_1.jpg?w=1200&fit=max&auto=compress,format",
-      "https://images.getbento.com/accounts/7e7099f99447a3ca8a173829176a5383/media/images/8035UptownEventsSpace-4764.jpg?w=1200&fit=max&auto=compress,format"
+      "https://starsrestaurant.com/wp-content/uploads/2022/09/Rooftop-Large-Image.jpeg",
+      "https://starsrestaurant.com/wp-content/uploads/2022/09/Hero-Image.jpeg",
+      "https://starsrestaurant.com/wp-content/uploads/2022/11/ZT7A0646-1-scaled.jpg",
+      "https://starsrestaurant.com/wp-content/uploads/2022/12/Stars-resturant-Bar-at-Charleston.webp",
+      "https://starsrestaurant.com/wp-content/uploads/2022/11/ZT7A0788-scaled.jpg",
+      "https://starsrestaurant.com/wp-content/uploads/2022/09/Private-Dining-Large-Image.jpeg"
     ]
   },
   {
     "rank": 3,
-    "name": "Blind Tiger Pub",
-    "id": "blind-tiger",
-    "category": "nightlife",
-    "desc": "Award-winning historic pub voted 'Best Bar in Charleston' multiple times. Beautiful patio setting, perfect for a chill night out.",
-    "price": 20,
-    "duration": "Evening",
-    "groupSize": "Any size",
-    "highlight": "\u{1F3C6} Best bar in CHS \u2022 Historic building \u2022 Patio \u2022 Craft cocktails",
-    "driveTime": "5 min",
-    "uberEstimate": "$9-10",
-    "details": "<b>Blind Tiger Pub</b><br><br><b>Address:</b> 36-38 Broad Street, Charleston, SC 29401<br><b>Phone:</b> (843) 577-0088<br><br><b>What to Expect:</b><br>• Beautiful outdoor courtyard — one of the best patios in Charleston<br>• Historic building dating to 1803<br>• Full bar with craft cocktails and local beers<br>• Casual, laid-back atmosphere<br>• No cover charge<br><br><b>Bach Tips:</b> Gorgeous courtyard for group photos. Perfect first stop or afternoon drinks before heading to King Street nightlife. Courtyard fills up on weekends — arrive early.",
-    "url": "https://blindtigerpub.com/",
-    "lat": 32.7775,
-    "lng": -79.9315,
+    "name": "Ritual Rooftop",
+    "id": "ritual",
+    "category": "dinner",
+    "desc": "Tulum-inspired rooftop at King & Calhoun. Shareable plates, craft cocktails, DJ nights. Open til 2am Fri/Sat. Weekend brunch too.",
+    "price": 40,
+    "duration": "2 hours",
+    "highlight": "\u{1F334} Tulum vibes \u2022 Largest rooftop in CHS \u2022 DJ nights \u2022 Weekend brunch",
+    "walkTime": "3 min walk",
+    "details": "<b>Ritual Rooftop Restaurant & Lounge</b><br><br><b>Address:</b> 145 Calhoun Street, Unit 301<br><b>Phone:</b> (843) 410-1747<br><b>Email:</b> vip@ritualchs.com<br><br><b>What It Is:</b> Rooftop restaurant by day, nightclub by night. Part of the Kenner Group.<br><br><b>Features:</b> Full menu, DJ & dancing, VIP tables, private events.<br><br><b>Bach Tips:</b> One of the few true nightclub options downtown. Book a VIP table for guaranteed seating and bottle service. Rooftop dinner → nightclub = easy one-stop evening.",
+    "url": "https://www.ritualchs.com/",
+    "lat": 32.7859,
+    "lng": -79.9357,
     "photos": [
-      "https://s3-media0.fl.yelpcdn.com/bphoto/-GeCGlHwfFVufcU8mVf7kw/l.jpg",
-      "https://s3-media0.fl.yelpcdn.com/bphoto/0xLOzb-Z0ZOmKJEK0d-Mzg/l.jpg",
-      "https://s3-media0.fl.yelpcdn.com/bphoto/1G35X0WTEZulf8aW1UBCAA/l.jpg",
-      "https://s3-media0.fl.yelpcdn.com/bphoto/7EAQNi4ou5QnlCZNkyw0MQ/l.jpg",
-      "https://s3-media0.fl.yelpcdn.com/bphoto/9aGMWatJ6ls-gKt5WY36IQ/l.jpg",
-      "https://s3-media0.fl.yelpcdn.com/bphoto/dSK1LO-QYfh12yj4VyaGEw/l.jpg"
+      "https://images.squarespace-cdn.com/content/v1/65e0129b6305620bd4cd6aec/df19def7-f141-4170-b397-f381bfe77bc4/lifestyle-45_jwb.jpg",
+      "https://images.squarespace-cdn.com/content/v1/65e0129b6305620bd4cd6aec/1767639448390-TVPZHQLW9WYPLJMQXNSY/image-asset.jpeg",
+      "https://images.squarespace-cdn.com/content/v1/65e0129b6305620bd4cd6aec/1767639449220-78R2EPI77ZVHX3OOX2BW/image-asset.jpeg",
+      "https://images.squarespace-cdn.com/content/v1/65e0129b6305620bd4cd6aec/1767639450908-H9P35MBWBNGQH1E4XA6H/image-asset.jpeg",
+      "https://images.squarespace-cdn.com/content/v1/65e0129b6305620bd4cd6aec/1767639451712-6VWTYPVRKBFNGCO1SBSV/image-asset.jpeg",
+      "https://images.squarespace-cdn.com/content/v1/65e0129b6305620bd4cd6aec/1767639452559-SDSHYDOEJIM3KTL7QASZ/image-asset.jpeg"
     ]
   },
   {
     "rank": 4,
-    "name": "The Cocktail Club",
-    "id": "cocktail-club",
-    "category": "nightlife",
-    "desc": "Upscale craft cocktail lounge above The Macintosh on upper King Street. House-made infusions, rare liquors, farm-to-shaker drinks. Multiple 'Best Cocktails' awards.",
-    "price": 16,
-    "duration": "1-3 hours",
-    "groupSize": "Up to 15",
-    "highlight": "\u{1F943} Award-winning cocktails \u2022 Upper King \u2022 Tue-Sun 5PM-2AM",
-    "walkTime": "2 min walk",
-    "details": "<b>The Cocktail Club</b><br><br><b>Address:</b> 479 King Street, Charleston, SC 29403<br><b>Phone:</b> (843) 724-9411<br><br><b>Hours:</b> Tue-Sun 5PM-2AM (Closed Mondays)<br><br><b>Features:</b><br>• Craft cocktails with creative, expertly made drinks<br>• Rooftop terrace — perfect for warm evenings<br>• Speakeasy-inspired interior with moody, upscale ambiance<br>• Private events available<br><br><b>Bach Tips:</b> Go early (~5-6pm) to snag rooftop seats, then stay as energy picks up. THE spot for a bach night out in Charleston. Pairs perfectly with nearby King Street restaurants.",
-    "url": "https://www.thecocktailclubcharleston.com/",
-    "lat": 32.7890,
-    "lng": -79.9382,
+    "name": "The Watch Rooftop",
+    "id": "the-watch",
+    "category": "dinner",
+    "desc": "7th-floor rooftop restaurant atop The Restoration Hotel. Harbor views, private Observatory room for groups, and Sunday brunch.",
+    "price": 45,
+    "duration": "2 hours",
+    "highlight": "\u{1F37D}\uFE0F Private dining for 42 \u2022 Harbor views \u2022 Sunday brunch \u2022 Espresso martinis",
+    "walkTime": "10 min walk",
+    "details": "<b>The Watch Rooftop Kitchen & Spirits</b><br><br><b>Location:</b> Atop The Restoration Hotel<br><br><b>Hours:</b> Mon-Thu 11am-11pm, Fri-Sat 11am-12am, Sun 10am-9pm<br><br><b>Menu:</b> Burrata & Jam, Skillet Mac & Cheese, Smoked Wings, burgers, craft cocktails. Sunday Brunch available.<br><br><b>Private Events:</b><br>• Dining Room: 42 seated, 60 reception<br>• Observatory Terrace: 16 seated, 25 standing<br>• Full Buyout: 150 guests, 360° views<br><br><b>Large Parties:</b> 10-20 guests: email directly. 20+: fill out inquiry form.<br><br><b>Bach Tips:</b> Stunning rooftop setting. Private Observatory is ideal for a celebration dinner.",
+    "url": "https://thewatchcharleston.com/",
+    "lat": 32.7821,
+    "lng": -79.9344,
     "photos": [
-      "https://images.getbento.com/accounts/a311ad0694794355eff2b270f4002ce9/media/images/7403302012023_Cocktail-Club_Andrew-Cebulka-16525_Large.jpeg?w=1200&fit=crop&auto=compress,format",
-      "https://images.getbento.com/accounts/a311ad0694794355eff2b270f4002ce9/media/images/64102012023_Cocktail-Club_Andrew-Cebulka-16640_Large.jpeg?w=1200&fit=crop&auto=compress,format",
-      "https://images.getbento.com/accounts/a311ad0694794355eff2b270f4002ce9/media/images/8719502102023_Cocktail-Club-CHS_Andrew-Cebulka-18132_Large.jpeg?w=1200&fit=crop&auto=compress,format",
-      "https://images.getbento.com/accounts/a311ad0694794355eff2b270f4002ce9/media/images/102709222022_Cocktail-Club_Andrew-Cebulka-11591.jpg?w=1200&fit=crop&auto=compress,format",
-      "https://images.getbento.com/accounts/a311ad0694794355eff2b270f4002ce9/media/images/8782802102023_Cocktail-Club-CHS_Andrew-Cebulka-18002_Large.jpeg?w=1200&fit=crop&auto=compress,format",
-      "https://images.getbento.com/accounts/a311ad0694794355eff2b270f4002ce9/media/images/2503502012023_Cocktail-Club_Andrew-Cebulka-16571_Large.jpeg?w=1200&fit=crop&auto=compress,format"
+      "https://thewatchcharleston.com/wp-content/uploads/2022/08/events.webp",
+      "https://thewatchcharleston.com/wp-content/uploads/2022/08/breakfast-avocado_toast.webp",
+      "https://thewatchcharleston.com/wp-content/uploads/2022/08/mussels.webp",
+      "https://thewatchcharleston.com/wp-content/uploads/2022/08/the_watch_burger.webp",
+      "https://thewatchcharleston.com/wp-content/uploads/2022/08/tomato_watermelon.webp",
+      "https://thewatchcharleston.com/wp-content/uploads/2023/11/espressomartini-1024x576.jpg"
     ]
   },
   {
     "rank": 5,
-    "name": "The Commodore",
-    "id": "commodore",
-    "category": "nightlife",
-    "desc": "Vintage cocktail bar with 1950s decor and live R&B, soul, and funk bands up to 5 nights a week. Dim lighting and mid-century vibes.",
-    "price": 15,
-    "duration": "2-3 hours",
-    "groupSize": "Up to 20",
-    "highlight": "\u{1F3B7} Live music \u2022 Retro vibes \u2022 R&B/soul/funk \u2022 Great cocktails",
-    "walkTime": "7 min walk",
-    "details": "<b>The Commodore - Live Music & Jazz Club</b><br><br><b>Address:</b> 504 Meeting Street, Charleston, SC 29403<br><br><b>Hours:</b><br>Sunday - Wednesday: 7:30 PM - 1:00 AM<br>Thursday - Saturday: 7:30 PM - 2:00 AM<br><br><b>Age Requirement:</b> 23 & Up<br><br><b>What to Expect:</b> Vintage jazz club that started in the early 80s as \"Touch of Class.\" Unparalleled live music and bar scene with a throwback-meets-modern atmosphere, fantastic dance floor, and craft cocktails.<br><br><b>Live Music:</b> Up to 5 nights a week — Lady & The Brass, The Majestics, The Funktastics, Future Funk, plus touring acts.<br><br><b>Bach Tips:</b> No formal packages but the dance floor + live funk/jazz + craft cocktails = ideal group night. 23+ age policy keeps it mature. Arrive early on weekends.",
-    "url": "https://thecommodorechs.com/",
-    "lat": 32.7925,
-    "lng": -79.9368,
+    "name": "MESU",
+    "id": "mesu",
+    "category": "dinner",
+    "desc": "High-energy Upper King spot blending Mexican and sushi. Tacos, specialty rolls, and bottle service. Open til 2am — dinner to nightlife.",
+    "price": 45,
+    "duration": "2 hours",
+    "highlight": "\u{1F363} Mexican-sushi fusion \u2022 Open til 2am \u2022 Bottle service \u2022 Buyout available",
+    "walkTime": "5 min walk",
+    "details": "<b>MESU — Mexican & Sushi Fusion</b><br><br><b>Address:</b> 570 King Street<br><b>Phone:</b> (854) 429-1011<br><br><b>Hours:</b> Daily 4pm-2am. Kitchen til 10pm. Happy Hour Mon-Fri 4-6pm.<br><br><b>Menu:</b> Nachos, Baja Fish Tacos, Shrimp Tempura Sushi, Street Corn, Churros. Full bar with sake & tequila cocktails.<br><br><b>Reviews:</b> \"Probably the best meal I had in Charleston.\" \"Amazing vibes! Recommend with a group.\"<br><br><b>Bach Tips:</b> Late-night kitchen + bar til 2am = perfect dinner-to-nightlife transition. Shareable plates great for groups. Heart of Upper King nightlife.",
+    "url": "https://mesuchs.com/",
+    "lat": 32.7928,
+    "lng": -79.9410,
     "photos": [
-      "https://thecommodorechs.com/images/banner-img.jpg",
-      "https://thecommodorechs.com/images/banner-img-02.jpg",
-      "https://thecommodorechs.com/images/banner-img-03.jpg",
-      "https://thecommodorechs.com/images/content-img.jpg"
+      "https://static.spotapps.co/web/mesuchs--com/custom/video_poster.jpg",
+      "https://static.spotapps.co/web/mesuchs--com/custom/food_back.jpg"
     ]
   },
   {
     "rank": 6,
-    "name": "Prohibition Charleston",
-    "id": "prohibition",
-    "category": "nightlife",
-    "desc": "Speakeasy-style cocktail bar on King Street with live jazz, craft cocktails, and a hidden patio. The bach night out spot.",
-    "price": 15,
-    "duration": "1-3 hours",
-    "highlight": "\u{1F3B7} Speakeasy vibes \u2022 Live jazz \u2022 Craft cocktails \u2022 Hidden patio",
-    "walkTime": "6 min walk",
-    "details": "<b>Prohibition — Speakeasy Bar & Restaurant</b><br><br><b>Address:</b> 547 King Street<br><b>Phone:</b> (843) 459-7214<br><br><b>Hours:</b> Mon-Wed 4pm, Thu-Sun 11am. Happy Hour Mon-Thu 4-6pm.<br><br><b>Live Music:</b><br>• Sat/Sun Brunch: live bands (11am-2pm)<br>• Mon-Thu: rotating artists (8-11pm)<br>• Fri/Sat: Live DJs (10pm-2am, 23+)<br><br><b>Private Events:</b> 3 bookable areas, up to 150 people. Bottle service available.<br><br><b>Awards:</b> \"Best Downtown Bar\" and \"Best Cocktails\" — Charleston City Paper.<br><br><b>Tip:</b> Walk-ins encouraged. Brunch with live music is a great daytime option. Late-night DJs go til 2am (must be 23+).",
-    "url": "https://www.prohibitioncharleston.com/",
-    "lat": 32.7912,
-    "lng": -79.9403,
+    "name": "Indaco",
+    "id": "indaco",
+    "category": "dinner",
+    "desc": "Rustic Italian on King Street. Wood-fired pizzas, handmade pastas, Negronis on tap. Enclosed courtyard seats up to 100.",
+    "price": 38,
+    "duration": "2 hours",
+    "highlight": "\u{1F355} Wood-fired \u2022 Handmade pasta \u2022 Negroni on tap \u2022 Courtyard for 100",
+    "walkTime": "5 min walk",
+    "details": "<b>Indaco — Rustic Italian</b><br><br><b>Address:</b> 526 King Street<br><b>Phone:</b> (843) 727-1229<br><br><b>Hours:</b> Dinner Sun-Thu 5-10pm, Fri-Sat 5-11pm. Brunch Sat & Sun 10am-2:30pm. Happy Hour Mon-Fri 5-7pm.<br><br><b>Press:</b> Conde Nast Traveler \"40 Best Restaurants in Charleston.\" Eater \"8 Best Italian.\" OpenTable \"12 Top Special Occasion.\"<br><br><b>Menu:</b> Wood-fired pizzas, handmade pastas, house-made salami, Negroni on tap. Family-style available.<br><br><b>Bach Tips:</b> Family-style dining ideal for sharing. Happy hour at the bar is great pre-dinner. Weekend brunch is another excellent option.",
+    "url": "https://www.indacorestaurant.com/location/indaco-charleston/",
+    "lat": 32.7916,
+    "lng": -79.9399,
     "photos": [
-      "https://cdn.prod.website-files.com/5f2b7226af66e051b0e6398d/5f3c3c5e8f5b523b33f0ff3d_bartender-1-1.jpg",
-      "https://cdn.prod.website-files.com/5f2b7226af66e051b0e6398d/5f3c3d5d19ad50db668e99ab_patio_prohib_chs_02_Jwb-1024x683.jpg",
-      "https://cdn.prod.website-files.com/5f2b7226af66e051b0e6398d/5f3c3a313a81575985812009_Schrute-sour_15_jwb-682x1024.jpg",
-      "https://cdn.prod.website-files.com/5f2b7226af66e051b0e6398d/65beae40c82767caefa3e15f_Gallery5.jpg",
-      "https://cdn.prod.website-files.com/5f2b7226af66e051b0e6398d/5f46d309d851a7890ae74be7_bar.jpg",
-      "https://cdn.prod.website-files.com/5f2b7226af66e051b0e6398d/5f468bfac7838672da6eb2a9_music.jpg"
-    ]
-  },
-  {
-    "rank": 7,
-    "name": "The Bangkok Lounge — Karaoke",
-    "id": "bangkok-karaoke",
-    "category": "nightlife",
-    "desc": "Karaoke bar on King Street, 2nd floor. Karaoke nightly at 8:30pm, no cover. Sing your hearts out with the crew.",
-    "price": 0,
-    "duration": "1-3 hours",
-    "highlight": "\u{1F3A4} Nightly karaoke \u2022 King Street \u2022 No cover \u2022 Private parties available",
-    "walkTime": "1 min walk",
-    "details": "<b>The Bangkok Lounge — Karaoke Bar</b><br><br><b>Address:</b> 353 King St, 2nd Floor<br><b>Hours:</b> Nightly 5pm-2am. Karaoke starts 6pm.<br><br><b>Theme Nights:</b><br>• Monday: Half-Priced Punch Bowls<br>• Tuesday: $3 Bourbon<br>• Wednesday: Country Karaoke<br>• Thursday: Hip Hop Karaoke<br>• Saturday: Opens at Noon<br>• Sunday: 90s Karaoke<br><br><b>Drinks:</b> Bangkok Punch, frozen drinks, daily specials.<br><br><b>Bach Tips:</b> Top bachelorette activity in Charleston. Monday's half-priced punch bowls and Thursday's hip hop karaoke are crowd favorites. The whole bar sings along — no private room needed!",
-    "url": "https://www.thebangkoklounge.com/",
-    "lat": 32.7870,
-    "lng": -79.9381,
-    "photos": [
-      "https://static.wixstatic.com/media/fbb480_7feb98abb3654879a5853a108f9e7174~mv2.jpeg",
-      "https://static.wixstatic.com/media/fbb480_c4ee32eaa1944c229820b35d75670fd6~mv2.jpg",
-      "https://static.wixstatic.com/media/fbb480_9540f5dc589d456c89b6a824bf90c144~mv2.jpeg",
-      "https://static.wixstatic.com/media/fbb480_ef3110573cec4c5481de5782485dabcd~mv2.jpg",
-      "https://static.wixstatic.com/media/fbb480_09c81f2d9175413287df3c0a8a29e741~mv2_d_1440_1440_s_2.jpg"
-    ]
-  },
-  {
-    "rank": 8,
-    "name": "Theatre 99 — Improv Comedy",
-    "id": "theatre-99",
-    "category": "fun",
-    "desc": "Charleston's home for improv comedy. Shows Wed-Sat at 8pm. Cheap, hilarious, and a perfect pre-bar activity. Cash only at the door.",
-    "price": 10,
-    "duration": "1-1.5 hours",
-    "highlight": "\u{1F923} Live improv \u2022 Wed-Sat 8pm \u2022 $5-12 \u2022 BYOB-friendly area",
-    "walkTime": "8 min walk",
-    "details": "<b>Theatre 99 — Improv Comedy</b><br><br><b>Address:</b> 280 Meeting Street, Charleston, SC 29401<br><b>Phone:</b> 843-853-6687<br><br><b>Shows:</b> Wed-Sat at 8pm<br>• Wednesdays: 3 acts of improv & sketch<br>• Thursdays: \"Laugh for a Lincoln\" — just $5!<br>• Fri/Sat: \"Take the Funny and Run\" flagship show<br><br><b>Bar (Cash Only):</b> Local craft beers $5-7, wine $6/glass, ATM in lobby.<br><br><b>Fun Extras:</b> Buy the Cast a Round ($20), Birthday Shout-out ($10) — make the bride the star!<br><br><b>Private Shows:</b> Rent the theatre for a private show, or hire them at your location.<br><br><b>Tip:</b> Interactive improv means the bride-to-be will likely get pulled on stage. Shows ~90 min, perfect pre-dinner activity.",
-    "url": "https://theatre99.com/",
-    "lat": 32.7838,
-    "lng": -79.9319,
-    "photos": [
-      "https://theatre99.com/wp-content/uploads/2019/08/CrowdLaughing.1.jpg",
-      "https://theatre99.com/wp-content/uploads/2019/08/THN2024.bar_-300x225.jpg",
-      "https://theatre99.com/wp-content/uploads/2019/08/StudentJam.no_.knife_-300x297.png"
+      "https://images.getbento.com/accounts/5cbb7ec98a8c1b28f9e7010a07d6860c/media/images/45664Lobster_ravioli_1_Large.jpeg?w=1200&fit=crop&auto=compress,format",
+      "https://images.getbento.com/accounts/5cbb7ec98a8c1b28f9e7010a07d6860c/media/images/327609222022_Indaco_Andrew-Cebulka-11359_Large.jpeg?w=1200&fit=crop&auto=compress,format",
+      "https://images.getbento.com/accounts/5cbb7ec98a8c1b28f9e7010a07d6860c/media/images/30444DSC04117.jpg?w=1200&fit=crop&auto=compress,format",
+      "https://images.getbento.com/accounts/5cbb7ec98a8c1b28f9e7010a07d6860c/media/images/3472504092025_indaco-chs_Andrew-Cebulka-5863_Large.jpeg?w=1200&fit=crop&auto=compress,format",
+      "https://images.getbento.com/accounts/5cbb7ec98a8c1b28f9e7010a07d6860c/media/images/5586209222022_Indaco_Andrew-Cebulka-11375.jpg?w=1200&fit=crop&auto=compress,format",
+      "https://images.getbento.com/accounts/5cbb7ec98a8c1b28f9e7010a07d6860c/media/images/7574909222022_Indaco_Andrew-Cebulka-11308_Large.jpeg?w=1200&fit=crop&auto=compress,format"
     ]
   }
 ];
@@ -941,7 +895,7 @@ let isSaving = false;
 let pendingSave = false;
 
 // ─── VOTES API (Vercel serverless function) ───
-const VOTES_API = 'https://bach-votes.vercel.app/api/night-votes';
+const VOTES_API = 'https://bach-votes.vercel.app/api/dinner-votes';
 
 async function loadVotes() {
   const dot = document.getElementById('syncStatus');
@@ -954,13 +908,13 @@ async function loadVotes() {
   } catch(e) {
     console.warn('Failed to load votes', e);
     if (dot) dot.innerHTML = '&#x1f534; Offline';
-    const saved = localStorage.getItem('bach_night_votes');
+    const saved = localStorage.getItem('bach_dinner_votes');
     if (saved) try { votes = JSON.parse(saved); } catch(e) {}
   }
 }
 
 async function saveVotes() {
-  localStorage.setItem('bach_night_votes', JSON.stringify(votes));
+  localStorage.setItem('bach_dinner_votes', JSON.stringify(votes));
 
   if (isSaving) { pendingSave = true; return; }
   isSaving = true;
@@ -1426,3 +1380,4 @@ document.addEventListener('keydown', e => {
 </script>
 </body>
 </html>
+
