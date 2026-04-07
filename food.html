@@ -382,43 +382,97 @@ body {
 .popup-carousel img.active { display: block; }
 .popup-carousel .carousel-btn { width: 22px; height: 22px; font-size: 11px; }
 
-/* ─── CARD ACTIONS ROW ─── */
-.card-actions {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: 8px;
-}
-.vote-btns-inline { display: flex; align-items: center; gap: 4px; }
-.vote-btn-sm {
-  font-size: 1.1rem;
-  padding: 2px 6px;
-  border: 2px solid transparent;
-  border-radius: 8px;
-  cursor: pointer;
-  background: var(--blush-light);
-  transition: all 0.2s;
-}
-.vote-btn-sm:hover { transform: scale(1.15); }
-.vote-btn-sm.selected { border-color: var(--gold); background: var(--gold-light); transform: scale(1.15); }
-.vote-btn-sm.selected.down { border-color: #E8A5A5; background: #FDF0F0; }
-.vote-count { font-size: 0.7rem; color: #999; margin-left: 2px; }
 
-/* ─── VOTING (stays compat) ─── */
-.vote-section { margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--blush); }
-.vote-label { font-size: 0.7rem; color: #999; margin-bottom: 4px; }
-.vote-btns { display: flex; gap: 6px; }
-.vote-btn {
-  font-size: 1.2rem;
-  padding: 4px 8px;
-  border: 2px solid transparent;
-  border-radius: 8px;
-  cursor: pointer;
-  background: var(--blush-light);
-  transition: all 0.2s;
+/* ─── STAYS-STYLE CARD ACTIONS ─── */
+.card-actions {
+  display: flex; align-items: center; gap: 6px; margin-top: 8px;
+  padding-top: 8px; border-top: 1px dashed var(--blush);
 }
-.vote-btn:hover { transform: scale(1.15); }
-.vote-btn.selected { border-color: var(--gold); background: var(--gold-light); transform: scale(1.15); }
+.action-icon-btn {
+  width: 34px; height: 34px; border-radius: 50%;
+  border: 2px solid var(--gold); background: var(--gold-light);
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  font-size: 1rem; transition: all 0.2s; flex-shrink: 0;
+}
+.action-icon-btn:hover { background: var(--gold); transform: translateY(-1px); }
+.action-divider { width: 1px; height: 24px; background: var(--blush-dark); margin: 0 2px; flex-shrink: 0; }
+.vote-btns { display: flex; gap: 5px; }
+.vote-btn {
+  font-size: 0.8rem; font-weight: 700; font-family: 'Montserrat', sans-serif;
+  width: 32px; height: 32px; border: 2px solid var(--blush-dark); border-radius: 50%;
+  cursor: pointer; background: var(--blush-light); color: var(--charcoal);
+  transition: all 0.2s; display: flex; align-items: center; justify-content: center;
+}
+.vote-btn:hover { transform: scale(1.15); border-color: var(--gold); }
+.vote-btn.selected { border-color: var(--gold); background: var(--gold); color: white; transform: scale(1.15); }
+.rank-voters { font-size: 0.7rem; color: #999; margin-top: 2px; }
+
+/* ─── GALLERY MODAL ─── */
+.gallery-overlay {
+  display: none; position: fixed; inset: 0; z-index: 10000;
+  background: rgba(0,0,0,0.95); flex-direction: column;
+}
+.gallery-overlay.show { display: flex; }
+.gallery-header {
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px 20px; background: rgba(0,0,0,0.5);
+}
+.gallery-title {
+  font-family: 'Playfair Display', serif; color: white;
+  font-size: 1.1rem; flex: 1;
+}
+.gallery-close {
+  background: none; border: none; color: white;
+  font-size: 2rem; cursor: pointer; padding: 0 8px; line-height: 1;
+}
+.gallery-close:hover { color: var(--gold); }
+.gallery-body {
+  flex: 1; display: flex; align-items: center; justify-content: center;
+  position: relative; overflow: hidden; padding: 10px;
+}
+.gallery-img {
+  max-width: 90%; max-height: 80vh; object-fit: contain;
+  border-radius: 8px; transition: opacity 0.15s ease;
+}
+.gallery-nav {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  background: rgba(255,255,255,0.15); border: none; color: white;
+  font-size: 2.5rem; width: 50px; height: 70px; border-radius: 8px;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: background 0.2s;
+}
+.gallery-nav:hover { background: rgba(255,255,255,0.3); }
+.gallery-nav.prev { left: 16px; }
+.gallery-nav.next { right: 16px; }
+.gallery-counter {
+  text-align: center; color: rgba(255,255,255,0.7);
+  font-size: 0.85rem; padding: 8px; font-weight: 500;
+}
+
+/* ─── MENU/INFO MODAL ─── */
+.info-overlay {
+  display: none; position: fixed; inset: 0; z-index: 10000;
+  background: rgba(0,0,0,0.6); align-items: center; justify-content: center;
+}
+.info-overlay.show { display: flex; }
+.info-modal {
+  background: var(--cream); border-radius: 16px; max-width: 500px; width: 90%;
+  max-height: 80vh; overflow-y: auto; padding: 28px; position: relative;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+.info-modal h2 {
+  font-family: 'Playfair Display', serif; font-size: 1.3rem;
+  margin-bottom: 4px; color: var(--charcoal);
+}
+.info-modal .info-subtitle { color: var(--gold-dark); font-size: 0.85rem; font-weight: 600; margin-bottom: 16px; }
+.info-modal .info-desc { font-size: 0.9rem; line-height: 1.6; color: #444; margin-bottom: 16px; }
+.info-modal .info-detail { display: flex; gap: 8px; align-items: center; padding: 8px 0; border-top: 1px solid var(--blush); font-size: 0.85rem; }
+.info-modal .info-detail-icon { font-size: 1.1rem; width: 28px; text-align: center; flex-shrink: 0; }
+.info-modal .info-close {
+  position: absolute; top: 12px; right: 16px; background: none; border: none;
+  font-size: 1.5rem; cursor: pointer; color: #999; line-height: 1;
+}
+.info-modal .info-close:hover { color: var(--charcoal); }
 
 /* ─── MAP ─── */
 .map-container { flex: 1; position: relative; }
@@ -1178,6 +1232,10 @@ function renderCards() {
     const voteCount = Object.keys(activityVotes).length;
     const priceStr = a.price === 0 ? 'Free' : '$' + a.price;
     const photos = a.photos || [];
+    const rankVoters = Object.entries(activityVotes).map(([name, vote]) => {
+      const em = vote === 'love' ? '\u{1F44D}' : '\u{1F44E}';
+      return em + ' ' + name;
+    }).join(' \u2022 ');
 
     return `
     <div class="card" id="card-${a.id}">
@@ -1195,31 +1253,29 @@ function renderCards() {
       </div>` : ''}
       <div class="card-body" onclick="flyTo(${a.lat}, ${a.lng}, '${a.id}')">
         <div class="card-name"><span class="card-rank">${a.rank}</span>${a.name}</div>
-        <span class="category-badge ${a.category}">${CATEGORY_ICONS[a.category] || ''} ${CATEGORY_LABELS[a.category] || a.category}</span>
-        <div class="card-desc">${a.desc}</div>
         <div class="card-details inline">
           <div><span class="label">Price</span><br><span class="card-price">${priceStr}</span><small>/pp</small></div>
           <div><span class="label">Duration</span><br>${a.duration}</div>
-          <div><span class="label">Travel</span><br>${a.driveTime ? `\u{1F697} ${a.driveTime} \u2022 ~${a.uberEstimate}` : `\u{1F6B6} ${a.walkTime || 'On King St'}`}</div>
+          <div><span class="label">Group</span><br>${a.groupSize}</div>
         </div>
         <div class="card-highlight">${a.highlight}</div>
         <div class="card-actions">
-          <a class="card-link" href="#" onclick="event.stopPropagation(); event.preventDefault(); showDetail('${a.id}');">Learn More \u2192</a>
-          <div class="vote-btns-inline">
-            <button class="vote-btn-sm ${myVote === 'love' ? 'selected' : ''}"
-                    onclick="event.stopPropagation(); castVote('${a.id}', 'love')"
-                    title="Yes!">\u{1F44D}</button>
-            <button class="vote-btn-sm ${myVote === 'nah' ? 'selected down' : ''}"
-                    onclick="event.stopPropagation(); castVote('${a.id}', 'nah')"
-                    title="Nah">\u{1F44E}</button>
-            ${voteCount > 0 ? `<span class="vote-count">${voteCount}</span>` : ''}
-          </div>
+          <button class="action-icon-btn" onclick="event.stopPropagation(); openGallery('${a.id}')" title="Photos">\u{1F4F7}</button>
+          <button class="action-icon-btn" onclick="event.stopPropagation(); openMenu('${a.id}')" title="Menu">\u{1F4CB}</button>
+          <div class="action-divider"></div>
+          <button class="vote-btn ${myVote === 'love' ? 'selected' : ''}"
+                  onclick="event.stopPropagation(); castVote('${a.id}', 'love')"
+                  title="Yes!">\u{1F44D}</button>
+          <button class="vote-btn ${myVote === 'nah' ? 'selected' : ''}"
+                  onclick="event.stopPropagation(); castVote('${a.id}', 'nah')"
+                  title="Nah">\u{1F44E}</button>
+          ${voteCount > 0 ? `<span class="rank-voters">${voteCount}</span>` : ''}
         </div>
+        ${rankVoters ? '<div class="rank-voters">' + rankVoters + '</div>' : ''}
       </div>
     </div>`;
   }).join('');
 }
-
 // ─── CAROUSEL ───
 function slideCarousel(id, direction, isPopup) {
   const carousel = document.getElementById(isPopup ? id : 'carousel-' + id);
@@ -1436,10 +1492,89 @@ function slideDetailCarousel(dir) {
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') {
     document.getElementById('resultsOverlay').classList.remove('show');
+    closeGallery();
+    closeInfo();
     closeDetail();
   }
 });
+
+
+// ─── PHOTO GALLERY ───
+let galleryPhotos = [];
+let galleryIndex = 0;
+
+function openGallery(activityId) {
+  const a = ACTIVITIES.find(x => x.id === activityId);
+  if (!a || !a.photos || a.photos.length === 0) return;
+  galleryPhotos = a.photos;
+  galleryIndex = 0;
+  document.getElementById('galleryTitle').textContent = a.name;
+  document.getElementById('galleryImg').src = galleryPhotos[0];
+  document.getElementById('galleryCounter').textContent = '1 / ' + galleryPhotos.length;
+  document.getElementById('galleryOverlay').classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeGallery() {
+  document.getElementById('galleryOverlay').classList.remove('show');
+  document.body.style.overflow = '';
+}
+
+function galleryNav(dir) {
+  galleryIndex = (galleryIndex + dir + galleryPhotos.length) % galleryPhotos.length;
+  const img = document.getElementById('galleryImg');
+  img.style.opacity = '0';
+  setTimeout(() => { img.src = galleryPhotos[galleryIndex]; img.style.opacity = '1'; }, 150);
+  document.getElementById('galleryCounter').textContent = (galleryIndex + 1) + ' / ' + galleryPhotos.length;
+}
+
+// ─── MENU/INFO MODAL ───
+function openMenu(activityId) {
+  const a = ACTIVITIES.find(x => x.id === activityId);
+  if (!a) return;
+  document.getElementById('infoTitle').textContent = a.name;
+  document.getElementById('infoSubtitle').textContent = a.category === 'brunch' ? 'Brunch' : 'Dinner';
+  document.getElementById('infoDesc').innerHTML = a.details || a.desc;
+  
+  let html = '';
+  if (a.menuUrl) {
+    html += '<div style="margin-top:12px;"><a href="' + a.menuUrl + '" target="_blank" style="display:inline-block;background:var(--gold);color:white;padding:8px 16px;border-radius:20px;font-weight:600;font-size:0.85rem;text-decoration:none;">View Full Menu \u2192</a></div>';
+  }
+  document.getElementById('infoDetails').innerHTML = html;
+  document.getElementById('infoOverlay').classList.add('show');
+}
+
+function closeInfo() {
+  document.getElementById('infoOverlay').classList.remove('show');
+}
+
 </script>
+
+<!-- Menu/Info Modal -->
+<div class="info-overlay" id="infoOverlay" onclick="closeInfo()">
+  <div class="info-modal" onclick="event.stopPropagation()">
+    <button class="info-close" onclick="closeInfo()">&times;</button>
+    <h2 id="infoTitle"></h2>
+    <div class="info-subtitle" id="infoSubtitle"></div>
+    <div class="info-desc" id="infoDesc"></div>
+    <div id="infoDetails"></div>
+  </div>
+</div>
+
+<!-- Photo Gallery Modal -->
+<div class="gallery-overlay" id="galleryOverlay">
+  <div class="gallery-header">
+    <span class="gallery-title" id="galleryTitle"></span>
+    <button class="gallery-close" onclick="closeGallery()">&times;</button>
+  </div>
+  <div class="gallery-body" onclick="closeGallery()">
+    <button class="gallery-nav prev" onclick="event.stopPropagation(); galleryNav(-1)">&lsaquo;</button>
+    <img id="galleryImg" class="gallery-img" onclick="event.stopPropagation()" src="" alt="">
+    <button class="gallery-nav next" onclick="event.stopPropagation(); galleryNav(1)">&rsaquo;</button>
+  </div>
+  <div class="gallery-counter" id="galleryCounter"></div>
+</div>
+
 </body>
 </html>
 
