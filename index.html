@@ -1220,13 +1220,13 @@ window.addEventListener('DOMContentLoaded', async () => {
     updateVoterDisplays('Voting as: ' + voterName);
   }
 
-  renderCards();
+  applyFiltersAndSort();
   initMap();
 
   // Poll for new votes every 10 seconds
   setInterval(async () => {
     await loadVotes();
-    renderCards();
+    applyFiltersAndSort();
   }, 10000);
 });
 
