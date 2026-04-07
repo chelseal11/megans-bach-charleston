@@ -527,6 +527,61 @@ body {
   .sort-bar { gap: 4px; }
   .sort-btn { padding: 4px 8px; font-size: 0.65rem; }
 }
+
+/* ─── PHOTO GALLERY MODAL ─── */
+.gallery-overlay {
+  display: none; position: fixed; inset: 0; z-index: 10000;
+  background: rgba(0,0,0,0.95); flex-direction: column;
+}
+.gallery-overlay.show { display: flex; }
+.gallery-header {
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px 20px; background: rgba(0,0,0,0.5);
+}
+.gallery-title {
+  font-family: 'Playfair Display', serif; color: white;
+  font-size: 1.1rem; flex: 1;
+}
+.gallery-airbnb-link {
+  color: var(--gold); font-size: 0.85rem; font-weight: 600;
+  text-decoration: none; white-space: nowrap;
+}
+.gallery-airbnb-link:hover { text-decoration: underline; }
+.gallery-close {
+  background: none; border: none; color: white;
+  font-size: 2rem; cursor: pointer; padding: 0 8px; line-height: 1;
+}
+.gallery-close:hover { color: var(--gold); }
+.gallery-body {
+  flex: 1; display: flex; align-items: center; justify-content: center;
+  position: relative; overflow: hidden; padding: 10px;
+}
+.gallery-img {
+  max-width: 90%; max-height: 80vh; object-fit: contain;
+  border-radius: 8px; transition: opacity 0.15s ease;
+}
+.gallery-nav {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  background: rgba(255,255,255,0.15); border: none; color: white;
+  font-size: 2.5rem; width: 50px; height: 70px; border-radius: 8px;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: background 0.2s;
+}
+.gallery-nav:hover { background: rgba(255,255,255,0.3); }
+.gallery-nav.prev { left: 16px; }
+.gallery-nav.next { right: 16px; }
+.gallery-counter {
+  text-align: center; color: rgba(255,255,255,0.7);
+  font-size: 0.85rem; padding: 8px; font-weight: 500;
+}
+.card-gallery-btn {
+  display: inline-block; background: var(--gold); color: white;
+  padding: 8px 16px; border-radius: 20px; font-weight: 600;
+  font-size: 0.8rem; cursor: pointer; border: none;
+  font-family: 'Montserrat', sans-serif; letter-spacing: 0.3px;
+  transition: all 0.2s; margin-top: 4px;
+}
+.card-gallery-btn:hover { background: var(--gold-dark); transform: translateY(-1px); }
 </style>
 </head>
 <body>
@@ -1243,6 +1298,210 @@ const LISTINGS = [
     }
 ];
 
+const ALL_PHOTOS = {
+  "1067027116202514008": [
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1067027116202514008/original/6ab26e5d-cbe0-4665-af5b-bb4b769a3b5d.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1067027116202514008/original/96ab5e0a-970e-475a-8d02-f813b97d3ca8.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1067027116202514008/original/bf59e2c9-cd36-4bff-b80f-359bd29cc0a7.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1067027116202514008/original/6b01f0f3-f6ed-4941-8ecc-4376b54e30cc.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1067027116202514008/original/b36b8431-c8ad-42b8-9341-39ed377a7986.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1067027116202514008/original/59ffb81f-bef2-49a0-bd5a-bcaa0e53798c.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1067027116202514008/original/0000a971-1718-45c6-a4c0-2e73abb73cfd.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1067027116202514008/original/0b883365-2c49-4017-85d2-b0a018a21aba.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1067027116202514008/original/1449ca90-a0fa-4220-ac93-2e4bcc837b6e.png",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1067027116202514008/original/18686c4a-caaf-4a6a-9207-3574171bee97.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1067027116202514008/original/216f0f6e-d3d3-439f-9b91-d913662d1de9.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1067027116202514008/original/31e4413c-ec45-4ee8-a75f-55c59958ac92.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1067027116202514008/original/3c539422-6e59-443f-809f-9d80759425f1.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1067027116202514008/original/3dc0ad32-b592-47a9-a160-85cf57bfe8d0.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1067027116202514008/original/4a60a781-b882-40ae-8df7-e2c5d0c0abe3.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1067027116202514008/original/4d85398e-11bc-4eb5-b4cb-96795642629b.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1067027116202514008/original/62c31215-59aa-472f-9839-73b8e478bcc4.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1067027116202514008/original/68ea44e0-277f-4a5f-bc3e-8d22dfefd9be.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1067027116202514008/original/6c42e6a7-3748-42c8-b6d0-8ede6521774b.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1067027116202514008/original/746f5a16-2c44-4382-bf09-a26c16b06f16.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1067027116202514008/original/7bc45257-fbd2-408e-843c-89d130a96ae5.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1067027116202514008/original/84a1636e-fdcb-4ee9-8bde-c1f471ff0475.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1067027116202514008/original/85ba4548-e2e1-4391-ae2a-80259aa74c4a.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1067027116202514008/original/8653ad11-452a-4b32-95bf-22873cfcd186.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1067027116202514008/original/8d21fb63-5be1-4afd-b9bc-5b873192be31.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1067027116202514008/original/ae114277-dd92-4768-bbf3-2686a76ebe5d.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1067027116202514008/original/b4ac9b93-edf3-49e5-aefb-00263ccd3bda.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1067027116202514008/original/b6998c76-8902-4f3e-9f6e-9e223ccb8f08.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1067027116202514008/original/bb460c3a-9629-4cbd-b263-ff012790c823.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1067027116202514008/original/be94c49f-cdb7-4725-afb8-3ce632cc9623.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1067027116202514008/original/bea2b25f-c02b-4817-bcf1-cd772408be84.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1067027116202514008/original/c06ce4b3-4294-48ec-8559-1acbd8eb7bc7.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1067027116202514008/original/d30fcc3a-00fa-4333-9385-9fb10bb5f6de.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1067027116202514008/original/ddc5033d-6e41-4b68-ac22-1b334d2d2fd1.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1067027116202514008/original/de87ae66-48b7-40b8-a7a1-3cb4d11ea932.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1067027116202514008/original/ed9a6511-1c49-47d5-90b5-73f630e92501.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1067027116202514008/original/f49e0c8e-9327-43bd-8942-21f14aa9cc6c.jpeg",
+  ],
+  "1644553657110726515": [
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1644553657110726515/original/95b4c9c7-9fa4-4bc2-b95d-4c17ba7a5a50.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1644553657110726515/original/f6bbf76c-5d10-4aed-9bd9-bc1a438b31aa.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1644553657110726515/original/a9162bf6-5fa6-4761-b1bd-bbbb1c236472.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1644553657110726515/original/e68b0809-ccec-4dc0-b733-0fa8605126b6.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1644553657110726515/original/3084b950-b7af-48f1-bfec-d81a53bc0122.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1644553657110726515/original/f6607952-4435-4f3a-902f-83ccc109f943.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1644553657110726515/original/067d5cd0-95a0-4a13-a7f5-c6ca8de19a01.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1644553657110726515/original/06b514d9-7b7c-4b6a-a71f-76d055ff8b41.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1644553657110726515/original/0fa06051-bbdc-4074-993c-170690b227f4.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1644553657110726515/original/1192323b-1790-41eb-a3b4-c609d78a5ebe.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1644553657110726515/original/12a91b7c-6c1f-46c0-be50-a99c3e7b1323.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1644553657110726515/original/12d39081-73d1-44ce-84e4-178ddec7ed20.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1644553657110726515/original/14584814-583f-4b33-992a-e2d0a056e100.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1644553657110726515/original/15012c2b-2a9d-4dbc-8c4b-c503b67fda0b.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1644553657110726515/original/1583a976-2809-4785-a0fc-ff33163ea5a1.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1644553657110726515/original/1e377205-771e-4bb1-8b84-ef13fb504c4d.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1644553657110726515/original/1f2b0b87-fff5-4859-96f8-9c255d5e8a59.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1644553657110726515/original/1f9149f0-f58f-40f5-932f-c23a4f4eba70.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1644553657110726515/original/1fc9c24c-0f0a-4916-b2a7-32b2b6c0dec7.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1644553657110726515/original/21baaaa7-c261-49b6-8a1e-3c049fd4e92f.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1644553657110726515/original/2853733a-c78b-47f2-a30c-b2bb89730133.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1644553657110726515/original/361f0965-19df-4896-92a9-0f2bbd608e16.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1644553657110726515/original/3bd574d5-7798-48b2-9082-5f23dbb4510a.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1644553657110726515/original/3d5f754c-9d52-4822-aeb3-e1b608519626.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1644553657110726515/original/4794e967-364e-45a8-bd05-24feafa29d66.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1644553657110726515/original/47ac7cb7-2094-422e-9a8f-8cb363253170.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1644553657110726515/original/4ab804f3-555d-4049-9db3-deec6b13a3c4.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1644553657110726515/original/59a196cc-b864-4c91-91d0-052a3657f42b.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1644553657110726515/original/5eb7e680-bd4c-4e24-814b-bbab02f1114d.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1644553657110726515/original/60587f25-b1eb-47bd-8286-d9caa3228805.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1644553657110726515/original/61aa565b-0fd8-4f20-96cc-6094ad956d4f.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1644553657110726515/original/63464bfd-7955-4b84-861d-a312479c0ece.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1644553657110726515/original/6c87b300-aa53-443a-b496-b09323576d6b.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1644553657110726515/original/70491f97-a5b2-4ed0-9848-c9926e5995eb.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1644553657110726515/original/73c0b3a5-e75c-4944-9a54-cb86b6a1a738.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1644553657110726515/original/74b184c7-8949-4291-8b20-19fbab61602f.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1644553657110726515/original/74b72518-ab4b-4440-8a76-39a37e89d6be.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1644553657110726515/original/780c2668-8942-4d07-af28-4ceeef1b9bb3.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1644553657110726515/original/79251451-a8a6-4978-bccb-f8cd0c030807.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1644553657110726515/original/94ed51be-9c3f-446a-a583-94cd37e7b028.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1644553657110726515/original/a0d3f641-5eb0-429e-82a3-2b93aa91fb2f.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1644553657110726515/original/a1db2752-c634-4b81-9274-a4baa3d613b2.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1644553657110726515/original/a1fec946-01c7-407a-8a74-819dbf45cc26.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1644553657110726515/original/a387998e-82b4-40c5-bdad-1a264a939f49.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1644553657110726515/original/a9333838-4505-4a8b-947f-cbf86bff22e0.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1644553657110726515/original/b5454235-2734-4ffc-99cb-2851576ec172.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1644553657110726515/original/b6c36003-da30-4dde-8954-f0e2266784bf.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1644553657110726515/original/ba3d4b3f-c201-4773-b2fd-53a44b7d8870.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1644553657110726515/original/bb443dca-1025-4aa4-9bda-362aba7823d5.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1644553657110726515/original/c21865ad-1c72-401c-9d89-13f57d83b5dd.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1644553657110726515/original/c811bd30-8934-41d3-b0ee-6db6d9d59653.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1644553657110726515/original/ca004570-2480-43f4-ae1d-e22604a94f4d.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1644553657110726515/original/de6caba3-c8ea-4d6a-9fb8-8d2bd6d2ac4d.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1644553657110726515/original/e9134ad7-07a3-491e-bf5b-d5dd756fb303.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1644553657110726515/original/ee833f72-aad8-4dba-aa38-a53fbd407f62.jpeg",
+  ],
+  "1062996081939528524": [
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1062996081939528524/original/27055c5c-0579-470c-83b8-299322351588.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1062996081939528524/original/2fb91a8f-b44e-468f-9fe0-423024356f44.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1062996081939528524/original/bd35d704-7162-4b34-8d3e-e5d81dd11a5d.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1062996081939528524/original/54191013-096b-4ec2-b99e-edba803eef6e.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1062996081939528524/original/a880b665-416d-4424-a25b-b231532141d3.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1062996081939528524/original/e8702ab8-d12d-4ed9-85ae-fb58fd2ef503.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1062996081939528524/original/23ba4fdf-d8e7-4a8b-928c-bb7206f93cb5.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1062996081939528524/original/3e89d012-cb0f-4f33-816b-899090963b4b.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1062996081939528524/original/581e0bb4-3a1f-463d-aeb0-f614324a23a1.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1062996081939528524/original/6aaf31bf-b3ea-4f28-a632-4314f2d8d909.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1062996081939528524/original/7eb57d03-fd1d-4977-8e0c-ed7824b2cad5.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1062996081939528524/original/98593e04-5aad-4d63-9e4b-4c91f78ab45f.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1062996081939528524/original/99841a02-4365-4602-9cc1-85b8ccd456d2.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1062996081939528524/original/a04d2deb-87e1-44de-a5fc-453d33942234.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1062996081939528524/original/a34bfeeb-b5d8-4b2d-9a12-a93fd65f8d14.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1062996081939528524/original/b45928e2-926b-436b-bc08-24d02693eafc.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1062996081939528524/original/bcf45f7e-1c01-4a21-8f0d-7ce0008a23ab.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1062996081939528524/original/c805de83-ae70-44c2-b114-6af31ffa7021.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1062996081939528524/original/f753a9d1-23c8-43de-8878-e6c45bee3d40.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1062996081939528524/original/fd7511ee-103a-461b-b6e0-d5e228a2ffcb.jpeg",
+  ],
+  "1142370073998644614": [
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1142370073998644614/original/30df6517-ebc2-442b-bc7e-d853acfd6f2c.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1142370073998644614/original/8fc3a487-8560-4960-bfb8-cfa279360595.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1142370073998644614/original/4f7321b7-c805-4f01-b419-a7c25e985eea.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1142370073998644614/original/81c72e4a-cdbc-4450-8a41-8f21347731e3.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1142370073998644614/original/e3eefff1-738d-4894-a75c-c284cd74ae05.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1142370073998644614/original/e7b56cea-f57b-48c5-8758-d740901526c1.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1142370073998644614/original/0a335c61-7d97-4356-912f-ebc2ab560a25.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1142370073998644614/original/0a3dfd03-d02e-4e60-ac23-b40d3fd793da.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1142370073998644614/original/0b28b39f-88e9-41f8-8129-d02d5b3cc113.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1142370073998644614/original/0fd8ba1f-5f74-4282-9b98-478d19fac3ff.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1142370073998644614/original/16862f43-327d-4f10-a0f4-2ed81113ac50.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1142370073998644614/original/174adee7-4de1-4ead-aabc-1b2a32ef2350.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1142370073998644614/original/1ffe8e62-58c3-4be1-8363-2048c10f1581.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1142370073998644614/original/34234d21-7572-4b3e-bacc-98437c2e1b26.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1142370073998644614/original/49b34d3e-b1c4-469d-9cf8-6fe08c3bdc67.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1142370073998644614/original/58861616-37a6-49fd-b7cd-ab9ede014df6.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1142370073998644614/original/6387fd01-ea99-465d-a2a6-e80a588aba98.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1142370073998644614/original/66143328-b5c2-4183-8bb9-d309caaca871.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1142370073998644614/original/794433a4-ef7b-4de2-a20d-ef92baec5876.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1142370073998644614/original/802c315c-e40c-4056-ad3d-c87bbe8f9155.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1142370073998644614/original/9e722993-1c23-4df3-8b52-c05590fac296.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1142370073998644614/original/a18b9a6a-a016-45fb-b026-a1463889d285.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1142370073998644614/original/a756179e-7c1d-4ece-aa34-706898905694.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1142370073998644614/original/a909bfc5-1efa-433c-aec9-516aec4c833e.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1142370073998644614/original/b0f341e7-e6d4-44ac-a914-6a57c235f737.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1142370073998644614/original/be958463-7a8a-451a-b599-053d94d95252.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1142370073998644614/original/d8d6a77e-237d-4bb6-9d3a-13a2c5f858d2.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1142370073998644614/original/df40a7e8-2c7b-4775-af6c-559f76fa7296.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1142370073998644614/original/df40fd25-c82b-48a9-8604-0e7ad6f50b2e.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1142370073998644614/original/ebecf533-1cd2-4c21-a69b-3ff93970d80d.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1142370073998644614/original/f51771b3-7447-4786-9bd8-453a1cf64d9c.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1142370073998644614/original/faabb9a8-ad0e-43eb-a29b-c33e1323134b.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1142370073998644614/original/fc368ea4-eb01-479f-b9dc-6e37c9adaa31.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1142370073998644614/original/ff166431-fe13-4c90-b83f-196a79b334f1.jpeg",
+  ],
+  "998569848645397009": [
+    "https://a0.muscache.com/im/pictures/miso/Hosting-998569848645397009/original/84b3362c-1c7c-44d8-af69-52d463f9e528.jpeg",
+    "https://a0.muscache.com/im/pictures/prohost-api/Hosting-998569848645397009/original/d978dc8e-81ef-4a59-8087-26d1f1d062e9.jpeg",
+    "https://a0.muscache.com/im/pictures/miso/Hosting-998569848645397009/original/39a2c8d3-6fce-459d-a742-b0a35e6963a1.jpeg",
+    "https://a0.muscache.com/im/pictures/miso/Hosting-998569848645397009/original/b24e2b11-9ca3-4be7-9529-472b54563ede.jpeg",
+    "https://a0.muscache.com/im/pictures/miso/Hosting-998569848645397009/original/fa9e2fde-84bb-4fc2-9036-9c75fa169667.jpeg",
+    "https://a0.muscache.com/im/pictures/miso/Hosting-998569848645397009/original/4f736c53-4c6f-4a51-8622-2e6720592042.jpeg",
+    "https://a0.muscache.com/im/pictures/miso/Hosting-998569848645397009/original/034d8386-2816-48ea-abf4-46d5559495e2.jpeg",
+    "https://a0.muscache.com/im/pictures/miso/Hosting-998569848645397009/original/0c72da82-6513-4b01-ac77-3d9022c81f48.jpeg",
+    "https://a0.muscache.com/im/pictures/miso/Hosting-998569848645397009/original/0f4f8d82-ef6c-4822-a663-98ae348392a3.jpeg",
+    "https://a0.muscache.com/im/pictures/miso/Hosting-998569848645397009/original/16aca593-ff40-46ad-b3da-c901aa48552a.jpeg",
+    "https://a0.muscache.com/im/pictures/miso/Hosting-998569848645397009/original/1fe1db86-5512-4b86-a5e1-0150830a1c70.jpeg",
+    "https://a0.muscache.com/im/pictures/miso/Hosting-998569848645397009/original/2b58be2e-d0b1-4d00-9b2f-5b37178a0775.jpeg",
+    "https://a0.muscache.com/im/pictures/miso/Hosting-998569848645397009/original/2c9f8043-ab43-470d-81d9-25d31e7a06fc.jpeg",
+    "https://a0.muscache.com/im/pictures/miso/Hosting-998569848645397009/original/3ae6c054-4afd-4045-8ed9-b7736ea50333.jpeg",
+    "https://a0.muscache.com/im/pictures/miso/Hosting-998569848645397009/original/3b4f4fbf-ebb0-45ae-a04f-463b6fcab0eb.jpeg",
+    "https://a0.muscache.com/im/pictures/miso/Hosting-998569848645397009/original/4c973540-d352-4645-9dac-83f87db21dcd.jpeg",
+    "https://a0.muscache.com/im/pictures/miso/Hosting-998569848645397009/original/4e02ff22-c113-4e84-88ec-c5d44c43ec68.jpeg",
+    "https://a0.muscache.com/im/pictures/miso/Hosting-998569848645397009/original/5133143d-1917-4833-8053-c20423081c38.jpeg",
+    "https://a0.muscache.com/im/pictures/miso/Hosting-998569848645397009/original/547412e6-6b5e-4d44-adb5-2142d7352dbf.jpeg",
+    "https://a0.muscache.com/im/pictures/miso/Hosting-998569848645397009/original/5d060a95-cf72-496b-8a3c-5bedc9be6f09.jpeg",
+    "https://a0.muscache.com/im/pictures/miso/Hosting-998569848645397009/original/6dde2930-2d46-4a91-899c-dcd131e5931f.jpeg",
+    "https://a0.muscache.com/im/pictures/miso/Hosting-998569848645397009/original/76fe939e-d551-445c-9b69-ebb4504bc323.jpeg",
+    "https://a0.muscache.com/im/pictures/miso/Hosting-998569848645397009/original/7beebc37-915c-4d48-a005-d1b2178ad3b9.jpeg",
+    "https://a0.muscache.com/im/pictures/miso/Hosting-998569848645397009/original/8069c84e-51b3-4494-ad8d-e3e0197370a9.jpeg",
+    "https://a0.muscache.com/im/pictures/miso/Hosting-998569848645397009/original/881965ad-3ce1-40cb-b2fe-64a89d48645a.jpeg",
+    "https://a0.muscache.com/im/pictures/miso/Hosting-998569848645397009/original/89fe55e8-3c9e-491d-afc1-cb6ffd617c9a.jpeg",
+    "https://a0.muscache.com/im/pictures/miso/Hosting-998569848645397009/original/8bf747d5-dcc0-4811-8772-463c7340186a.jpeg",
+    "https://a0.muscache.com/im/pictures/miso/Hosting-998569848645397009/original/904c5430-bd6c-4c1b-bca0-9c29b35af531.jpeg",
+    "https://a0.muscache.com/im/pictures/miso/Hosting-998569848645397009/original/94ab5f41-7ab4-4f1f-9f6d-5a28c7e6496a.jpeg",
+    "https://a0.muscache.com/im/pictures/miso/Hosting-998569848645397009/original/97ea5345-5f00-4e70-8a22-a62c57ccb6b9.jpeg",
+    "https://a0.muscache.com/im/pictures/miso/Hosting-998569848645397009/original/9da96075-e2f0-46cd-b5c6-25b48d78ec0e.jpeg",
+    "https://a0.muscache.com/im/pictures/miso/Hosting-998569848645397009/original/a227c257-7313-417c-8484-0414d5509ce9.jpeg",
+    "https://a0.muscache.com/im/pictures/miso/Hosting-998569848645397009/original/a33c7b1e-0c37-4685-98fb-22949f062464.jpeg",
+    "https://a0.muscache.com/im/pictures/miso/Hosting-998569848645397009/original/ac7e8240-8a5f-40ac-9357-80274b5805f0.jpeg",
+    "https://a0.muscache.com/im/pictures/miso/Hosting-998569848645397009/original/b46f1344-e76a-46cd-a938-8cd3b5806cfa.jpeg",
+    "https://a0.muscache.com/im/pictures/miso/Hosting-998569848645397009/original/b599f55a-bba5-47ba-b38b-1607cb903425.jpeg",
+    "https://a0.muscache.com/im/pictures/miso/Hosting-998569848645397009/original/c369ce91-d42a-4c25-a8bf-82c61f7ebac0.jpeg",
+    "https://a0.muscache.com/im/pictures/miso/Hosting-998569848645397009/original/c8928701-60da-40e2-8c88-189e6aaa4403.jpeg",
+    "https://a0.muscache.com/im/pictures/miso/Hosting-998569848645397009/original/cb47ed3d-1e3d-4c69-87d8-abe1cb7e05ce.jpeg",
+    "https://a0.muscache.com/im/pictures/miso/Hosting-998569848645397009/original/cf78316f-5cc6-408d-b310-763547665d7a.jpeg",
+    "https://a0.muscache.com/im/pictures/miso/Hosting-998569848645397009/original/d592fd39-a223-495e-820f-d1f525c3b0ea.jpeg",
+    "https://a0.muscache.com/im/pictures/miso/Hosting-998569848645397009/original/e645f979-607b-49bf-badb-efde0225778b.jpeg",
+    "https://a0.muscache.com/im/pictures/miso/Hosting-998569848645397009/original/e7b23e45-9bc2-478d-93e6-f48edc63301d.jpeg",
+    "https://a0.muscache.com/im/pictures/miso/Hosting-998569848645397009/original/f2f694ba-b356-49da-a1f6-d45604727b34.jpeg",
+    "https://a0.muscache.com/im/pictures/miso/Hosting-998569848645397009/original/fb531ad9-6acd-458c-85fc-2b7ff1a2a6b4.jpeg",
+  ],
+};
+
 // Upper King reference point
 const UPPER_KING = { lat: 32.7876, lng: -79.9378 };
 
@@ -1509,7 +1768,10 @@ function renderCards() {
           <div><span class="label">Per Person</span><br><span class="card-price">$${Math.round(l.price / 10).toLocaleString()}</span> <small>($${ppn}/night)</small></div>
         </div>
         <div class="card-highlight">${l.highlight}</div>
-        <a class="card-link" href="${l.url}" target="_blank" onclick="event.stopPropagation()">View on Airbnb \u2192</a>
+        <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+          <button class="card-gallery-btn" onclick="event.stopPropagation(); openGallery('${l.id}')">See the Space \u2192</button>
+          <a class="card-link" href="${l.url}" target="_blank" onclick="event.stopPropagation()" style="margin:0;">View on Airbnb</a>
+        </div>
         <div class="vote-section">
           <div class="vote-label">Your vote ${voteCount > 0 ? '(' + voteCount + ' vote' + (voteCount>1?'s':'') + ' total)' : ''}</div>
           <div class="vote-btns">
@@ -1696,12 +1958,73 @@ function calcVoteScore(voteObj) {
   return count > 0 ? total / count * count : 0;
 }
 
+// ─── PHOTO GALLERY MODAL ───
+let galleryPhotos = [];
+let galleryIndex = 0;
+
+function openGallery(listingId) {
+  const l = LISTINGS.find(x => x.id === listingId);
+  if (!l) return;
+  galleryPhotos = ALL_PHOTOS[listingId] || l.photos || [];
+  galleryIndex = 0;
+
+  const overlay = document.getElementById('galleryOverlay');
+  const img = document.getElementById('galleryImg');
+  const counter = document.getElementById('galleryCounter');
+  const title = document.getElementById('galleryTitle');
+  const link = document.getElementById('galleryLink');
+
+  title.textContent = l.name;
+  link.href = l.url;
+  img.src = galleryPhotos[0];
+  counter.textContent = `1 / ${galleryPhotos.length}`;
+  overlay.classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeGallery() {
+  document.getElementById('galleryOverlay').classList.remove('show');
+  document.body.style.overflow = '';
+}
+
+function galleryNav(dir) {
+  galleryIndex = (galleryIndex + dir + galleryPhotos.length) % galleryPhotos.length;
+  const img = document.getElementById('galleryImg');
+  img.style.opacity = '0';
+  setTimeout(() => {
+    img.src = galleryPhotos[galleryIndex];
+    img.style.opacity = '1';
+  }, 150);
+  document.getElementById('galleryCounter').textContent = `${galleryIndex + 1} / ${galleryPhotos.length}`;
+}
+
 // Close modals on Escape
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') {
     document.getElementById('resultsOverlay').classList.remove('show');
+    closeGallery();
+  }
+  if (document.getElementById('galleryOverlay').classList.contains('show')) {
+    if (e.key === 'ArrowLeft') galleryNav(-1);
+    if (e.key === 'ArrowRight') galleryNav(1);
   }
 });
 </script>
+
+<!-- Photo Gallery Modal -->
+<div class="gallery-overlay" id="galleryOverlay">
+  <div class="gallery-header">
+    <span class="gallery-title" id="galleryTitle"></span>
+    <a class="gallery-airbnb-link" id="galleryLink" href="#" target="_blank">View on Airbnb</a>
+    <button class="gallery-close" onclick="closeGallery()">&times;</button>
+  </div>
+  <div class="gallery-body" onclick="closeGallery()">
+    <button class="gallery-nav prev" onclick="event.stopPropagation(); galleryNav(-1)">&lsaquo;</button>
+    <img id="galleryImg" class="gallery-img" onclick="event.stopPropagation()" src="" alt="">
+    <button class="gallery-nav next" onclick="event.stopPropagation(); galleryNav(1)">&rsaquo;</button>
+  </div>
+  <div class="gallery-counter" id="galleryCounter"></div>
+</div>
+
 </body>
 </html>
