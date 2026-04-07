@@ -396,6 +396,14 @@ body {
 }
 .action-icon-btn:hover { background: var(--gold); transform: translateY(-1px); }
 .action-divider { width: 1px; height: 24px; background: var(--blush-dark); margin: 0 2px; flex-shrink: 0; }
+.vote-btn {
+  font-size: 0.8rem; font-weight: 700; font-family: 'Montserrat', sans-serif;
+  width: 32px; height: 32px; border: 2px solid var(--blush-dark); border-radius: 50%;
+  cursor: pointer; background: var(--blush-light); color: var(--charcoal);
+  transition: all 0.2s; display: flex; align-items: center; justify-content: center;
+}
+.vote-btn:hover { transform: scale(1.15); border-color: var(--gold); }
+.vote-btn.selected { border-color: var(--gold); background: var(--gold); color: white; transform: scale(1.15); }
 .rank-voters { font-size: 0.7rem; color: #999; margin-top: 2px; }
 
 /* ─── GALLERY MODAL ─── */
