@@ -729,7 +729,7 @@ body {
 
 <div class="tab-bar">
   <a href="index.html">Stays</a>
-  <a href="food.html" class="active">Brunch</a>
+  <a href="brunch.html" class="active">Brunch</a>
   <a href="activities.html">Daytime</a>
   <a href="dinner.html">Dinner</a>
   <a href="night.html">Nightlife</a>
@@ -1196,7 +1196,7 @@ function renderCards() {
         <div class="card-highlight">${a.highlight}</div>
         <div class="card-actions">
           <button class="action-icon-btn" onclick="event.stopPropagation(); openGallery('${a.id}')" title="Photos">\u{1F4F7}</button>
-          \${a.foodPhotos && a.foodPhotos.length > 0 ? \`<button class="action-icon-btn" onclick="event.stopPropagation(); openFoodGallery('\${a.id}')" title="Food & Drinks">\u{1F37D}\uFE0F</button>\` : ''}
+          ${a.foodPhotos && a.foodPhotos.length > 0 ? `<button class="action-icon-btn" onclick="event.stopPropagation(); openFoodGallery('${a.id}')" title="Food & Drinks">🍽️</button>` : ''}
           <button class="action-icon-btn" onclick="event.stopPropagation(); openMenu('${a.id}')" title="Menu">\u{1F4CB}</button>
           <div class="action-divider"></div>
           <button class="vote-btn ${myVote === 'love' ? 'selected' : ''}"
