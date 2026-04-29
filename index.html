@@ -646,6 +646,14 @@ body {
   font-size: 1.5rem; cursor: pointer; color: #999; line-height: 1;
 }
 .info-modal .info-close:hover { color: var(--charcoal); }
+
+/* card-popup — make Leaflet popups host a full card */
+.leaflet-popup.card-popup .leaflet-popup-content-wrapper { padding: 0; background: transparent; box-shadow: 0 8px 30px rgba(0,0,0,0.18); border-radius: 14px; }
+.leaflet-popup.card-popup .leaflet-popup-content { margin: 0; width: 380px !important; }
+.leaflet-popup.card-popup .leaflet-popup-tip { background: white; }
+.leaflet-popup.card-popup .card { margin: 0; box-shadow: none; border: none; border-radius: 14px; }
+.leaflet-popup.card-popup .carousel { border-top-left-radius: 14px; border-top-right-radius: 14px; overflow: hidden; }
+
 </style>
 </head>
 <body>
@@ -736,6 +744,7 @@ const LISTINGS = [
     "val": 3,
     "bach": 9.0,
     "bedrooms": 4,
+    "beds": 4,
     "baths": 4.0,
     "guests": 8,
     "price": 4818.0,
@@ -768,6 +777,7 @@ const LISTINGS = [
     "val": 4,
     "bach": 7.3,
     "bedrooms": 4,
+    "beds": 6,
     "baths": 5.0,
     "guests": 8,
     "price": 4130.0,
@@ -800,6 +810,7 @@ const LISTINGS = [
     "val": 3,
     "bach": 8.2,
     "bedrooms": 6,
+    "beds": 6,
     "baths": 6.5,
     "guests": 12,
     "price": 5026.0,
@@ -832,6 +843,7 @@ const LISTINGS = [
     "val": 5,
     "bach": 5.0,
     "bedrooms": 2,
+    "beds": 4,
     "baths": 2.0,
     "guests": 8,
     "price": 2845.0,
@@ -864,6 +876,7 @@ const LISTINGS = [
     "val": 3,
     "bach": 7.8,
     "bedrooms": 4,
+    "beds": 5,
     "baths": 3.0,
     "guests": 10,
     "price": 4916.0,
@@ -896,6 +909,7 @@ const LISTINGS = [
     "val": 5,
     "bach": 4.0,
     "bedrooms": 2,
+    "beds": 4,
     "baths": 2.0,
     "guests": 8,
     "price": 2977.0,
@@ -928,6 +942,7 @@ const LISTINGS = [
     "val": 5,
     "bach": 5.0,
     "bedrooms": 3,
+    "beds": 3,
     "baths": 3.0,
     "guests": 8,
     "price": 2939.0,
@@ -960,10 +975,11 @@ const LISTINGS = [
     "val": 2,
     "bach": 7.7,
     "bedrooms": 5,
+    "beds": 5,
     "baths": 4.5,
     "guests": 12,
-    "price": 12636.0,
-    "pricePerNight": 4212.0,
+    "price": 4211.0,
+    "pricePerNight": 1404.0,
     "rating": 4.8,
     "reviews": 66,
     "highlight": "🅿️ Free parking • Private patio or balcony • Outdoor furniture • Coffee maker • 66 reviews",
@@ -992,6 +1008,7 @@ const LISTINGS = [
     "val": 3,
     "bach": 7.7,
     "bedrooms": 5,
+    "beds": 5,
     "baths": 4.5,
     "guests": 12,
     "price": 5821.0,
@@ -1024,6 +1041,7 @@ const LISTINGS = [
     "val": 3,
     "bach": 7.2,
     "bedrooms": 4,
+    "beds": 5,
     "baths": 4.5,
     "guests": 10,
     "price": 4779.0,
@@ -1056,6 +1074,7 @@ const LISTINGS = [
     "val": 3,
     "bach": 6.5,
     "bedrooms": 4,
+    "beds": 4,
     "baths": 3.0,
     "guests": 9,
     "price": 5348.0,
@@ -1088,10 +1107,11 @@ const LISTINGS = [
     "val": 2,
     "bach": 6.0,
     "bedrooms": 4,
+    "beds": 8,
     "baths": 3.0,
     "guests": 8,
-    "price": 10377.0,
-    "pricePerNight": 3459.0,
+    "price": 3458.0,
+    "pricePerNight": 1153.0,
     "rating": 4.83,
     "reviews": 59,
     "highlight": "🅿️ Free parking • Private patio or balcony • Private backyard – Fully fenced • Coffee maker: drip coffee maker, Keurig coffee machine • 59 reviews",
@@ -1120,10 +1140,11 @@ const LISTINGS = [
     "val": 2,
     "bach": 6.7,
     "bedrooms": 4,
+    "beds": 4,
     "baths": 4.0,
     "guests": 9,
-    "price": 10065.0,
-    "pricePerNight": 3355.0,
+    "price": 3355.0,
+    "pricePerNight": 1118.0,
     "rating": 4.67,
     "reviews": 12,
     "highlight": "🅿️ Free parking • Patio or balcony • Backyard • Outdoor furniture • 12 reviews",
@@ -1152,10 +1173,11 @@ const LISTINGS = [
     "val": 2,
     "bach": 5.6,
     "bedrooms": 2,
+    "beds": 4,
     "baths": 2.0,
     "guests": 8,
-    "price": 8415.0,
-    "pricePerNight": 2805.0,
+    "price": 2805.0,
+    "pricePerNight": 935.0,
     "rating": 4.99,
     "reviews": 168,
     "highlight": "🅿️ Free parking • Private patio or balcony • Outdoor furniture • Coffee maker: drip coffee maker • 168 reviews",
@@ -2245,72 +2267,82 @@ function updateMapMarkers() {
   }
 }
 
+function cardHtml(l, prefix) {
+  prefix = prefix || '';
+  const ppn = Math.round(l.price / 7 / 3);
+  const listingVotes = votes[l.id] || {};
+  const myVote = voterName ? listingVotes[voterName] : null;
+  const rankVoters = Object.entries(listingVotes).map(([name, rank]) => {
+    const label = rank === '1' ? '1st' : rank === '2' ? '2nd' : '3rd';
+    return label + ': ' + name;
+  }).join(' \u2022 ');
+  const photos = l.photos || [];
+  const ratingStr = l.rating ? `\u2605 ${l.rating} (${l.reviews} reviews)` : 'New listing';
+  const hasWater = l.hasPool || l.hasHotTub;
+  const carouselId = prefix + 'carousel-' + l.id;
+  const counterId = prefix + 'counter-' + l.id;
+  const layoutBits = [
+    `${l.bedrooms}BR`,
+    l.beds ? `${l.beds} bed${l.beds === 1 ? '' : 's'}` : null,
+    `${l.baths} ba`,
+    `${l.guests} guests`,
+  ].filter(Boolean).join(' \u2022 ');
+
+  return `
+  <div class="card ${hasWater ? 'has-water-feature' : ''}" id="${prefix}card-${l.id}">
+    ${photos.length > 0 ? `
+    <div class="carousel" id="${carouselId}" onclick="event.stopPropagation()">
+      ${photos.map((p, idx) => `<img src="${p}" alt="${l.name}" class="${idx === 0 ? 'active' : ''}" loading="lazy">`).join('')}
+      ${photos.length > 1 ? `
+        <button class="carousel-btn prev" onclick="slideCarousel('${carouselId}', -1)">\u2039</button>
+        <button class="carousel-btn next" onclick="slideCarousel('${carouselId}', 1)">\u203A</button>
+        <div class="carousel-counter"><span id="${counterId}">1</span>/${photos.length}</div>
+        <div class="carousel-dots">
+          ${photos.map((_, idx) => `<button class="carousel-dot ${idx === 0 ? 'active' : ''}" onclick="goToSlide('${carouselId}', ${idx})"></button>`).join('')}
+        </div>
+      ` : ''}
+    </div>` : ''}
+    <div class="card-body" onclick="flyTo(${l.lat}, ${l.lng}, '${l.id}')">
+      <div class="card-name"><span class="card-rank">${l.rank}</span>${l.name}</div>
+      ${(hasWater || l.hasParking) ? `<div class="amenity-badges">
+        ${l.hasPool ? '<span class="amenity-badge">\u{1F3CA} Pool</span>' : ''}
+        ${l.hasHotTub ? '<span class="amenity-badge hot-tub">\u2668\uFE0F Hot Tub</span>' : ''}
+        ${l.hasParking ? '<span class="amenity-badge parking">\u{1F17F}\uFE0F Free Parking</span>' : ''}
+      </div>` : ''}
+      <div class="card-details">
+        <div><span class="label">Layout</span><br>${layoutBits}</div>
+        <div><span class="label">Rating</span><br>${ratingStr}</div>
+        <div><span class="label">Total</span><br><span class="card-price">$${l.price.toLocaleString()}</span></div>
+        <div><span class="label">Per Person</span><br><span class="card-price">$${Math.round(l.price / 7).toLocaleString()}</span> <small>($${ppn}/night)</small></div>
+      </div>
+      <div class="card-highlight">${l.highlight}</div>
+      <div class="card-actions">
+        <button class="action-icon-btn" onclick="event.stopPropagation(); openGallery('${l.id}')" title="Photos">\u{1F4F7}</button>
+        <button class="action-icon-btn" onclick="event.stopPropagation(); openInfo('${l.id}')" title="Details">\u{1F4CB}</button>
+        <a class="action-icon-btn" href="${l.url}" target="_blank" rel="noopener" onclick="event.stopPropagation()" title="Open on Airbnb" style="text-decoration:none;display:inline-flex;align-items:center;justify-content:center;">\u{1F517}</a>
+        <div class="action-divider"></div>
+        <div class="vote-btns">
+          ${RANKS.map(r => `
+            <button class="vote-btn ${myVote === r.key ? 'selected' : ''}"
+                    onclick="event.stopPropagation(); castVote('${l.id}', '${r.key}')"
+                    title="${r.label} choice">${r.key}</button>
+          `).join('')}
+        </div>
+      </div>
+      ${rankVoters ? '<div class="rank-voters">' + rankVoters + '</div>' : ''}
+    </div>
+  </div>`;
+}
+
 function renderCards() {
   const container = document.getElementById('cardList');
-  container.innerHTML = sortedListings.map(l => {
-    const ppn = Math.round(l.price / 7 / 3);
-    const listingVotes = votes[l.id] || {};
-    const myVote = voterName ? listingVotes[voterName] : null;
-    const voteCount = Object.keys(listingVotes).length;
-    const rankVoters = Object.entries(listingVotes).map(([name, rank]) => {
-      const label = rank === '1' ? '1st' : rank === '2' ? '2nd' : '3rd';
-      return label + ': ' + name;
-    }).join(' \u2022 ');
-    const photos = l.photos || [];
-    const ratingStr = l.rating ? `\u2605 ${l.rating} (${l.reviews} reviews)` : 'New listing';
-    const displayRank = l.rank;
-
-    const hasWater = l.hasPool || l.hasHotTub;
-
-    return `
-    <div class="card ${hasWater ? 'has-water-feature' : ''}" id="card-${l.id}">
-      ${photos.length > 0 ? `
-      <div class="carousel" id="carousel-${l.id}" onclick="event.stopPropagation()">
-        ${photos.map((p, idx) => `<img src="${p}" alt="${l.name}" class="${idx === 0 ? 'active' : ''}" loading="lazy">`).join('')}
-        ${photos.length > 1 ? `
-          <button class="carousel-btn prev" onclick="slideCarousel('${l.id}', -1)">\u2039</button>
-          <button class="carousel-btn next" onclick="slideCarousel('${l.id}', 1)">\u203A</button>
-          <div class="carousel-counter"><span id="counter-${l.id}">1</span>/${photos.length}</div>
-          <div class="carousel-dots">
-            ${photos.map((_, idx) => `<button class="carousel-dot ${idx === 0 ? 'active' : ''}" onclick="goToSlide('${l.id}', ${idx})"></button>`).join('')}
-          </div>
-        ` : ''}
-      </div>` : ''}
-      <div class="card-body" onclick="flyTo(${l.lat}, ${l.lng}, '${l.id}')">
-        <div class="card-name"><span class="card-rank">${displayRank}</span>${l.name}</div>
-        ${(hasWater || l.hasParking) ? `<div class="amenity-badges">
-          ${l.hasPool ? '<span class="amenity-badge">\u{1F3CA} Pool</span>' : ''}
-          ${l.hasHotTub ? '<span class="amenity-badge hot-tub">\u2668\uFE0F Hot Tub</span>' : ''}
-          ${l.hasParking ? '<span class="amenity-badge parking">\u{1F17F}\uFE0F Free Parking</span>' : ''}
-        </div>` : ''}
-        <div class="card-details">
-          <div><span class="label">Layout</span><br>${l.bedrooms}BR \u2022 ${l.baths} ba \u2022 ${l.guests} guests</div>
-          <div><span class="label">Rating</span><br>${ratingStr}</div>
-          <div><span class="label">Total</span><br><span class="card-price">$${l.price.toLocaleString()}</span></div>
-          <div><span class="label">Per Person</span><br><span class="card-price">$${Math.round(l.price / 7).toLocaleString()}</span> <small>($${ppn}/night)</small></div>
-        </div>
-        <div class="card-highlight">${l.highlight}</div>
-        <div class="card-actions">
-          <button class="action-icon-btn" onclick="event.stopPropagation(); openGallery('${l.id}')" title="Photos">\u{1F4F7}</button>
-          <button class="action-icon-btn" onclick="event.stopPropagation(); openInfo('${l.id}')" title="Details">\u{1F4CB}</button>
-          <div class="action-divider"></div>
-          <div class="vote-btns">
-            ${RANKS.map(r => `
-              <button class="vote-btn ${myVote === r.key ? 'selected' : ''}"
-                      onclick="event.stopPropagation(); castVote('${l.id}', '${r.key}')"
-                      title="${r.label} choice">${r.key}</button>
-            `).join('')}
-          </div>
-        </div>
-        ${rankVoters ? '<div class="rank-voters">' + rankVoters + '</div>' : ''}
-      </div>
-    </div>`;
-  }).join('');
+  container.innerHTML = sortedListings.map(l => cardHtml(l, '')).join('');
 }
 
 // ─── CAROUSEL ───
-function slideCarousel(listingId, direction, isPopup) {
-  const carousel = document.getElementById(isPopup ? listingId : 'carousel-' + listingId);
+function slideCarousel(carouselId, direction) {
+  const carousel = document.getElementById(carouselId);
+  if (!carousel) return;
   const imgs = carousel.querySelectorAll('img');
   const dots = carousel.querySelectorAll('.carousel-dot');
   let current = [...imgs].findIndex(img => img.classList.contains('active'));
@@ -2319,21 +2351,18 @@ function slideCarousel(listingId, direction, isPopup) {
   current = (current + direction + imgs.length) % imgs.length;
   imgs[current].classList.add('active');
   if (dots[current]) dots[current].classList.add('active');
-  const counter = document.getElementById('counter-' + listingId);
+  const counter = document.getElementById(carouselId.replace('carousel-', 'counter-'));
   if (counter) counter.textContent = current + 1;
 }
 
-function goToSlide(listingId, index) {
-  const carousel = document.getElementById('carousel-' + listingId);
+function goToSlide(carouselId, index) {
+  const carousel = document.getElementById(carouselId);
+  if (!carousel) return;
   const imgs = carousel.querySelectorAll('img');
   const dots = carousel.querySelectorAll('.carousel-dot');
-  imgs.forEach((img, i) => {
-    img.classList.toggle('active', i === index);
-  });
-  dots.forEach((dot, i) => {
-    dot.classList.toggle('active', i === index);
-  });
-  const counter = document.getElementById('counter-' + listingId);
+  imgs.forEach((img, i) => img.classList.toggle('active', i === index));
+  dots.forEach((dot, i) => dot.classList.toggle('active', i === index));
+  const counter = document.getElementById(carouselId.replace('carousel-', 'counter-'));
   if (counter) counter.textContent = index + 1;
 }
 
@@ -2389,24 +2418,7 @@ function initMap() {
     const ratingStr = l.rating ? `\u2605${l.rating}` : 'New';
     const marker = L.marker([l.lat, l.lng], { icon })
       .addTo(map)
-      .bindPopup(`
-        <div style="font-family:Montserrat,sans-serif; max-width:220px;">
-          ${photos.length > 0 ? `
-          <div class="popup-carousel" id="${popupId}">
-            ${photos.map((p, idx) => `<img src="${p}" class="${idx === 0 ? 'active' : ''}">`).join('')}
-            ${photos.length > 1 ? `
-              <button class="carousel-btn prev" onclick="slideCarousel('${popupId}', -1, true)">\u2039</button>
-              <button class="carousel-btn next" onclick="slideCarousel('${popupId}', 1, true)">\u203A</button>
-            ` : ''}
-          </div>` : ''}
-          <b style="font-family:Playfair Display,serif; font-size:14px;">${l.name}</b><br>
-          <span style="color:#D4A843; font-weight:600;">Score: ${l.score.toFixed(1)}</span><br>
-          ${l.bedrooms}BR \u2022 ${l.baths}ba \u2022 ${ratingStr}<br>
-          <b>$${l.price.toLocaleString()}</b> <span style="color:#999;">($${ppn}/pp/night)</span><br>
-          <em style="color:#D4A843; font-size:12px;">${l.highlight}</em><br>
-          <a href="${l.url}" target="_blank" style="color:#D4A843;">View on Airbnb</a>
-        </div>
-      `, { maxWidth: 240 });
+      .bindPopup(cardHtml(l, 'popup-'), { maxWidth: 420, className: 'card-popup' });
     markers[l.id] = marker;
   });
 
